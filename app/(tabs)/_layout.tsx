@@ -1,37 +1,17 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+// import { Slot,Stack } from 'expo-router'
+import { createStackNavigator } from '@react-navigation/stack';
+import PhoneNumber from './phoneNumber';
+const Layout = () => {
+    const Stack = createStackNavigator();
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
-  );
+    <Stack.Navigator screenOptions={{headerShown:false}}>
+      <Stack.Screen name="First" component={PhoneNumber} />
+    </Stack.Navigator>
+  )
 }
+
+export default Layout
+
+const styles = StyleSheet.create({})
