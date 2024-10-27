@@ -5,53 +5,66 @@ import {
   Dimensions,
   TouchableOpacity,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback
 } from "react-native";
 import React, { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 import Logo from "@/assets/icons/logo";
+
 const PhoneNumber = () => {
   const [number, onChangeNumber] = useState("");
   console.log(number);
   return (
-    <View style={styles.container}>
-      <LinearGradient
-        colors={["#FFEFD4", "#ffffff", "#FFDBA8"]}
-        style={styles.linearGradient}
+    <TouchableWithoutFeedback style={{flex:1}} onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <View style={styles.Parent}>
-          <View style={styles.txt}>
-            <Text style={styles.txt1}>Quotes and Wishes </Text>
-            <Text style={styles.txt2}>Everyday</Text>
+        <View style={styles.container}>
+          <LinearGradient
+            colors={["#FFEFD4", "#ffffff", "#FFDBA8"]}
+            style={styles.linearGradient}
+          >
+            <View style={styles.Parent}>
+              <View style={styles.txt}>
+                <Text style={styles.txt1}>Quotes and Wishes </Text>
+                <Text style={styles.txt2}>Everyday</Text>
+              </View>
+              <View style={[styles.txt, { marginBottom: 20 * scale }]}>
+                <Text style={styles.txt1}> with </Text>
+                <Text style={styles.txt2}>your photo </Text>
+                <Text style={styles.txt1}>and </Text>
+                <Text style={styles.txt2}>name</Text>
+              </View>
+              <Logo />
+            </View>
+          </LinearGradient>
+          <View style={styles.flex2}>
+            <Text style={styles.heading}>EventPoster Pro</Text>
+            <Text style={styles.number1}>ENTER MOBILE NUMBER</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeNumber}
+              value={number}
+              placeholder="+91-1234567890"
+              keyboardType="numeric"
+              placeholderTextColor="#000000"
+              maxLength={10}
+            />
+            <TouchableOpacity style={styles.btn}>
+              <Text style={{ fontSize: 15 * scale, fontWeight: "500" }}>
+                Get OTP
+              </Text>
+            </TouchableOpacity>
           </View>
-          <View style={[styles.txt, { marginBottom: 20 * scale }]}>
-            <Text style={styles.txt1}> with </Text>
-            <Text style={styles.txt2}>your photo </Text>
-            <Text style={styles.txt1}>and </Text>
-            <Text style={styles.txt2}>name</Text>
-          </View>
-
-          <Logo />
         </View>
-      </LinearGradient>
-      <View style={styles.flex2}>
-        <Text style={styles.heading}>EventPoster Pro</Text>
-        <Text style={styles.number1}>ENTER MOBILE NUMBER</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeNumber}
-          value={number}
-          placeholder="+91-1234567890"
-          keyboardType="numeric"
-          placeholderTextColor="#000000"
-          maxLength={10}
-        />
-        <TouchableOpacity style={styles.btn}>
-          <Text style={{fontSize:15*scale,fontWeight:"500"}}>Get OTP</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -63,7 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFDBA8",
   },
   linearGradient: {
-    height: "50%", // Adjust the gradient height to 50%
+    height: "55%",
     justifyContent: "center",
   },
   flex2: {
@@ -74,7 +87,6 @@ const styles = StyleSheet.create({
     paddingVertical: 25 * scale,
     paddingHorizontal: 10 * scale,
   },
-
   txt: {
     flexDirection: "row",
   },
@@ -109,16 +121,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#000000",
     paddingHorizontal: 10 * scale,
-    marginTop:10*scale
+    marginTop: 10 * scale,
   },
   btn: {
     backgroundColor: "#FF8017",
-    width:"80%",
-    borderRadius:8*scale,
-    paddingHorizontal:15*scale,
-    paddingVertical:10*scale,
-    alignItems:"center",
-    alignSelf:"center",
-    marginTop:25*scale
+    width: "80%",
+    borderRadius: 8 * scale,
+    paddingHorizontal: 15 * scale,
+    paddingVertical: 10 * scale,
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 25 * scale,
   },
 });
