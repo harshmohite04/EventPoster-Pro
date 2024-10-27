@@ -11,8 +11,8 @@ import Svg, {
 function Logo(props) {
   return (
     <Svg
-      width={224}
-      height={219}
+      width={props.size*1.02}
+      height={props.size}
       viewBox="0 0 224 219"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

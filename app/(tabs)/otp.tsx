@@ -10,26 +10,33 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 import Logo from "@/assets/icons/logo";
-import * as Yup from "yup";
 import { Formik } from "formik";
+import PhoneNumber from "./phoneNumber";
+const Otp = ({ navigation,route }) => {
 
-const PhoneNumber = ({ navigation }) => {
-  
-  const handleSubmit = (values) => {
-    const phoneNumber = values.phoneLength
-    console.log(phoneNumber);
-    navigation.push("Otp",{number:phoneNumber});
-  };
-  const phoneNumeberSchema = Yup.object().shape({
-    phoneLength: Yup.string()
-      .length(10, "Must be 10 numbers")
-      .required("Required Field"),
-  });
+    const { number = '' } = route?.params || {};
+
+  const [secondsRemaining, setSecondsRemaining] = useState(30);
+
+  useEffect(() => {
+    let intervalId;
+    if (secondsRemaining > 0) {
+      intervalId = setInterval(() => {
+        setSecondsRemaining(secondsRemaining - 1);
+      }, 1000);
+    } else {
+      // Timer has reached 0
+      clearInterval(intervalId);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [secondsRemaining]);
+
   return (
     <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
@@ -57,63 +64,51 @@ const PhoneNumber = ({ navigation }) => {
           </LinearGradient>
           <View style={styles.flex2}>
             <Text style={styles.heading}>EventPoster Pro</Text>
-            <Text style={styles.number1}>ENTER MOBILE NUMBER</Text>
-            <Formik
-              initialValues={{ phoneLength: "" }}
-              validationSchema={phoneNumeberSchema}
-              onSubmit={handleSubmit}
+            <View
+              style={{
+                height: 40 * scale,
+                width: 40 * scale,
+                borderWidth: 4,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 20 * scale,
+                borderColor: "#FFC070",
+                alignSelf: "center",
+                marginVertical: 10 * scale,
+              }}
             >
-              {({ handleChange, errors, touched, handleSubmit, values }) => (
+              <Text style={{ fontSize: 20 * scale }}>{secondsRemaining}</Text>
+            </View>
+            <Text
+              style={{
+                fontSize: 12 * scale,
+                color: "#000000",
+                fontWeight: "500",
+                marginTop: 10 * scale,
+              }}
+            >
+              OTP sent to {number}, Please wait
+            </Text>
+
+            <Formik
+              initialValues={{ email: "" }}
+              onSubmit={(values) => console.log(values)}
+            >
+              {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <View>
-                  <View
+                  
+
+                  <TouchableOpacity
                     style={{
-                      flexDirection: "row",
-                      borderRadius: 10 * scale,
-                      borderWidth: 1 * scale,
-                      borderColor: "black",
+                      backgroundColor: "#FF8017",
                       width: "80%",
-                      alignSelf: "center",
-                      paddingVertical: 6 * scale,
-                      paddingHorizontal: 6 * scale,
-                      marginTop: 8 * scale,
+                      alignItems: "center",
+                      paddingVertical: 10 * scale,
+                      alignSelf:"center",
+                      borderRadius:10*scale
                     }}
                   >
-                    <View
-                      style={{
-                        alignItems: "center",
-                        justifyContent: "center",
-                        paddingHorizontal: 10 * scale,
-                        borderRightWidth: 1,
-                      }}
-                    >
-                      <Text style={{ fontSize: 12 * scale }}>+91</Text>
-                    </View>
-                    <TextInput
-                      onChangeText={handleChange("phoneLength")}
-                      value={values.phoneLength}
-                      placeholder="93568365221"
-                      keyboardType="numeric"
-                      placeholderTextColor="#858597"
-                      style={{
-                        fontSize: 11 * scale,
-                        paddingHorizontal: 10 * scale,
-                      }}
-                    />
-                  </View>
-                  {errors.phoneLength && touched.phoneLength && (
-                    <Text style={{ color: "red", alignSelf: "center" }}>
-                      {errors.phoneLength}
-                    </Text>
-                  )}
-                  <TouchableOpacity
-                    onPress={
-                      handleSubmit
-                    }
-                    style={styles.btn}
-                  >
-                    <Text style={{ fontSize: 15 * scale, fontWeight: "500" }}>
-                      Get OTP
-                    </Text>
+                    <Text style={{fontSize:13*scale,fontWeight:"500"}}>Continue</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -125,7 +120,7 @@ const PhoneNumber = ({ navigation }) => {
   );
 };
 
-export default PhoneNumber;
+export default Otp;
 
 const styles = StyleSheet.create({
   container: {

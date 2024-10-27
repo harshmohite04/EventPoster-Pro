@@ -3,11 +3,13 @@ import React from 'react'
 // import { Slot,Stack } from 'expo-router'
 import { createStackNavigator } from '@react-navigation/stack';
 import PhoneNumber from './phoneNumber';
+import Otp from './otp';
 const Layout = () => {
     const Stack = createStackNavigator();
   return (
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-      <Stack.Screen name="First" component={PhoneNumber} />
+    <Stack.Navigator initialRouteName="PhoneNumberAuth" screenOptions={{headerShown:false}}>
+      <Stack.Screen name="PhoneNumberAuth" component={PhoneNumber} />
+      <Stack.Screen name="Otp" component={Otp} />
     </Stack.Navigator>
   )
 }
