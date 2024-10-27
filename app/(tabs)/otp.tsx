@@ -10,17 +10,26 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 import Logo from "@/assets/icons/logo";
 import { Formik } from "formik";
 import PhoneNumber from "./phoneNumber";
-const Otp = ({ navigation,route }) => {
+const Otp = ({ navigation, route }) => {
+  const { number = "" } = route?.params || {};
 
-    const { number = '' } = route?.params || {};
+  const et1 = useRef();
+  const et2 = useRef();
+  const et3 = useRef();
+  const et4 = useRef();
 
+  const [f1, setF1] = useState("");
+  const [f2, setF2] = useState("");
+  const [f3, setF3] = useState("");
+  const [f4, setF4] = useState("");
+  const otp = f1 + f2 + f3 + f4;
   const [secondsRemaining, setSecondsRemaining] = useState(30);
 
   useEffect(() => {
@@ -59,7 +68,7 @@ const Otp = ({ navigation,route }) => {
                 <Text style={styles.txt1}>and </Text>
                 <Text style={styles.txt2}>name</Text>
               </View>
-              <Logo size={170*scale}/>
+              <Logo size={170 * scale} />
             </View>
           </LinearGradient>
           <View style={styles.flex2}>
@@ -89,27 +98,124 @@ const Otp = ({ navigation,route }) => {
             >
               OTP sent to {number}, Please wait
             </Text>
+            <View style={{ flexDirection: "row", alignSelf: "center" }}>
+              <TextInput
+                ref={et1}
+                style={[
+                  styles.inputView,
+                  { borderColor: f1.length >= 1 ? "blue" : "#000" },
+                ]}
+                keyboardType="number-pad"
+                maxLength={1}
+                value={f1}
+                onChangeText={(txt) => {
+                  setF1(txt);
+                  if (txt.length === 1) et2.current.focus();
+                }}
+              />
+              <TextInput
+                ref={et2}
+                style={[
+                  styles.inputView,
+                  { borderColor: f2.length >= 1 ? "blue" : "#000" },
+                ]}
+                keyboardType="number-pad"
+                maxLength={1}
+                value={f2}
+                onChangeText={(txt) => {
+                  setF2(txt);
+                  if (txt.length === 1) et3.current.focus();
+                  else if (txt.length == 0) et1.current.focus();
+                }}
+              />
+              <TextInput
+                ref={et3}
+                style={[
+                  styles.inputView,
+                  { borderColor: f3.length >= 1 ? "blue" : "#000" },
+                ]}
+                keyboardType="number-pad"
+                maxLength={1}
+                value={f3}
+                onChangeText={(txt) => {
+                  setF3(txt);
+                  if (txt.length === 1) et4.current.focus();
+                  else if (txt.length == 0) et2.current.focus();
+                }}
+              />
+              <TextInput
+                ref={et4}
+                style={[
+                  styles.inputView,
+                  { borderColor: f4.length >= 1 ? "blue" : "#000" },
+                ]}
+                keyboardType="number-pad"
+                maxLength={1}
+                value={f4}
+                onChangeText={(txt) => {
+                  setF4(txt);
 
+                  if (txt.length == 0) et3.current.focus();
+                }}
+              />
+            </View>
             <Formik
               initialValues={{ email: "" }}
               onSubmit={(values) => console.log(values)}
             >
               {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <View>
-                  
-
                   <TouchableOpacity
+                    disabled={
+                      f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
+                        ? false
+                        : true
+                    }
+                    onPress={() => {
+                      console.log(otp);
+                      navigation.push("Promo");
+                    }}
                     style={{
-                      backgroundColor: "#FF8017",
+                      backgroundColor:
+                        f1 !== '' && f2 !== '' && f3 !== '' && f4 !== ''
+                          ? "#FF8017"
+                          : "#B3B3B3",
                       width: "80%",
                       alignItems: "center",
                       paddingVertical: 10 * scale,
-                      alignSelf:"center",
-                      borderRadius:10*scale
+                      alignSelf: "center",
+                      borderRadius: 10 * scale,
                     }}
                   >
-                    <Text style={{fontSize:13*scale,fontWeight:"500"}}>Continue</Text>
+                    <Text
+                      style={{
+                        fontSize: 13 * scale,
+                        fontWeight: "500",
+                        color:
+                          f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
+                            ? "#000000"
+                            : "#ffffff",
+                      }}
+                    >
+                      Continue
+                    </Text>
                   </TouchableOpacity>
+                  <Text
+                    disabled={secondsRemaining > 1}
+                    onPress={() => {
+                      setSecondsRemaining(30);
+                      console.log("Tap");
+                    }}
+                    style={{
+                      alignSelf: "center",
+                      fontSize: 14 * scale,
+                      textDecorationLine: "underline",
+                      marginVertical: 5 * scale,
+                      color: secondsRemaining == 0 ? "blue" : "grey",
+                    }}
+                  >
+                    Resend OTP
+                  </Text>
                 </View>
               )}
             </Formik>
@@ -184,5 +290,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     marginTop: 25 * scale,
+  },
+  inputView: {
+    borderRadius: 10,
+    width: 35 * scale,
+    height: 35 * scale,
+    color: "#000000",
+    textAlign: "center",
+    marginLeft: 15 * scale,
+    marginVertical: 10 * scale,
+    backgroundColor: "#FFEFD4",
   },
 });
