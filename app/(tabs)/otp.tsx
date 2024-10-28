@@ -9,6 +9,7 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
@@ -16,8 +17,17 @@ const { width } = Dimensions.get("window");
 const scale = width / 320;
 import Logo from "@/assets/icons/logo";
 import { Formik } from "formik";
-import PhoneNumber from "./phoneNumber";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFonts } from "expo-font";
+import { SafeAreaView } from "react-native-safe-area-context";
+import KeyboardAvoidingContainer from "@/components/KeyboardAvoidingContainer";
 const Otp = ({ navigation, route }) => {
+  const [loaded] = useFonts({
+    Satoshi: require("../../assets/fonts/Satoshi-Variable.ttf"),
+    Gotham: require("../../assets/fonts/GothamMedium.ttf"),
+    GothamBold: require("../../assets/fonts/GothamBold.ttf"),
+  });
+
   const { number = "" } = route?.params || {};
 
   const et1 = useRef();
@@ -47,182 +57,191 @@ const Otp = ({ navigation, route }) => {
   }, [secondsRemaining]);
 
   return (
-    <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <View style={styles.container}>
-          <LinearGradient
-            colors={["#FFEFD4", "#ffffff", "#FFDBA8"]}
-            style={styles.linearGradient}
-          >
-            <View style={styles.Parent}>
-              <View style={styles.txt}>
-                <Text style={styles.txt1}>Quotes and Wishes </Text>
-                <Text style={styles.txt2}>Everyday</Text>
-              </View>
-              <View style={[styles.txt, { marginBottom: 20 * scale }]}>
-                <Text style={styles.txt1}> with </Text>
-                <Text style={styles.txt2}>your photo </Text>
-                <Text style={styles.txt1}>and </Text>
-                <Text style={styles.txt2}>name</Text>
-              </View>
-              <Logo size={170 * scale} />
-            </View>
-          </LinearGradient>
-          <View style={styles.flex2}>
-            <Text style={styles.heading}>EventPoster Pro</Text>
-            <View
-              style={{
-                height: 40 * scale,
-                width: 40 * scale,
-                borderWidth: 4,
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: 20 * scale,
-                borderColor: "#FFC070",
-                alignSelf: "center",
-                marginVertical: 10 * scale,
-              }}
-            >
-              <Text style={{ fontSize: 20 * scale }}>{secondsRemaining}</Text>
-            </View>
-            <Text
-              style={{
-                fontSize: 12 * scale,
-                color: "#000000",
-                fontWeight: "500",
-                marginTop: 10 * scale,
-              }}
-            >
-              OTP sent to {number}, Please wait
-            </Text>
-            <View style={{ flexDirection: "row", alignSelf: "center" }}>
-              <TextInput
-                ref={et1}
-                style={[
-                  styles.inputView,
-                  { borderColor: f1.length >= 1 ? "blue" : "#000" },
-                ]}
-                keyboardType="number-pad"
-                maxLength={1}
-                value={f1}
-                onChangeText={(txt) => {
-                  setF1(txt);
-                  if (txt.length === 1) et2.current.focus();
-                }}
-              />
-              <TextInput
-                ref={et2}
-                style={[
-                  styles.inputView,
-                  { borderColor: f2.length >= 1 ? "blue" : "#000" },
-                ]}
-                keyboardType="number-pad"
-                maxLength={1}
-                value={f2}
-                onChangeText={(txt) => {
-                  setF2(txt);
-                  if (txt.length === 1) et3.current.focus();
-                  else if (txt.length == 0) et1.current.focus();
-                }}
-              />
-              <TextInput
-                ref={et3}
-                style={[
-                  styles.inputView,
-                  { borderColor: f3.length >= 1 ? "blue" : "#000" },
-                ]}
-                keyboardType="number-pad"
-                maxLength={1}
-                value={f3}
-                onChangeText={(txt) => {
-                  setF3(txt);
-                  if (txt.length === 1) et4.current.focus();
-                  else if (txt.length == 0) et2.current.focus();
-                }}
-              />
-              <TextInput
-                ref={et4}
-                style={[
-                  styles.inputView,
-                  { borderColor: f4.length >= 1 ? "blue" : "#000" },
-                ]}
-                keyboardType="number-pad"
-                maxLength={1}
-                value={f4}
-                onChangeText={(txt) => {
-                  setF4(txt);
+    <SafeAreaView style={{ flex: 1 }}>
+      <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <ScrollView>
 
-                  if (txt.length == 0) et3.current.focus();
-                }}
-              />
-            </View>
-            <Formik
-              initialValues={{ email: "" }}
-              onSubmit={(values) => console.log(values)}
-            >
-              {({ handleChange, handleBlur, handleSubmit, values }) => (
-                <View>
-                  <TouchableOpacity
-                    disabled={
-                      f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
-                        ? false
-                        : true
-                    }
-                    onPress={() => {
-                      console.log(otp);
-                      navigation.push("Promo");
-                    }}
-                    style={{
-                      backgroundColor:
-                        f1 !== '' && f2 !== '' && f3 !== '' && f4 !== ''
-                          ? "#FF8017"
-                          : "#B3B3B3",
-                      width: "80%",
-                      alignItems: "center",
-                      paddingVertical: 10 * scale,
-                      alignSelf: "center",
-                      borderRadius: 10 * scale,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 13 * scale,
-                        fontWeight: "500",
-                        color:
-                          f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
-                            ? "#000000"
-                            : "#ffffff",
-                      }}
-                    >
-                      Continue
-                    </Text>
-                  </TouchableOpacity>
-                  <Text
-                    disabled={secondsRemaining > 1}
-                    onPress={() => {
-                      setSecondsRemaining(30);
-                      console.log("Tap");
-                    }}
-                    style={{
-                      alignSelf: "center",
-                      fontSize: 14 * scale,
-                      textDecorationLine: "underline",
-                      marginVertical: 5 * scale,
-                      color: secondsRemaining == 0 ? "blue" : "grey",
-                    }}
-                  >
-                    Resend OTP
-                  </Text>
+  
+          <View style={styles.container}>
+            <LinearGradient
+              colors={["#FFEFD4", "#ffffff", "#FFDBA8"]}
+              style={styles.linearGradient}
+              >
+              <View style={styles.Parent}>
+                <View style={styles.txt}>
+                  <Text style={styles.txt1}>Quotes and Wishes </Text>
+                  <Text style={styles.txt2}>Everyday</Text>
                 </View>
-              )}
-            </Formik>
+                <View style={[styles.txt, { marginBottom: 20 * scale }]}>
+                  <Text style={styles.txt1}> with </Text>
+                  <Text style={styles.txt2}>your photo </Text>
+                  <Text style={styles.txt1}>and </Text>
+                  <Text style={styles.txt2}>name</Text>
+                </View>
+                <Logo size={170 * scale} />
+              </View>
+            </LinearGradient>
+            <View style={styles.flex2}>
+              <Text style={styles.heading}>EventPoster Pro</Text>
+              <View
+                style={{
+                  height: 40 * scale,
+                  width: 40 * scale,
+                  borderWidth: 4,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 20 * scale,
+                  borderColor: "#FFC070",
+                  alignSelf: "center",
+                  marginVertical: 10 * scale,
+                }}
+                >
+                <Text style={{ fontSize: 20 * scale }}>{secondsRemaining}</Text>
+              </View>
+              <Text
+                style={{
+                  fontSize: 12 * scale,
+                  color: "#000000",
+                  fontWeight: "500",
+                  marginTop: 10 * scale,
+                }}
+                >
+                OTP sent to {number}, Please wait
+              </Text>
+              <View style={{ flexDirection: "row", alignSelf: "center" }}>
+                <TextInput
+                  ref={et1}
+                  style={[
+                    styles.inputView,
+                    { borderColor: f1.length >= 1 ? "blue" : "#000" },
+                  ]}
+                  keyboardType="number-pad"
+                  maxLength={1}
+                  value={f1}
+                  onChangeText={(txt) => {
+                    setF1(txt);
+                    if (txt.length === 1) et2.current.focus();
+                  }}
+                  />
+                <TextInput
+                  ref={et2}
+                  style={[
+                    styles.inputView,
+                    { borderColor: f2.length >= 1 ? "blue" : "#000" },
+                  ]}
+                  keyboardType="number-pad"
+                  maxLength={1}
+                  value={f2}
+                  onChangeText={(txt) => {
+                    setF2(txt);
+                    if (txt.length === 1) et3.current.focus();
+                    else if (txt.length == 0) et1.current.focus();
+                  }}
+                  />
+                <TextInput
+                  ref={et3}
+                  style={[
+                    styles.inputView,
+                    { borderColor: f3.length >= 1 ? "blue" : "#000" },
+                  ]}
+                  keyboardType="number-pad"
+                  maxLength={1}
+                  value={f3}
+                  onChangeText={(txt) => {
+                    setF3(txt);
+                    if (txt.length === 1) et4.current.focus();
+                    else if (txt.length == 0) et2.current.focus();
+                  }}
+                  />
+                <TextInput
+                  ref={et4}
+                  style={[
+                    styles.inputView,
+                    { borderColor: f4.length >= 1 ? "blue" : "#000" },
+                  ]}
+                  keyboardType="number-pad"
+                  maxLength={1}
+                  value={f4}
+                  onChangeText={(txt) => {
+                    setF4(txt);
+
+                    if (txt.length == 0) et3.current.focus();
+                  }}
+                />
+              </View>
+              <Formik
+                initialValues={{ otp: "" }}
+                onSubmit={(values) => console.log(values)}
+                >
+                {({ handleChange, handleBlur, handleSubmit, values }) => (
+                  <View>
+                    <TouchableOpacity
+                      disabled={
+                        f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
+                          ? false
+                          : true
+                      }
+                      onPress={async () => {
+                        console.log(otp);
+                        await AsyncStorage.setItem("isVerified", "true");
+                        navigation.replace("Promo");
+                      }}
+                      style={{
+                        backgroundColor:
+                          f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
+                            ? "#FF8017"
+                            : "#B3B3B3",
+                            width: "80%",
+                            alignItems: "center",
+                            paddingVertical: 10 * scale,
+                            
+                            alignSelf: "center",
+                            borderRadius: 10 * scale,
+                          }}
+                          >
+                      <Text
+                        style={{
+                          fontSize: 13 * scale,
+                          fontWeight: "500",
+                          color:
+                            f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
+                              ? "#000000"
+                              : "#ffffff",
+                            }}
+                            >
+                        Continue
+                      </Text>
+                    </TouchableOpacity>
+                    <Text
+                      disabled={secondsRemaining > 1}
+                      onPress={() => {
+                        setSecondsRemaining(30);
+                        console.log("Tap");
+                      }}
+                      style={{
+                        alignSelf: "center",
+                        fontSize: 14 * scale,
+                        textDecorationLine: "underline",
+                        marginVertical: 5 * scale,
+                        color: secondsRemaining == 0 ? "blue" : "grey",
+                      }}
+                      >
+                      Resend OTP
+                    </Text>
+                  </View>
+                )}
+              </Formik>
+            </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+         
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 };
 

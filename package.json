@@ -20,11 +20,11 @@
     "@react-navigation/stack": "^6.4.1",
     "expo": "~51.0.28",
     "expo-constants": "~16.0.2",
-    "expo-font": "~12.0.9",
+    "expo-font": "~12.0.10",
     "expo-linear-gradient": "~13.0.2",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.23",
-    "expo-splash-screen": "~0.27.5",
+    "expo-splash-screen": "~0.27.6",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
     "expo-web-browser": "~13.0.3",
@@ -41,7 +41,9 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "15.2.0",
     "react-native-web": "~0.19.10",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "@react-native-async-storage/async-storage": "1.23.1",
+    "expo-image-picker": "~15.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

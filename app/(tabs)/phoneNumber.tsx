@@ -17,9 +17,15 @@ const scale = width / 320;
 import Logo from "@/assets/icons/logo";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import { useFonts } from "expo-font";
 
 const PhoneNumber = ({ navigation }) => {
   
+  const [loaded]=useFonts({
+    Satoshi: require("../../assets/fonts/Satoshi-Variable.ttf"),
+    Gotham: require("../../assets/fonts/GothamMedium.ttf"),
+    GothamBold: require("../../assets/fonts/GothamBold.ttf")
+  })
   const handleSubmit = (values) => {
     const phoneNumber = values.phoneLength
     console.log(phoneNumber);
@@ -154,12 +160,12 @@ const styles = StyleSheet.create({
   txt1: {
     color: "#000000",
     fontSize: 20 * scale,
-    fontWeight: "500",
+    fontFamily:"Gotham"
   },
   txt2: {
     color: "#7F310F",
     fontSize: 20 * scale,
-    fontWeight: "800",
+    fontFamily:"GothamBold"
   },
   heading: {
     fontSize: 20 * scale,
@@ -169,6 +175,8 @@ const styles = StyleSheet.create({
   number1: {
     fontSize: 13 * scale,
     marginTop: 25 * scale,
+    fontFamily:"Satoshi",
+    
   },
   input: {
     width: "90%",
