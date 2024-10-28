@@ -39,7 +39,7 @@ const Layout = () => {
 
 
     
-    <Stack.Navigator initialRouteName="PhoneNumberAuth" screenOptions={{headerShown:false}}>
+    <Stack.Navigator initialRouteName="UploadImage" screenOptions={{headerShown:false}}>
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="PhoneNumberAuth" component={PhoneNumber} />
       <Stack.Screen name="Otp" component={Otp} />

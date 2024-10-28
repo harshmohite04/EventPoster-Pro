@@ -21,11 +21,11 @@ import { useFonts } from "expo-font";
 
 const PhoneNumber = ({ navigation }) => {
   
-  const [loaded]=useFonts({
-    Satoshi: require("../../assets/fonts/Satoshi-Variable.ttf"),
-    Gotham: require("../../assets/fonts/GothamMedium.ttf"),
-    GothamBold: require("../../assets/fonts/GothamBold.ttf")
-  })
+  // const [loaded]=useFonts({
+  //   Satoshi: require("../../assets/fonts/Satoshi-Variable.ttf"),
+  //   Gotham: require("../../assets/fonts/GothamMedium.ttf"),
+  //   GothamBold: require("../../assets/fonts/GothamBold.ttf")
+  // })
   const handleSubmit = (values) => {
     const phoneNumber = values.phoneLength
     console.log(phoneNumber);
@@ -160,12 +160,12 @@ const styles = StyleSheet.create({
   txt1: {
     color: "#000000",
     fontSize: 20 * scale,
-    fontFamily:"Gotham"
+    // fontFamily:"Gotham"
   },
   txt2: {
     color: "#7F310F",
     fontSize: 20 * scale,
-    fontFamily:"GothamBold"
+    // fontFamily:"GothamBold"
   },
   heading: {
     fontSize: 20 * scale,
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   number1: {
     fontSize: 13 * scale,
     marginTop: 25 * scale,
-    fontFamily:"Satoshi",
+    // fontFamily:"Satoshi",
     
   },
   input: {

@@ -9,7 +9,6 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
-  ScrollView,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
@@ -19,8 +18,8 @@ import Logo from "@/assets/icons/logo";
 import { Formik } from "formik";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
-import { SafeAreaView } from "react-native-safe-area-context";
-import KeyboardAvoidingContainer from "@/components/KeyboardAvoidingContainer";
+import { ScrollView } from "react-native-gesture-handler";
+
 const Otp = ({ navigation, route }) => {
   const [loaded] = useFonts({
     Satoshi: require("../../assets/fonts/Satoshi-Variable.ttf"),
@@ -57,20 +56,16 @@ const Otp = ({ navigation, route }) => {
   }, [secondsRemaining]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <ScrollView>
-
-  
+          >
           <View style={styles.container}>
             <LinearGradient
               colors={["#FFEFD4", "#ffffff", "#FFDBA8"]}
               style={styles.linearGradient}
-              >
+            >
               <View style={styles.Parent}>
                 <View style={styles.txt}>
                   <Text style={styles.txt1}>Quotes and Wishes </Text>
@@ -99,7 +94,7 @@ const Otp = ({ navigation, route }) => {
                   alignSelf: "center",
                   marginVertical: 10 * scale,
                 }}
-                >
+              >
                 <Text style={{ fontSize: 20 * scale }}>{secondsRemaining}</Text>
               </View>
               <Text
@@ -109,7 +104,7 @@ const Otp = ({ navigation, route }) => {
                   fontWeight: "500",
                   marginTop: 10 * scale,
                 }}
-                >
+              >
                 OTP sent to {number}, Please wait
               </Text>
               <View style={{ flexDirection: "row", alignSelf: "center" }}>
@@ -126,7 +121,7 @@ const Otp = ({ navigation, route }) => {
                     setF1(txt);
                     if (txt.length === 1) et2.current.focus();
                   }}
-                  />
+                />
                 <TextInput
                   ref={et2}
                   style={[
@@ -141,7 +136,7 @@ const Otp = ({ navigation, route }) => {
                     if (txt.length === 1) et3.current.focus();
                     else if (txt.length == 0) et1.current.focus();
                   }}
-                  />
+                />
                 <TextInput
                   ref={et3}
                   style={[
@@ -156,7 +151,7 @@ const Otp = ({ navigation, route }) => {
                     if (txt.length === 1) et4.current.focus();
                     else if (txt.length == 0) et2.current.focus();
                   }}
-                  />
+                />
                 <TextInput
                   ref={et4}
                   style={[
@@ -176,7 +171,7 @@ const Otp = ({ navigation, route }) => {
               <Formik
                 initialValues={{ otp: "" }}
                 onSubmit={(values) => console.log(values)}
-                >
+              >
                 {({ handleChange, handleBlur, handleSubmit, values }) => (
                   <View>
                     <TouchableOpacity
@@ -195,14 +190,13 @@ const Otp = ({ navigation, route }) => {
                           f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
                             ? "#FF8017"
                             : "#B3B3B3",
-                            width: "80%",
-                            alignItems: "center",
-                            paddingVertical: 10 * scale,
-                            
-                            alignSelf: "center",
-                            borderRadius: 10 * scale,
-                          }}
-                          >
+                        width: "80%",
+                        alignItems: "center",
+                        paddingVertical: 10 * scale,
+                        alignSelf: "center",
+                        borderRadius: 10 * scale,
+                      }}
+                    >
                       <Text
                         style={{
                           fontSize: 13 * scale,
@@ -211,8 +205,8 @@ const Otp = ({ navigation, route }) => {
                             f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
                               ? "#000000"
                               : "#ffffff",
-                            }}
-                            >
+                        }}
+                      >
                         Continue
                       </Text>
                     </TouchableOpacity>
@@ -229,7 +223,7 @@ const Otp = ({ navigation, route }) => {
                         marginVertical: 5 * scale,
                         color: secondsRemaining == 0 ? "blue" : "grey",
                       }}
-                      >
+                    >
                       Resend OTP
                     </Text>
                   </View>
@@ -237,11 +231,8 @@ const Otp = ({ navigation, route }) => {
               </Formik>
             </View>
           </View>
-         
-          </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
-    </SafeAreaView>
   );
 };
 
