@@ -18,25 +18,24 @@ import ImageCard from "@/components/ImageCard";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 
-const UploadImage = () => {
+const UploadImage = ({ navigation }) => {
   const templetes = useTempletes();
   const [selectedTempletes, setSelectedTempletes] = useState<null | Templete>(
     null
   );
 
   const [image, setImage] = useState<string | null>(null);
-
+  console.log(image);
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      // allowsEditing: true,
-      // aspect: [4, 3],
+
       quality: 1,
     });
 
+    navigation.push("EditImage", { image: image });
     console.log(result);
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
