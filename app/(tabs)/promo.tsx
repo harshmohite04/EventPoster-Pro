@@ -192,6 +192,6 @@ const styles = StyleSheet.create({
   skip: {
     flexDirection: "row",
     alignSelf: "flex-end",
-    paddingHorizontal: 10 * scale,
+    paddingHorizontal: 10 * scale,marginBottom:15*scale
   },
 });

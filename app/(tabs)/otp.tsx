@@ -9,6 +9,7 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
@@ -18,7 +19,6 @@ import Logo from "@/assets/icons/logo";
 import { Formik } from "formik";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
-import { ScrollView } from "react-native-gesture-handler";
 
 const Otp = ({ navigation, route }) => {
   const [loaded] = useFonts({
@@ -28,7 +28,6 @@ const Otp = ({ navigation, route }) => {
   });
 
   const { number = "" } = route?.params || {};
-
   const et1 = useRef();
   const et2 = useRef();
   const et3 = useRef();
@@ -41,6 +40,9 @@ const Otp = ({ navigation, route }) => {
   const otp = f1 + f2 + f3 + f4;
   const [secondsRemaining, setSecondsRemaining] = useState(30);
 
+  // State for keyboard height
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
   useEffect(() => {
     let intervalId;
     if (secondsRemaining > 0) {
@@ -48,19 +50,45 @@ const Otp = ({ navigation, route }) => {
         setSecondsRemaining(secondsRemaining - 1);
       }, 1000);
     } else {
-      // Timer has reached 0
       clearInterval(intervalId);
     }
-
     return () => clearInterval(intervalId);
   }, [secondsRemaining]);
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      (event) => {
+        setKeyboardHeight(event.endCoordinates.height);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
-    <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: Math.max(0, keyboardHeight-150*scale),
+            backgroundColor:"#ffffff"
+          }}
+          keyboardShouldPersistTaps="handled"
+        >
           <View style={styles.container}>
             <LinearGradient
               colors={["#FFEFD4", "#ffffff", "#FFDBA8"]}
@@ -82,32 +110,13 @@ const Otp = ({ navigation, route }) => {
             </LinearGradient>
             <View style={styles.flex2}>
               <Text style={styles.heading}>EventPoster Pro</Text>
-              <View
-                style={{
-                  height: 40 * scale,
-                  width: 40 * scale,
-                  borderWidth: 4,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  borderRadius: 20 * scale,
-                  borderColor: "#FFC070",
-                  alignSelf: "center",
-                  marginVertical: 10 * scale,
-                }}
-              >
+              <View style={styles.timerContainer}>
                 <Text style={{ fontSize: 20 * scale }}>{secondsRemaining}</Text>
               </View>
-              <Text
-                style={{
-                  fontSize: 12 * scale,
-                  color: "#000000",
-                  fontWeight: "500",
-                  marginTop: 10 * scale,
-                }}
-              >
+              <Text style={styles.otpSentText}>
                 OTP sent to {number}, Please wait
               </Text>
-              <View style={{ flexDirection: "row", alignSelf: "center" }}>
+              <View style={styles.otpContainer}>
                 <TextInput
                   ref={et1}
                   style={[
@@ -163,66 +172,39 @@ const Otp = ({ navigation, route }) => {
                   value={f4}
                   onChangeText={(txt) => {
                     setF4(txt);
-
                     if (txt.length == 0) et3.current.focus();
                   }}
                 />
               </View>
-              <Formik
-                initialValues={{ otp: "" }}
-                onSubmit={(values) => console.log(values)}
-              >
-                {({ handleChange, handleBlur, handleSubmit, values }) => (
+              <Formik initialValues={{ otp: "" }} onSubmit={(values) => console.log(values)}>
+                {({ handleSubmit }) => (
                   <View>
                     <TouchableOpacity
-                      disabled={
-                        f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
-                          ? false
-                          : true
-                      }
+                      disabled={otp.length < 4}
                       onPress={async () => {
                         console.log(otp);
                         await AsyncStorage.setItem("isVerified", "true");
                         navigation.replace("Promo");
                       }}
-                      style={{
-                        backgroundColor:
-                          f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
-                            ? "#FF8017"
-                            : "#B3B3B3",
-                        width: "80%",
-                        alignItems: "center",
-                        paddingVertical: 10 * scale,
-                        alignSelf: "center",
-                        borderRadius: 10 * scale,
-                      }}
+                      style={[
+                        styles.continueButton,
+                        {
+                          backgroundColor:
+                            otp.length === 4 ? "#FF8017" : "#B3B3B3",
+                        },
+                      ]}
                     >
-                      <Text
-                        style={{
-                          fontSize: 13 * scale,
-                          fontWeight: "500",
-                          color:
-                            f1 !== "" && f2 !== "" && f3 !== "" && f4 !== ""
-                              ? "#000000"
-                              : "#ffffff",
-                        }}
-                      >
-                        Continue
-                      </Text>
+                      <Text style={styles.continueText}>Continue</Text>
                     </TouchableOpacity>
                     <Text
                       disabled={secondsRemaining > 1}
-                      onPress={() => {
-                        setSecondsRemaining(30);
-                        console.log("Tap");
-                      }}
-                      style={{
-                        alignSelf: "center",
-                        fontSize: 14 * scale,
-                        textDecorationLine: "underline",
-                        marginVertical: 5 * scale,
-                        color: secondsRemaining == 0 ? "blue" : "grey",
-                      }}
+                      onPress={() => setSecondsRemaining(30)}
+                      style={[
+                        styles.resendOtpText,
+                        {
+                          color: secondsRemaining === 0 ? "blue" : "grey",
+                        },
+                      ]}
                     >
                       Resend OTP
                     </Text>
@@ -231,8 +213,9 @@ const Otp = ({ navigation, route }) => {
               </Formik>
             </View>
           </View>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -277,29 +260,26 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     alignSelf: "center",
   },
-  number1: {
-    fontSize: 13 * scale,
-    marginTop: 25 * scale,
-  },
-  input: {
-    width: "90%",
+  timerContainer: {
+    height: 40 * scale,
+    width: 40 * scale,
+    borderWidth: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20 * scale,
+    borderColor: "#FFC070",
     alignSelf: "center",
-    height: 35 * scale,
-    borderRadius: 10 * scale,
-    borderWidth: 1,
-    borderColor: "#000000",
-    paddingHorizontal: 10 * scale,
+    marginVertical: 10 * scale,
+  },
+  otpSentText: {
+    fontSize: 12 * scale,
+    color: "#000000",
+    fontWeight: "500",
     marginTop: 10 * scale,
   },
-  btn: {
-    backgroundColor: "#FF8017",
-    width: "80%",
-    borderRadius: 8 * scale,
-    paddingHorizontal: 15 * scale,
-    paddingVertical: 10 * scale,
-    alignItems: "center",
+  otpContainer: {
+    flexDirection: "row",
     alignSelf: "center",
-    marginTop: 25 * scale,
   },
   inputView: {
     borderRadius: 10,
@@ -310,5 +290,23 @@ const styles = StyleSheet.create({
     marginLeft: 15 * scale,
     marginVertical: 10 * scale,
     backgroundColor: "#FFEFD4",
+  },
+  continueButton: {
+    width: "80%",
+    alignItems: "center",
+    paddingVertical: 10 * scale,
+    alignSelf: "center",
+    borderRadius: 10 * scale,
+  },
+  continueText: {
+    fontSize: 13 * scale,
+    fontWeight: "500",
+    color: "#000000",
+  },
+  resendOtpText: {
+    alignSelf: "center",
+    fontSize: 14 * scale,
+    textDecorationLine: "underline",
+    marginVertical: 5 * scale,
   },
 });

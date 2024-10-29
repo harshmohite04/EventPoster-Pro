@@ -12,7 +12,7 @@ import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import Upload from "@/assets/icons/upload";
 import { ScrollView } from "react-native-gesture-handler";
-import { useTempletes } from "@/hooks/useTemplete";
+import { Templete, useTempletes } from "@/hooks/useTemplete";
 import ImageCard from "@/components/ImageCard";
 
 const { width } = Dimensions.get("window");
@@ -20,7 +20,7 @@ const scale = width / 320;
 
 const UploadImage = () => {
   const templetes = useTempletes();
-  const [selectedTempletes, setSelectedTempletes] = useState<null | Wallpaper>(
+  const [selectedTempletes, setSelectedTempletes] = useState<null | Templete>(
     null
   );
 
@@ -30,8 +30,8 @@ const UploadImage = () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
+      // allowsEditing: true,
+      // aspect: [4, 3],
       quality: 1,
     });
 

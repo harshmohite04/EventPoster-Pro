@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
   View,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
@@ -15,7 +15,7 @@ const scale = width / 320;
 
 import ProfilePhoto from "@/assets/icons/profilePhoto";
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [search, setSearch] = useState("");
   return (
     <SafeAreaView style={styles.container}>
@@ -28,17 +28,20 @@ const Home = ({navigation}) => {
           }}
         >
           <View style={styles.search}>
-            <EvilIcons name="search" size={20*scale} color="black" />
+            <EvilIcons name="search" size={20 * scale} color="black" />
             <TextInput
               value={search}
               onChangeText={setSearch}
               placeholder="Search"
               placeholderTextColor={"#49454F"}
-              style={{ marginLeft: 5 * scale, fontSize: 16.8 * scale }}
+              clearButtonMode="always"
+              style={{ marginLeft: 5 * scale, fontSize: 14 * scale }}
             />
           </View>
           <TouchableOpacity
-          onPress={()=>{navigation.push("UploadImage")}}
+            onPress={() => {
+              navigation.push("UploadImage");
+            }}
             style={{
               flexDirection: "row",
               backgroundColor: "#FF9A37",
@@ -58,10 +61,7 @@ const Home = ({navigation}) => {
         <ProfilePhoto size={35 * scale} />
       </View>
 
-      <View style={styles.category}>
-
-        
-      </View>
+      <View style={styles.category}></View>
     </SafeAreaView>
   );
 };
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
     paddingHorizontal: 10 * scale,
-    paddingVertical:15*scale
+    paddingVertical: 15 * scale,
   },
   flex1: {
     flexDirection: "row",
@@ -86,14 +86,14 @@ const styles = StyleSheet.create({
     borderRadius: 25 * scale,
     paddingHorizontal: 5 * scale,
     paddingVertical: 5 * scale,
-    alignItems:"center"
+    alignItems: "center",
   },
   category: {
     borderTopColor: "#F0F0F0",
     borderBottomColor: "#F0F0F0",
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    marginTop:10*scale,
+    marginTop: 10 * scale,
     paddingVertical: 10 * scale,
   },
 });
