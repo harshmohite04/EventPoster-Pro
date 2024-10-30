@@ -1,31 +1,59 @@
 import {
   Dimensions,
   StyleSheet,
-  Text,
+  Text as RNText,
   Image,
   View,
   TouchableOpacity,
   SafeAreaView,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 import Feather from "@expo/vector-icons/Feather";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-
+import { PanGestureHandler } from "react-native-gesture-handler";
+import Svg ,{Text as SvgText}from "react-native-svg";
 const Tab = createMaterialTopTabNavigator();
 
+const DraggableText = ({ initialX, initialY, text, fontSize, color="#fff" }) => {
+  const [position, setPosition] = useState({ x: initialX, y: initialY });
+
+  const onGestureEvent = (event) => {
+    setPosition({
+      x: event.nativeEvent.translationX + initialX,
+      y: event.nativeEvent.translationY + initialY,
+    });
+  };
+
+  return (
+    <PanGestureHandler onGestureEvent={onGestureEvent}>
+      <Svg style={{ position: "absolute", left: position.x, top: position.y }}>
+        <SvgText
+          fill={color}
+          fontSize={fontSize}
+          fontWeight="bold"
+          x={50*scale}
+          y={50*scale}
+          textAnchor="middle"
+        >
+          {text}
+        </SvgText>
+      </Svg>
+    </PanGestureHandler>
+  );
+};
 const FontTab = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-      <Text>Hello this is FontTab</Text>
+      <RNText>Hello this is FontTab</RNText>
     </View>
   );
 };
 const BoxcolorTab = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-      <Text>Hello this is BoxcolorTab</Text>
+      <RNText>Hello this is BoxcolorTab</RNText>
     </View>
   );
 };
@@ -33,21 +61,21 @@ const BoxcolorTab = () => {
 const ColorTab = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-      <Text>This is ColorTab</Text>
+      <RNText>This is ColorTab</RNText>
     </View>
   );
 };
 const AlignTab = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-      <Text>This is AlignTab</Text>
+      <RNText>This is AlignTab</RNText>
     </View>
   );
 };
 const Shadowtab = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
-      <Text>This is ShadowTab</Text>
+      <RNText>This is ShadowTab</RNText>
     </View>
   );
 };
@@ -88,49 +116,57 @@ const EditImage = ({ navigation, route }) => {
           }}
         >
           <Feather name="check" size={24} color="black" />
-          <Text style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
+          <RNText style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
             Done
-          </Text>
+          </RNText>
         </TouchableOpacity>
       </View>
       <View style={{ paddingVertical: 20 * scale }}>
         {image && (
-          <Image
-            source={{ uri: image }}
-            style={{
-              width: 300 * scale,
-              height: 300 * scale,
-              alignSelf: "center",
-            }}
-          ></Image>
+          <View style={{}}>
+            <Image
+              source={{ uri: image }}
+              style={{
+                width: 300 * scale,
+                height: 300 * scale,
+                alignSelf: "center",
+              }}
+            />
+            <DraggableText
+              initialX={100}
+              initialY={200}
+              text="what"
+              fontSize={24}
+              color="red"
+            />
+          </View>
         )}
-        {!image && <Text>Image not selected</Text>}
+        {!image && <RNText>Image not selected</RNText>}
       </View>
 
       <View
         style={{
           flex: 1,
           backgroundColor: "#f7f7f7",
-          borderTopRightRadius:20*scale,
-          borderTopLeftRadius:20*scale,
+          borderTopRightRadius: 20 * scale,
+          borderTopLeftRadius: 20 * scale,
         }}
       >
         <Tab.Navigator
           screenOptions={{
-            tabBarLabelStyle: { fontSize: 10 * scale, textTransform: "none" },
+            tabBarLabelStyle: { fontSize: 10 * scale, RNTextTransform: "none" },
             tabBarItemStyle: { width: 65 * scale },
             tabBarStyle: { backgroundColor: "#ffffff" },
           }}
           style={{
             borderTopLeftRadius: 20 * scale,
             borderTopRightRadius: 20 * scale,
-            
           }}
         >
           <Tab.Screen
             name="Fonts"
             component={FontTab}
-            options={{ tabBarLabel: "Home" }}
+            options={{ tabBarLabel: "Font" }}
           />
           <Tab.Screen
             name="Boxcolor"
