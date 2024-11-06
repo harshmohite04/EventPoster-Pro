@@ -7,6 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Image,
   Keyboard,
   ScrollView,
   TouchableWithoutFeedback,
@@ -15,14 +16,39 @@ import React, { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
-import Logo from "@/assets/icons/logo";
+import MiddleLogo from "../../assets/icons/middleLogo";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import { useFonts } from "expo-font";
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import {
+  Poppins_400Regular,
+  Poppins_700Bold,
+  Poppins_800ExtraBold,
+  Poppins_600SemiBold,
+} from "@expo-google-fonts/poppins";
 
 const PhoneNumber = ({ navigation }) => {
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [fontsLoaded] = useFonts({
+    'Poppins-Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
+    'Poppins-Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+    'Poppins-ExtraBold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
+    'Poppins-SemiBold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
+  });
 
+  if (!fontsLoaded) {
+    return (
+      <AppLoading />
+    )
+  }
+
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  useFonts({
+    Poppins_400Regular,
+    Poppins_700Bold,
+    Poppins_800ExtraBold,
+    Poppins_600SemiBold,
+  });
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",
@@ -87,10 +113,25 @@ const PhoneNumber = ({ navigation }) => {
                   <Text style={styles.txt1}>and </Text>
                   <Text style={styles.txt2}>name</Text>
                 </View>
-                <Logo size={170 * scale} />
+                {/* <Logo size={170*scale} /> */}
+                <Image
+                  style={{
+                    width: 150 * scale * 1.0228310502283105022831050228311,
+                    height: 150 * scale,
+                  }}
+                  source={require("../../assets/images/logo2.png")}
+                ></Image>
               </View>
             </LinearGradient>
             <View style={styles.flex2}>
+              <MiddleLogo
+                style={{
+                  position: "absolute",
+                  top: -25 * scale, // Adjust to control how much it overlaps
+                  alignSelf: "center",
+                }}
+                size={50 * scale}
+              />
               <Text style={styles.heading}>EventPoster Pro</Text>
               <Text style={styles.number1}>ENTER MOBILE NUMBER</Text>
               <Formik
@@ -103,12 +144,12 @@ const PhoneNumber = ({ navigation }) => {
                     <View
                       style={{
                         flexDirection: "row",
-                        borderRadius: 10 * scale,
+                        borderRadius: 16 * scale,
                         borderWidth: 1 * scale,
                         borderColor: "black",
-                        width: "80%",
+                        width: "100%",
                         alignSelf: "center",
-                        paddingVertical: 6 * scale,
+                        paddingVertical: 13 * scale,
                         paddingHorizontal: 6 * scale,
                         marginTop: 8 * scale,
                       }}
@@ -121,7 +162,14 @@ const PhoneNumber = ({ navigation }) => {
                           borderRightWidth: 1,
                         }}
                       >
-                        <Text style={{ fontSize: 12 * scale }}>+91</Text>
+                        <Text
+                          style={{
+                            fontSize: 16 * scale,
+                            fontFamily: "Poppins_700Bold",
+                          }}
+                        >
+                          +91
+                        </Text>
                       </View>
                       <TextInput
                         onChangeText={handleChange("phoneLength")}
@@ -130,9 +178,10 @@ const PhoneNumber = ({ navigation }) => {
                         keyboardType="numeric"
                         placeholderTextColor="#858597"
                         style={{
-                          fontSize: 11 * scale,
                           paddingHorizontal: 10 * scale,
-                          width:"80%"
+                          width: "80%",
+                          fontSize: 16 * scale,
+                          fontFamily: "Poppins_600SemiBold",
                         }}
                       />
                     </View>
@@ -142,7 +191,12 @@ const PhoneNumber = ({ navigation }) => {
                       </Text>
                     )}
                     <TouchableOpacity onPress={handleSubmit} style={styles.btn}>
-                      <Text style={{ fontSize: 15 * scale, fontWeight: "500" }}>
+                      <Text
+                        style={{
+                          fontSize: 15 * scale,
+                          fontFamily: "Poppins_700Bold",
+                        }}
+                      >
                         Get OTP
                       </Text>
                     </TouchableOpacity>
@@ -181,30 +235,35 @@ const styles = StyleSheet.create({
   },
   Parent: {
     alignItems: "center",
+    alignSelf: "center",
     justifyContent: "center",
+    width: "60%",
   },
   txt1: {
     color: "#000000",
-    fontSize: 20 * scale,
-    // fontFamily:"Gotham"
+    fontSize: 18 * scale,
+    fontFamily: "Poppins_400Regular",
+    lineHeight: 30,
   },
   txt2: {
     color: "#7F310F",
-    fontSize: 20 * scale,
-    // fontFamily:"GothamBold"
+    fontSize: 18 * scale,
+    lineHeight: 30,
+    fontFamily: "Poppins_700Bold",
   },
   heading: {
     fontSize: 20 * scale,
-    fontWeight: "800",
     alignSelf: "center",
+    // fontFamily:"Poppins_800ExtraBold",
+    fontFamily: "Poppins_700Bold",
   },
   number1: {
     fontSize: 13 * scale,
     marginTop: 25 * scale,
-    // fontFamily:"Satoshi",
+    fontFamily: "Poppins_400Regular",
   },
   input: {
-    width: "90%",
+    width: "100%",
     alignSelf: "center",
     height: 35 * scale,
     borderRadius: 10 * scale,
@@ -215,8 +274,8 @@ const styles = StyleSheet.create({
   },
   btn: {
     backgroundColor: "#FF8017",
-    width: "80%",
-    borderRadius: 8 * scale,
+    width: "100%",
+    borderRadius: 16 * scale,
     paddingHorizontal: 15 * scale,
     paddingVertical: 10 * scale,
     alignItems: "center",

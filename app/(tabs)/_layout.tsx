@@ -10,6 +10,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import UploadImage from "./uploadImage";
 import EditImage from "./editImage";
 
+import { useFonts } from "expo-font";
+import AppLoading from 'expo-app-loading';
+
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     const checkVerificationStatus = async () => {
@@ -34,10 +37,24 @@ const SplashScreen = ({ navigation }) => {
 };
 
 const Layout = () => {
+
+  const [fontsLoaded] = useFonts({
+    'Poppins-Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
+    'Poppins-Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+    'Poppins-ExtraBold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
+    'Poppins-SemiBold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <AppLoading />
+    )
+  }
+
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="EditImage"
+      initialRouteName="Splash"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />

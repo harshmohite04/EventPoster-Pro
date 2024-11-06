@@ -21,11 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 
 const Otp = ({ navigation, route }) => {
-  const [loaded] = useFonts({
-    Satoshi: require("../../assets/fonts/Satoshi-Variable.ttf"),
-    Gotham: require("../../assets/fonts/GothamMedium.ttf"),
-    GothamBold: require("../../assets/fonts/GothamBold.ttf"),
-  });
+
 
   const { number = "" } = route?.params || {};
   const et1 = useRef();
