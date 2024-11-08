@@ -6,11 +6,29 @@ const { width } = Dimensions.get("window");
 const scale = width / 320;
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { TouchableOpacity } from "react-native-gesture-handler";
-const Promo = ({navigation}) => {
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
+const Promo = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-ExtraBold": require("../../assets/fonts/Poppins-ExtraBold.ttf"),
+    "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.flex1}>
-        <TouchableOpacity style={styles.skip} onPress={()=>{navigation.push("Home")}}>
+        <TouchableOpacity
+          style={styles.skip}
+          onPress={() => {
+            navigation.push("Home");
+          }}
+        >
           <Text
             style={{
               marginTop: 20 * scale,
@@ -32,11 +50,11 @@ const Promo = ({navigation}) => {
           style={{
             width: "100%",
             height: "90%",
-            justifyContent: "flex-end",
+            justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <PromoImg />
+          <PromoImg size={250*scale}/>
         </LinearGradient>
       </View>
       <View style={styles.flex2}>
@@ -63,17 +81,34 @@ const Promo = ({navigation}) => {
           }}
         >
           <View>
-            <Text style={{ fontSize: 20 * scale }}>Yearly Plan</Text>
+            <Text
+              style={{
+                fontSize: 20 * scale,
+                fontFamily: "Poppins-Regular",
+                lineHeight: 25 * scale,
+              }}
+            >
+              Yearly Plan
+            </Text>
             <Text
               style={{
                 color: "#14AE5C",
                 fontSize: 30 * scale,
-                fontWeight: "700",
+                fontFamily: "Poppins-Bold",
+                lineHeight: 45 * scale,
               }}
             >
               ₹500
             </Text>
-            <Text style={{ color: "grey" }}>(₹50/month)</Text>
+            <Text
+              style={{
+                color: "grey",
+                lineHeight: 12 * scale,
+                fontFamily: "Poppins-Regular",
+              }}
+            >
+              (₹50/month)
+            </Text>
           </View>
 
           <View
@@ -93,7 +128,8 @@ const Promo = ({navigation}) => {
                 textDecorationLine: "line-through",
                 color: "#ffffff",
                 fontSize: 25 * scale,
-                fontWeight: "bold",
+                fontFamily: "Poppins-Bold",
+                lineHeight: 30 * scale,
               }}
             >
               ₹1800
@@ -102,7 +138,8 @@ const Promo = ({navigation}) => {
               style={{
                 color: "#ffffff",
                 fontSize: 20 * scale,
-                fontWeight: "bold",
+                fontFamily: "Poppins-Bold",
+                lineHeight: 25 * scale,
               }}
             >
               SAVE 67%
@@ -192,6 +229,7 @@ const styles = StyleSheet.create({
   skip: {
     flexDirection: "row",
     alignSelf: "flex-end",
-    paddingHorizontal: 10 * scale,marginBottom:15*scale
+    paddingHorizontal: 10 * scale,
+    marginBottom: 15 * scale,
   },
 });

@@ -13,8 +13,8 @@ import Svg, {
  function PromoImg( props) {
   return (
     <Svg
-      width={369}
-      height={362}
+      width={props.size*1.0193370165745856353591160220994}
+      height={props.size}
       viewBox="0 0 369 362"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

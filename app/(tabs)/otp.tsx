@@ -18,10 +18,22 @@ const scale = width / 320;
 import Logo from "@/assets/icons/logo";
 import { Formik } from "formik";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
+
 
 const Otp = ({ navigation, route }) => {
+  const [fontsLoaded] = useFonts({
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-ExtraBold": require("../../assets/fonts/Poppins-ExtraBold.ttf"),
+    "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
+  });
 
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   const { number = "" } = route?.params || {};
   const et1 = useRef();
@@ -80,8 +92,8 @@ const Otp = ({ navigation, route }) => {
         <ScrollView
           contentContainerStyle={{
             flexGrow: 1,
-            paddingBottom: Math.max(0, keyboardHeight-150*scale),
-            backgroundColor:"#ffffff"
+            paddingBottom: Math.max(0, keyboardHeight - 150 * scale),
+            backgroundColor: "#ffffff",
           }}
           keyboardShouldPersistTaps="handled"
         >
@@ -172,7 +184,10 @@ const Otp = ({ navigation, route }) => {
                   }}
                 />
               </View>
-              <Formik initialValues={{ otp: "" }} onSubmit={(values) => console.log(values)}>
+              <Formik
+                initialValues={{ otp: "" }}
+                onSubmit={(values) => console.log(values)}
+              >
                 {({ handleSubmit }) => (
                   <View>
                     <TouchableOpacity
@@ -244,12 +259,14 @@ const styles = StyleSheet.create({
   txt1: {
     color: "#000000",
     fontSize: 20 * scale,
-    fontWeight: "500",
+    // fontWeight: "500",
+    fontFamily: "Poppins_400Regular",
   },
   txt2: {
     color: "#7F310F",
     fontSize: 20 * scale,
-    fontWeight: "800",
+    // fontWeight: "800",
+    fontFamily: "Poppins_700Bold",
   },
   heading: {
     fontSize: 20 * scale,
@@ -270,25 +287,30 @@ const styles = StyleSheet.create({
   otpSentText: {
     fontSize: 12 * scale,
     color: "#000000",
-    fontWeight: "500",
-    marginTop: 10 * scale,
+    // fontWeight: "500",
+    // marginTop: 10 * scale,
+    fontFamily: "Poppins_400Regular",
   },
   otpContainer: {
     flexDirection: "row",
     alignSelf: "center",
+  
   },
   inputView: {
     borderRadius: 10,
-    width: 35 * scale,
-    height: 35 * scale,
+    width: 50 * scale,
+    height: 45 * scale,
     color: "#000000",
     textAlign: "center",
-    marginLeft: 15 * scale,
+    marginLeft: 10 * scale,
+    marginRight: 10 * scale,
     marginVertical: 10 * scale,
     backgroundColor: "#FFEFD4",
+    fontSize:15*scale,
+    fontFamily:"Poppins_400Regular",
   },
   continueButton: {
-    width: "80%",
+    width: "100%",
     alignItems: "center",
     paddingVertical: 10 * scale,
     alignSelf: "center",
@@ -296,13 +318,15 @@ const styles = StyleSheet.create({
   },
   continueText: {
     fontSize: 13 * scale,
-    fontWeight: "500",
+    // fontWeight: "500",
     color: "#000000",
+    fontFamily:"Poppins_400Regular"
   },
   resendOtpText: {
     alignSelf: "center",
     fontSize: 14 * scale,
     textDecorationLine: "underline",
     marginVertical: 5 * scale,
+    fontFamily:"Poppins_400Regular"
   },
 });
