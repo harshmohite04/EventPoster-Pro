@@ -17,8 +17,13 @@ import * as Sharing from "expo-sharing";
 import Feather from "@expo/vector-icons/Feather";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Slider from "@react-native-community/slider";
-import { useFonts, Kanit_400Regular, Kanit_500Medium, Kanit_700Bold } from '@expo-google-fonts/kanit';
-import { FjallaOne_400Regular } from '@expo-google-fonts/fjalla-one';
+import {
+  useFonts,
+  Kanit_400Regular,
+  Kanit_500Medium,
+  Kanit_700Bold,
+} from "@expo-google-fonts/kanit";
+import { FjallaOne_400Regular } from "@expo-google-fonts/fjalla-one";
 
 const { width } = Dimensions.get("window");
 const scale = width / 320;
@@ -28,17 +33,24 @@ const EditImage = ({ navigation, route }) => {
   let { image } = route?.params || {};
   const [text, setText] = useState("Your Text Here");
   const [fontSize, setFontSize] = useState(20);
+  const [fontFamily, setFontFamily] = useState("");
   const [fontColor, setFontColor] = useState("#000000");
-  const [backgroundColor, setBackgroundColor] = useState("transparent");
+  const [opacity, setOpacity] = useState(1);
+  const [BgColor,setBgColor]=useState("rgba(0, 0, 0, 0)");
+  const [Colors,setColors]=useState("rgba(0, 0, 0, 0)")
+
   const [textPosition, setTextPosition] = useState({ x: 10, y: 10 });
   const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
   const imageRef = useRef(null); // Reference to the image for getting its dimensions
   const viewShotRef = useRef(null); // Reference to ViewShot for capturing the screen
-  
-  useFonts({Kanit_400Regular, Kanit_500Medium, Kanit_700Bold,FjallaOne_400Regular})
 
-  image =
-    "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FEventPosterPro-471475fa-868c-45b2-8da3-eeebe21dea7a/ImagePicker/2bcc8ffe-01e0-40be-b879-662fef673535.jpeg";
+  useFonts({
+    Kanit_400Regular,
+    Kanit_500Medium,
+    Kanit_700Bold,
+    FjallaOne_400Regular,
+  });
+  console.log("This image got", image);
 
   const [imageDimensions, setImageDimensions] = useState({
     width: 0,
@@ -52,7 +64,7 @@ const EditImage = ({ navigation, route }) => {
       });
     }
   }, [image]);
-  const okk = (text1) => {
+  const ok = (text1) => {
     setText(text1);
   };
   const handleDownload = async () => {
@@ -74,6 +86,7 @@ const EditImage = ({ navigation, route }) => {
   const FontTab = React.memo(() => {
     const [text1, setText1] = useState("");
     const [fontSize1, setFontSize1] = useState(20);
+    const [fontFamily1, setFontFamily1] = useState("");
     return (
       <ScrollView
         style={{ flex: 1, backgroundColor: "#FFFFFF" }}
@@ -107,8 +120,10 @@ const EditImage = ({ navigation, route }) => {
               alignItems: "center",
             }}
             onPress={() => {
-              okk(text1);
+              ok(text1);
               setFontSize(Number(fontSize1));
+              setFontFamily(fontFamily1);
+
               console.log("fontSize", fontSize);
               console.log(typeof fontSize);
             }}
@@ -178,56 +193,187 @@ const EditImage = ({ navigation, route }) => {
           maximumTrackTintColor="#DBDBDB"
         />
 
-        <View style={{paddingVertical:10*scale,width:"95%",alignSelf:"center"}}>
+        <View
+          style={{
+            paddingVertical: 10 * scale,
+            width: "95%",
+            alignSelf: "center",
+          }}
+        >
           <Text>Select Font</Text>
           <View
             style={{ flexDirection: "row", width: "100%", height: 30 * scale }}
           >
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                setFontFamily1("Kanit_400Regular");
+              }}
               style={styles.fontView}
             >
-              <Text style={[styles.fontText,{fontFamily:"Kanit_400Regular"}]}>Select</Text>
-            </View>
-            <View
+              <Text
+                style={[styles.fontText, { fontFamily: "Kanit_400Regular" }]}
+              >
+                Select
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontFamily1("FjallaOne_400Regular");
+              }}
               style={styles.fontView}
             >
-              <Text style={[styles.fontText,{fontFamily:"FjallaOne_400Regular"}]}>Select</Text>
-            </View>
-            <View
+              <Text
+                style={[
+                  styles.fontText,
+                  { fontFamily: "FjallaOne_400Regular" },
+                ]}
+              >
+                Select
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontFamily1("Pressed");
+              }}
               style={styles.fontView}
             >
               <Text style={styles.fontText}>Select</Text>
-            </View>
-            <View
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontFamily1("Pressed");
+              }}
               style={styles.fontView}
             >
               <Text style={styles.fontText}>Select</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
-        <TextInput
-          style={styles.input}
-          value={String(fontSize)}
-          keyboardType="numeric"
-          onChangeText={(value) => setFontSize(Number(value))}
-          placeholder="Font Size"
-        />
-        <TextInput
-          style={styles.input}
-          value={fontColor}
-          onChangeText={setFontColor}
-          placeholder="Font Color (hex)"
-        />
-        <TextInput
-          style={styles.input}
-          value={backgroundColor}
-          onChangeText={setBackgroundColor}
-          placeholder="Background Color (hex)"
-        />
+       
       </ScrollView>
     );
   });
 
+  const BoxColor = () => {
+    const [opacity1, setOpacity1] = useState(1);
+    const [BgColor1, setBgColor1] = useState("rgba(0, 0, 0, 0)");
+    return (
+      <ScrollView style={{ flex: 1, backgroundColor: "#ffffff" }}>
+        <View>
+          <Text style={{}}>Opacity</Text>
+          <Slider
+            style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
+            onValueChange={(value) => {
+              setOpacity1(Number(value.toFixed(1)));
+              console.log(opacity1);
+              console.log(value.toFixed(1));
+            }}
+            minimumValue={0}
+            maximumValue={1}
+            minimumTrackTintColor="#FF9A37"
+            maximumTrackTintColor="#DBDBDB"
+          />
+        </View>
+        <View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(0, 0, 0, 0)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(0, 0, 0, 0)", marginRight: 5 * scale,justifyContent:"center" }}><Text style={{textAlign:"center"}}>None</Text></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(249, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(249, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(246, 203, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(246, 203, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(243, 140, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(243, 140, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(241, 73, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(241, 73, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(240, 0, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(240, 0, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(240, 0, 64, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(240, 0, 64, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(242, 0, 138, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(242, 0, 138, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(244, 0, 201, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(244, 0, 201, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(247, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(247, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(196, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(196, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(143, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(143, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+</ScrollView>
+<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginTop: 5 * scale }}>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(199, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(199, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(148, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(148, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(100, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(100, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(74, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(74, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(81, 255, 131, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(81, 255, 131, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(98, 255, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(98, 255, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(85, 196, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(85, 196, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(75, 131, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(75, 131, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(68, 44, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(68, 44, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(65, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(65, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setBgColor1("rgba(68, 44, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(68, 44, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+</ScrollView>
+
+        
+          
+        </View>
+        <TouchableOpacity
+          style={{
+            backgroundColor: "red",
+            alignSelf: "center",
+            paddingVertical: 5 * scale,
+            paddingHorizontal: 10 * scale,
+            borderRadius: 5 * scale,
+          }}
+          onPress={() => {
+            setOpacity(opacity1);
+            setBgColor(BgColor1);
+          }}
+        >
+          <Text>OK</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
+  };
+  const Color=()=>{
+    const [fontColor1,setFontColor1]=useState("rgba(0, 0, 0, 0)");
+    return(
+      <View>
+        
+<View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(0, 0, 0, 0)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(0, 0, 0, 0)", marginRight: 5 * scale,justifyContent:"center" }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(249, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(249, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(246, 203, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(246, 203, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(243, 140, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(243, 140, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(241, 73, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(241, 73, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(240, 0, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(240, 0, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(240, 0, 64, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(240, 0, 64, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(242, 0, 138, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(242, 0, 138, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(244, 0, 201, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(244, 0, 201, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(247, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(247, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(196, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(196, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(143, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(143, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+</ScrollView>
+<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginTop: 5 * scale }}>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(199, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(199, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(148, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(148, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(100, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(100, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(74, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(74, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(81, 255, 131, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(81, 255, 131, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(98, 255, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(98, 255, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(85, 196, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(85, 196, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(75, 131, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(75, 131, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(68, 44, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(68, 44, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(65, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(65, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(68, 44, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(68, 44, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
+  <TouchableOpacity onPress={() => { setFontColor1("rgba(0, 0, 0, 255)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(0, 0, 0, 255)", marginRight: 5 * scale }}></TouchableOpacity>
+</ScrollView>
+
+        
+          
+        </View>
+        <TouchableOpacity style={{
+            backgroundColor: "red",
+            alignSelf: "center",
+            paddingVertical: 5 * scale,
+            paddingHorizontal: 10 * scale,
+            borderRadius: 5 * scale,
+          }} onPress={()=>{
+            setFontColor(fontColor1)
+          }}><Text>Ok</Text></TouchableOpacity>
+      </View>
+    )
+  }
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -306,9 +452,11 @@ const EditImage = ({ navigation, route }) => {
                 {
                   fontSize,
                   color: fontColor,
-                  backgroundColor,
+                  backgroundColor: BgColor,
                   left: textPosition.x,
                   top: textPosition.y,
+                  fontFamily: fontFamily,
+                  opacity: opacity,
                 },
               ]}
             >
@@ -337,6 +485,7 @@ const EditImage = ({ navigation, route }) => {
             borderTopLeftRadius: 20 * scale,
             borderTopRightRadius: 20 * scale,
           }}
+          swipeEnabled={false}
         >
           <Tab.Screen
             name="Fonts"
@@ -345,12 +494,12 @@ const EditImage = ({ navigation, route }) => {
           />
           <Tab.Screen
             name="Boxcolor"
-            component={() => <Text>Box Color</Text>}
+            component={BoxColor}
             options={{ tabBarLabel: "Box Color" }}
           />
           <Tab.Screen
             name="Color"
-            component={() => <Text>Color</Text>}
+            component={Color}
             options={{ tabBarLabel: "Color" }}
           />
           <Tab.Screen
@@ -403,7 +552,7 @@ const styles = StyleSheet.create({
   },
   fontText: {
     textAlign: "center",
-    paddingHorizontal:10*scale,
-    paddingVertical:5*scale
+    paddingHorizontal: 10 * scale,
+    paddingVertical: 5 * scale,
   },
 });

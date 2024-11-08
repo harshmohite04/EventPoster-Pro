@@ -13,8 +13,8 @@ import * as ImagePicker from "expo-image-picker";
 import Upload from "@/assets/icons/upload";
 import { ScrollView } from "react-native-gesture-handler";
 import { Templete, useTempletes } from "@/hooks/useTemplete";
+import Edit from "@/assets/icons/edit";
 import ImageCard from "@/components/ImageCard";
-
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 
@@ -24,8 +24,7 @@ const UploadImage = ({ navigation }) => {
     null
   );
 
-  const [image, setImage] = useState<string | null>(null);
-  console.log(image);
+  let image ="../../assets/images/No_Image.png"
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -34,27 +33,32 @@ const UploadImage = ({ navigation }) => {
       quality: 1,
     });
 
-    navigation.push("EditImage", { image: image });
-    console.log(result);
+    console.log("result",result);
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      console.log("This image was sent",result.assets[0].uri)
+      image=result.assets[0].uri
+      navigation.push("EditImage", { image: image });
     }
   };
 
+  const editFlyer=()=>{}
+
   return (
     <ScrollView style={styles.container}>
+      <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+
       <TouchableOpacity
         style={{
           alignItems: "center",
           backgroundColor: "#FFEFD4",
-          height: 170 * scale,
-          width: 170 * scale,
+          height: 140 * scale,
+          width: 140 * scale,
           borderRadius: 85 * scale,
           justifyContent: "center",
           alignSelf: "center",
         }}
         onPress={pickImage}
-      >
+        >
         <Upload size={20 * scale} />
         <View
           style={{
@@ -62,7 +66,7 @@ const UploadImage = ({ navigation }) => {
             alignItems: "center",
             justifyContent: "center",
           }}
-        >
+          >
           <Text style={{ fontSize: 12 * scale, fontWeight: "400" }}>
             Upload your
           </Text>
@@ -71,8 +75,36 @@ const UploadImage = ({ navigation }) => {
           </Text>
         </View>
       </TouchableOpacity>
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-      {image && <Text style={styles.selectedImageText}>Selected Image</Text>}
+      {/* {image && <Image source={{ uri: image }} style={styles.image} />} */}
+      {/* {image && <Text style={styles.selectedImageText}>Selected Image</Text>} */}
+      <TouchableOpacity
+        style={{
+          alignItems: "center",
+          backgroundColor: "#FFEFD4",
+          height: 140 * scale,
+          width: 140 * scale,
+          borderRadius: 85 * scale,
+          justifyContent: "center",
+          alignSelf: "center",
+        }}
+        onPress={editFlyer}
+        >
+        <Edit size={20 * scale} />
+        <View
+          style={{
+            marginTop: 10 * scale,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          >
+          <Text style={{ fontSize: 12 * scale, fontWeight: "400" }}>
+            Edit Flyer
+          </Text>
+          
+        </View>
+      </TouchableOpacity>
+      
+      </View>
 
       <Text
         style={{
@@ -95,20 +127,25 @@ const UploadImage = ({ navigation }) => {
               <ImageCard
                 onPress={() => {
                   setSelectedTempletes(item);
+                  console.log(item.url)
+                  image=item.url
+                  navigation.push("EditImage", { image: image });
                 }}
                 templete={item}
+                />
+              )}
+              keyExtractor={(item) => item.name}
               />
-            )}
-            keyExtractor={(item) => item.name}
-          />
         </View>
         <View style={styles.innerContainer}>
           <FlatList
             data={templetes.filter((_, index) => index % 2 === 1)}
             renderItem={({ item }) => (
               <ImageCard
-                onPress={() => {
-                  setSelectedTempletes(item);
+              onPress={() => {
+                setSelectedTempletes(item);
+                image=item.url
+                navigation.push("EditImage", { image: image });
                 }}
                 templete={item}
               />

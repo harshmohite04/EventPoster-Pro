@@ -10,6 +10,7 @@ import {
 import { Templete } from "@/hooks/useTemplete";
   import { ThemedView } from "./ThemedView";
   import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
   const ImageCard = ({
     templete,
     onPress,
@@ -19,9 +20,9 @@ import { Templete } from "@/hooks/useTemplete";
   }) => {
     const theme = useColorScheme() ?? "light";
     return (
-      <Pressable onPress={onPress} style={styles.imageContainer}>
+      <TouchableOpacity onPress={onPress} style={styles.imageContainer}>
         <Image source={{ uri: templete.url }} style={styles.image} />
-        <ThemedView style={styles.labelContainer}>
+        {/* <ThemedView style={styles.labelContainer}>
           <Text style={styles.label}>{templete.name}</Text>
           <Ionicons
             style={styles.icon}
@@ -29,8 +30,8 @@ import { Templete } from "@/hooks/useTemplete";
             size={18}
             color={"white"}
           />
-        </ThemedView>
-      </Pressable>
+        </ThemedView> */}
+      </TouchableOpacity>
     );
   };
   export default ImageCard;
@@ -57,9 +58,6 @@ import { Templete } from "@/hooks/useTemplete";
       paddingHorizontal: 10,
       alignItems: "center",
       alignSelf: "center",
-    },
-    icon: {
-      // left: 100,
     },
     imageContainer: {},
   });

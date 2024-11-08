@@ -54,7 +54,7 @@ const Layout = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="Promo"
+      initialRouteName="UploadImage"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
