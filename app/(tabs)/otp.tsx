@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Keyboard,
+  Image,
   TouchableWithoutFeedback,
   ScrollView,
 } from "react-native";
@@ -21,6 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
+import MiddleLogo from "@/assets/icons/middleLogo";
 
 
 const Otp = ({ navigation, route }) => {
@@ -113,10 +115,25 @@ const Otp = ({ navigation, route }) => {
                   <Text style={styles.txt1}>and </Text>
                   <Text style={styles.txt2}>name</Text>
                 </View>
-                <Logo size={170 * scale} />
+                {/* <Logo size={170 * scale} /> */}
+                <Image
+                  style={{
+                    width: 150 * scale * 1.0228310502283105022831050228311,
+                    height: 150 * scale,
+                  }}
+                  source={require("../../assets/images/logo2.png")}
+                ></Image>
               </View>
             </LinearGradient>
             <View style={styles.flex2}>
+            <MiddleLogo
+                style={{
+                  position: "absolute",
+                  top: -25 * scale, // Adjust to control how much it overlaps
+                  alignSelf: "center",
+                }}
+                size={50 * scale}
+              />
               <Text style={styles.heading}>EventPoster Pro</Text>
               <View style={styles.timerContainer}>
                 <Text style={{ fontSize: 20 * scale }}>{secondsRemaining}</Text>

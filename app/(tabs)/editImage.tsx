@@ -24,7 +24,10 @@ import {
   Kanit_700Bold,
 } from "@expo-google-fonts/kanit";
 import { FjallaOne_400Regular } from "@expo-google-fonts/fjalla-one";
-
+import LeftAlign from "@/assets/icons/left-align";
+import RightAlign from "@/assets/icons/right-align";
+import CenterAlign from "@/assets/icons/center-align";
+import SkipLogo from "@/assets/icons/skip";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 const Tab = createMaterialTopTabNavigator();
@@ -36,8 +39,11 @@ const EditImage = ({ navigation, route }) => {
   const [fontFamily, setFontFamily] = useState("");
   const [fontColor, setFontColor] = useState("#000000");
   const [opacity, setOpacity] = useState(1);
-  const [BgColor,setBgColor]=useState("rgba(0, 0, 0, 0)");
-  const [Colors,setColors]=useState("rgba(0, 0, 0, 0)")
+  const [BgColor, setBgColor] = useState("rgba(0, 0, 0, 0)");
+  const [align, setAlign] = useState("left");
+  const [lineSpacing, setLineSpacing] = useState();
+  const [shadow, setShadow] = useState();
+  const [shadowColor, setShadowColor] = useState();
 
   const [textPosition, setTextPosition] = useState({ x: 10, y: 10 });
   const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
@@ -249,16 +255,15 @@ const EditImage = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
-       
       </ScrollView>
     );
   });
 
-  const BoxColor = () => {
+  const BoxColorTab = () => {
     const [opacity1, setOpacity1] = useState(1);
     const [BgColor1, setBgColor1] = useState("rgba(0, 0, 0, 0)");
     return (
-      <ScrollView style={{ flex: 1, backgroundColor: "#ffffff" }}>
+      <ScrollView style={{ flex: 1, backgroundColor: "#ffffff" ,paddingVertical:20*scale,paddingLeft:10*scale}}>
         <View>
           <Text style={{}}>Opacity</Text>
           <Slider
@@ -275,36 +280,271 @@ const EditImage = ({ navigation, route }) => {
           />
         </View>
         <View>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(0, 0, 0, 0)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(0, 0, 0, 0)", marginRight: 5 * scale,justifyContent:"center" }}><Text style={{textAlign:"center"}}>None</Text></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(249, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(249, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(246, 203, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(246, 203, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(243, 140, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(243, 140, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(241, 73, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(241, 73, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(240, 0, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(240, 0, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(240, 0, 64, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(240, 0, 64, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(242, 0, 138, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(242, 0, 138, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(244, 0, 201, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(244, 0, 201, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(247, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(247, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(196, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(196, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(143, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(143, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-</ScrollView>
-<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginTop: 5 * scale }}>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(199, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(199, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(148, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(148, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(100, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(100, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(74, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(74, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(81, 255, 131, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(81, 255, 131, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(98, 255, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(98, 255, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(85, 196, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(85, 196, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(75, 131, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(75, 131, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(68, 44, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(68, 44, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(65, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(65, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setBgColor1("rgba(68, 44, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(68, 44, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-</ScrollView>
-
-        
-          
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(0, 0, 0, 0)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(0, 0, 0, 0)",
+                marginRight: 5 * scale,
+                justifyContent: "center",
+                alignItems:"center"
+              }}
+            >
+              <SkipLogo size={20*scale}/>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(249, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(249, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(246, 203, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(246, 203, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(243, 140, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(243, 140, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(241, 73, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(241, 73, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(240, 0, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(240, 0, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(240, 0, 64, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(240, 0, 64, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(242, 0, 138, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(242, 0, 138, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(244, 0, 201, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(244, 0, 201, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(247, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(247, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(196, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(196, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(143, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(143, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+          </ScrollView>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{ marginTop: 5 * scale }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(199, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(199, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(148, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(148, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(100, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(100, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(74, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(74, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(81, 255, 131, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(81, 255, 131, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(98, 255, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(98, 255, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(85, 196, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(85, 196, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(75, 131, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(75, 131, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(68, 44, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(68, 44, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(65, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(65, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setBgColor1("rgba(68, 44, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(68, 44, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+          </ScrollView>
         </View>
         <TouchableOpacity
           style={{
@@ -324,56 +564,751 @@ const EditImage = ({ navigation, route }) => {
       </ScrollView>
     );
   };
-  const Color=()=>{
-    const [fontColor1,setFontColor1]=useState("rgba(0, 0, 0, 0)");
-    return(
-      <View>
-        
-<View>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(0, 0, 0, 0)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(0, 0, 0, 0)", marginRight: 5 * scale,justifyContent:"center" }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(249, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(249, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(246, 203, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(246, 203, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(243, 140, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(243, 140, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(241, 73, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(241, 73, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(240, 0, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(240, 0, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(240, 0, 64, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(240, 0, 64, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(242, 0, 138, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(242, 0, 138, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(244, 0, 201, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(244, 0, 201, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(247, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(247, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(196, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(196, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(143, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(143, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-</ScrollView>
-<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{ marginTop: 5 * scale }}>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(199, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(199, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(148, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(148, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(100, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(100, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(74, 255, 0, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(74, 255, 0, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(81, 255, 131, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(81, 255, 131, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(98, 255, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(98, 255, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(85, 196, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(85, 196, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(75, 131, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(75, 131, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(68, 44, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(68, 44, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(65, 0, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(65, 0, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(68, 44, 255, 1)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(68, 44, 255, 1)", marginRight: 5 * scale }}></TouchableOpacity>
-  <TouchableOpacity onPress={() => { setFontColor1("rgba(0, 0, 0, 255)") }} style={{ width: 35 * scale, height: 35 * scale, backgroundColor: "rgba(0, 0, 0, 255)", marginRight: 5 * scale }}></TouchableOpacity>
-</ScrollView>
-
-        
-          
+  const ColorTab = () => {
+    const [fontColor1, setFontColor1] = useState("rgba(255, 255, 255, 255)");
+    return (
+      <View
+        style={{
+          paddingVertical: 20 * scale,
+          backgroundColor: "#ffffff",
+          flex: 1,
+          paddingLeft: 10 * scale,
+        }}
+      >
+        <View style={{ marginBottom: 15 * scale }}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(255, 255, 255, 255)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(255, 255, 255, 255)",
+                marginRight: 5 * scale,
+                justifyContent: "center",
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(249, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(249, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(246, 203, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(246, 203, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(243, 140, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(243, 140, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(241, 73, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(241, 73, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(240, 0, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(240, 0, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(240, 0, 64, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(240, 0, 64, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(242, 0, 138, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(242, 0, 138, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(244, 0, 201, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(244, 0, 201, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(247, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(247, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(196, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(196, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(143, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(143, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+          </ScrollView>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{ marginTop: 5 * scale }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(199, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(199, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(148, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(148, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(100, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(100, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(74, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(74, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(81, 255, 131, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(81, 255, 131, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(98, 255, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(98, 255, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(85, 196, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(85, 196, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(75, 131, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(75, 131, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(68, 44, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(68, 44, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(65, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(65, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(68, 44, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(68, 44, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setFontColor1("rgba(0, 0, 0, 255)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(0, 0, 0, 255)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+          </ScrollView>
         </View>
-        <TouchableOpacity style={{
+        <TouchableOpacity
+          style={{
             backgroundColor: "red",
             alignSelf: "center",
             paddingVertical: 5 * scale,
             paddingHorizontal: 10 * scale,
             borderRadius: 5 * scale,
-          }} onPress={()=>{
-            setFontColor(fontColor1)
-          }}><Text>Ok</Text></TouchableOpacity>
+          }}
+          onPress={() => {
+            setFontColor(fontColor1);
+          }}
+        >
+          <Text>Ok</Text>
+        </TouchableOpacity>
       </View>
-    )
-  }
+    );
+  };
+
+  const AlignTab = () => {
+    const [align1, setAlign1] = useState("");
+    const [lineSpacing1, setLineSpacing1] = useState();
+    return (
+      <View
+        style={{
+          backgroundColor: "#ffffff",
+          flex: 1,
+          paddingVertical: 25 * scale,
+        }}
+      >
+        <Text>Line Spacing</Text>
+        <Slider
+          style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
+          onValueChange={(value) => {
+            setLineSpacing1(Number(Math.round(value)));
+            console.log(lineSpacing1);
+          }}
+          minimumValue={0}
+          maximumValue={100}
+          minimumTrackTintColor="#FF9A37"
+          maximumTrackTintColor="#DBDBDB"
+        />
+        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+          <TouchableOpacity
+            onPress={() => {
+              setAlign1("left");
+            }}
+          >
+            <View
+              style={{
+                borderWidth: 1.5 * scale,
+                width: 60 * scale,
+                height: 60 * scale,
+                borderColor: "#FF9A37",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <LeftAlign size={24 * scale} />
+            </View>
+            <Text style={{ textAlign: "center", fontSize: 15 * scale }}>
+              Left
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setAlign1("center");
+            }}
+          >
+            <View
+              style={{
+                borderWidth: 1.5 * scale,
+                width: 60 * scale,
+                height: 60 * scale,
+                borderColor: "#FF9A37",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CenterAlign size={24 * scale} />
+            </View>
+            <Text style={{ textAlign: "center", fontSize: 15 * scale }}>
+              Center
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setAlign1("right");
+            }}
+          >
+            <View
+              style={{
+                borderWidth: 1.5 * scale,
+                width: 60 * scale,
+                height: 60 * scale,
+                borderColor: "#FF9A37",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <RightAlign size={24 * scale} />
+            </View>
+            <Text style={{ textAlign: "center", fontSize: 15 * scale }}>
+              Right
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={{
+            alignItems: "center",
+            marginTop: 10 * scale,
+          }}
+          onPress={() => {
+            setAlign(align1);
+            setLineSpacing(lineSpacing1);
+          }}
+        >
+          <Text
+            style={{
+              paddingVertical: 5 * scale,
+              paddingHorizontal: 10 * scale,
+              backgroundColor: "red",
+              borderRadius: 8 * scale,
+            }}
+          >
+            OK
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const ShadowTab = () => {
+    const [shadow1, setShadow1] = useState();
+    const [shadowColor1, setShadowColor1] = useState();
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "#ffffff",
+          paddingVertical: 15 * scale,
+          paddingLeft: 10 * scale,
+        }}
+      >
+        <Text>Shadow</Text>
+        <Slider
+          style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
+          onValueChange={(value) => {
+            setShadow1(Number(Math.round(value)));
+            console.log(shadow1);
+            console.log(shadow1);
+          }}
+          minimumValue={0}
+          maximumValue={100}
+          minimumTrackTintColor="#FF9A37"
+          maximumTrackTintColor="#DBDBDB"
+        />
+
+        <View style={{ marginTop: 10 * scale }}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(0, 0, 0, 0)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(255, 255, 255, 255)",
+                marginRight: 5 * scale,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <SkipLogo size={20 * scale} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(249, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(249, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(246, 203, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(246, 203, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(243, 140, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(243, 140, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(241, 73, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(241, 73, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(240, 0, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(240, 0, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(240, 0, 64, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(240, 0, 64, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(242, 0, 138, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(242, 0, 138, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(244, 0, 201, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(244, 0, 201, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(247, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(247, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(196, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(196, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(143, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(143, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+          </ScrollView>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{ marginTop: 5 * scale }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(199, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(199, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(148, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(148, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(100, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(100, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(74, 255, 0, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(74, 255, 0, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(81, 255, 131, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(81, 255, 131, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(98, 255, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(98, 255, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(85, 196, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(85, 196, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(75, 131, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(75, 131, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(68, 44, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(68, 44, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(65, 0, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(65, 0, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(68, 44, 255, 1)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(68, 44, 255, 1)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setShadowColor1("rgba(0, 0, 0, 255)");
+              }}
+              style={{
+                width: 35 * scale,
+                height: 35 * scale,
+                backgroundColor: "rgba(0, 0, 0, 255)",
+                marginRight: 5 * scale,
+              }}
+            ></TouchableOpacity>
+          </ScrollView>
+        </View>
+        <TouchableOpacity
+          style={{
+            alignItems: "center",
+            marginTop: 10 * scale,
+          }}
+          onPress={() => {
+            setShadow(shadow1);
+            setShadowColor(shadowColor1);
+          }}
+        >
+          <Text
+            style={{
+              paddingVertical: 5 * scale,
+              paddingHorizontal: 10 * scale,
+              backgroundColor: "red",
+              borderRadius: 8 * scale,
+            }}
+          >
+            OK
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -411,7 +1346,13 @@ const EditImage = ({ navigation, route }) => {
           paddingVertical: 10 * scale,
         }}
       >
-        <Feather name="arrow-left" size={24 * scale} color="black" />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Feather name="arrow-left" size={24 * scale} color="black" />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={handleDownload}
           style={{
@@ -457,6 +1398,11 @@ const EditImage = ({ navigation, route }) => {
                   top: textPosition.y,
                   fontFamily: fontFamily,
                   opacity: opacity,
+                  textAlign: align,
+                  lineHeight: lineSpacing,
+                  textShadowColor: shadowColor,
+                  textShadowOffset: { width: -1, height: 1 },
+                  textShadowRadius: shadow,
                 },
               ]}
             >
@@ -494,22 +1440,22 @@ const EditImage = ({ navigation, route }) => {
           />
           <Tab.Screen
             name="Boxcolor"
-            component={BoxColor}
+            component={BoxColorTab}
             options={{ tabBarLabel: "Box Color" }}
           />
           <Tab.Screen
             name="Color"
-            component={Color}
+            component={ColorTab}
             options={{ tabBarLabel: "Color" }}
           />
           <Tab.Screen
             name="Align"
-            component={() => <Text>Align</Text>}
+            component={AlignTab}
             options={{ tabBarLabel: "Align" }}
           />
           <Tab.Screen
             name="Shadow"
-            component={() => <Text>Shadow</Text>}
+            component={ShadowTab}
             options={{ tabBarLabel: "Shadow" }}
           />
         </Tab.Navigator>

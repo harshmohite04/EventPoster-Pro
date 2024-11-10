@@ -6,14 +6,125 @@ import {
   TextInput,
   View,
   SafeAreaView,
+  Image,
+  FlatList,
 } from "react-native";
 import React, { useState } from "react";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
-
+import WhatsAppLogo from "@/assets/icons/WhatsLogo";
 import ProfilePhoto from "@/assets/icons/profilePhoto";
+import Upload from "@/assets/icons/upload";
+import Download from "@/assets/icons/download";
+
+const images = [
+  {
+    url: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
+    id: "1",
+  },
+  {
+    url: "https://ideogram.ai/assets/image/lossless/response/A7eOEfrLRdK8gZI88L3Yjw",
+    id: "2",
+  },
+  {
+    url: "https://ideogram.ai/assets/progressive-image/balanced/response/d6I5TyfcRYy8Pb_MSEjAQw",
+    id: "3",
+  },
+  {
+    url: "https://ideogram.ai/assets/progressive-image/balanced/response/mZKT1ae5SPWexGn5OTnOWQ",
+    id: "5",
+  },
+  {
+    url: "https://ideogram.ai/assets/progressive-image/balanced/response/2T3vLk22TZiHRo2ROTUH6A",
+    id: "6",
+  },
+  {
+    url: "https://ideogram.ai/assets/progressive-image/balanced/response/POhRvFN5QRmud-vx75SUYQ",
+    id: "7",
+  },
+  {
+    url: "https://ideogram.ai/assets/progressive-image/balanced/response/H9kSy8zhR3-J16Jy-OeSKQ",
+    id: "8",
+  },
+  {
+    url: "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
+    id: "9",
+  },
+];
+
+const ImageReel = () => {
+  const { height, width } = Dimensions.get("window");
+
+  const renderItem = ({ item }) => (
+    <View style={[styles.imageContainer, { height, width }]}>
+      <Image source={{ uri: item.url }} style={styles.image} />
+      <View style={{ width: "100%" }}>
+        <View
+          style={{
+            backgroundColor: "#60D669",
+            width: "90%",
+            paddingVertical: 10 * scale,
+            marginTop: 10 * scale,
+            flexDirection: "row",
+            justifyContent: "center",
+            borderRadius: 50 * scale,
+            alignSelf: "center",
+          }}
+        >
+          <Text
+            style={{
+              color: "#ffffff",
+              fontSize: 15 * scale,
+              paddingRight: 10 * scale,
+            }}
+          >
+            Share
+          </Text>
+          <WhatsAppLogo size={20 * scale} />
+        </View>
+        <View
+          style={{
+            backgroundColor: "#ffffff",
+            width: "90%",
+            paddingVertical: 10 * scale,
+            marginTop: 10 * scale,
+            flexDirection: "row",
+            justifyContent: "center",
+            borderRadius: 50 * scale,
+            alignSelf: "center",
+            borderWidth:2,
+            borderColor:"#FF9A37"
+          }}
+        >
+          <Download size={20 * scale} />
+          <Text
+            style={{
+              color: "#000000",
+              fontSize: 15 * scale,
+              paddingLeft: 10 * scale,
+            }}
+          >
+            Download
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <FlatList
+      data={images}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      pagingEnabled
+      showsVerticalScrollIndicator={false}
+      snapToAlignment="start"
+      decelerationRate="fast"
+    />
+  );
+};
 
 const Home = ({ navigation }) => {
   const [search, setSearch] = useState("");
@@ -61,7 +172,9 @@ const Home = ({ navigation }) => {
         <ProfilePhoto size={35 * scale} />
       </View>
 
-      <View style={styles.category}></View>
+      <View style={{}}>
+        <ImageReel />
+      </View>
     </SafeAreaView>
   );
 };
@@ -72,12 +185,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#ffffff",
-    paddingHorizontal: 10 * scale,
     paddingVertical: 15 * scale,
   },
   flex1: {
     flexDirection: "row",
     justifyContent: "space-between",
+    borderBottomColor: "#F0F0F0",
+    borderBottomWidth: 1,
+    paddingHorizontal: 10 * scale,
+    paddingBottom: 5 * scale,
   },
   search: {
     flexDirection: "row",
@@ -88,12 +204,15 @@ const styles = StyleSheet.create({
     paddingVertical: 5 * scale,
     alignItems: "center",
   },
-  category: {
-    borderTopColor: "#F0F0F0",
-    borderBottomColor: "#F0F0F0",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    marginTop: 10 * scale,
-    paddingVertical: 10 * scale,
+
+  imageContainer: {
+    alignItems: "center",
+    paddingTop: 10 * scale,
+    paddingBottom: 50 * scale,
+  },
+  image: {
+    width: "80%",
+    height: "80%",
+    resizeMode: "cover",
   },
 });
