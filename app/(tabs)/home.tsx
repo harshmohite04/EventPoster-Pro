@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Image,
   FlatList,
+  Modal,
 } from "react-native";
 import React, { useState } from "react";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
@@ -18,7 +19,7 @@ import WhatsAppLogo from "@/assets/icons/WhatsLogo";
 import ProfilePhoto from "@/assets/icons/profilePhoto";
 import Upload from "@/assets/icons/upload";
 import Download from "@/assets/icons/download";
-
+import Swipe from "@/assets/icons/swipe";
 const images = [
   {
     url: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
@@ -56,10 +57,74 @@ const images = [
 
 const ImageReel = () => {
   const { height, width } = Dimensions.get("window");
-
+  const [modalVisible, setModalVisible] = useState(true);
   const renderItem = ({ item }) => (
     <View style={[styles.imageContainer, { height, width }]}>
+      <Modal
+        // animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+        style={{ justifyContent: "center", alignContent: "center" }}
+      >
+        <View
+          style={{
+            backgroundColor: "#FFF8ED",
+            alignSelf: "center",
+            justifyContent: "center",
+            marginTop: 150 * scale,
+            paddingVertical: 30 * scale,
+            paddingHorizontal: 30 * scale,
+            borderRadius: 10 * scale,
+            alignItems: "center",
+          }}
+        >
+          <Text
+            style={{
+              color: "#000000",
+              fontSize: 16 * scale,
+              marginBottom: 10 * scale,
+            }}
+          >
+            Swipe Up for more
+          </Text>
+          <Swipe size={80 * scale} />
+          <Text
+            style={{
+              color: "#000000",
+              fontSize: 16 * scale,
+              marginTop: 10 * scale,
+              marginBottom: 20 * scale,
+            }}
+          >
+            Just like Instagram
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#FF8017",
+              paddingHorizontal: 30 * scale,
+              paddingVertical: 5 * scale,
+              borderRadius: 25 * scale,
+            }}
+            onPress={() => setModalVisible(!modalVisible)}
+          >
+            <Text
+              style={{
+                color: "#000000",
+                fontSize: 16 * scale,
+                textAlign: "center",
+              }}
+            >
+              Close
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <Image source={{ uri: item.url }} style={styles.image} />
+
       <View style={{ width: "100%" }}>
         <View
           style={{
@@ -94,8 +159,8 @@ const ImageReel = () => {
             justifyContent: "center",
             borderRadius: 50 * scale,
             alignSelf: "center",
-            borderWidth:2,
-            borderColor:"#FF9A37"
+            borderWidth: 2,
+            borderColor: "#FF9A37",
           }}
         >
           <Download size={20 * scale} />
@@ -172,6 +237,44 @@ const Home = ({ navigation }) => {
         <ProfilePhoto size={35 * scale} />
       </View>
 
+      <View
+        style={{
+          paddingVertical: 15 * scale,
+          width: "100%",
+        }}
+      >
+        <View
+          style={{
+            paddingHorizontal: 5 * scale,
+            borderBottomColor: "#F0F0F0",
+            borderBottomWidth: 1,
+            paddingVertical: 10 * scale,
+          }}
+        >
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
+          >
+            <Text style={styles.category}>All</Text>
+            <Text style={styles.category}>Jokes</Text>
+            <Text style={styles.category}>Morning</Text>
+            <Text style={styles.category}>Birthday</Text>
+            <Text style={styles.category}>Birthday</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginTop: 5 * scale,
+            }}
+          >
+            <Text style={styles.category}>Birthday</Text>
+            <Text style={styles.category}>Jokes</Text>
+            <Text style={styles.category}>Morning</Text>
+            <Text style={styles.category}>Birthday</Text>
+            <Text style={styles.category}>All</Text>
+          </View>
+        </View>
+      </View>
       <View style={{}}>
         <ImageReel />
       </View>
@@ -212,7 +315,16 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "80%",
-    height: "80%",
+    height: "60%",
     resizeMode: "cover",
+  },
+  category: {
+    color: "#000000",
+    borderWidth: 1,
+    borderColor: "#FF9A37",
+    borderRadius: 25 * scale,
+    paddingHorizontal: 8 * scale,
+    paddingVertical: 2 * scale,
+    fontSize: 12 * scale,
   },
 });
