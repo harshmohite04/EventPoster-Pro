@@ -12,6 +12,7 @@ import EditImage from "./editImage";
 
 import { useFonts } from "expo-font";
 import AppLoading from 'expo-app-loading';
+import Library from "./library";
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
@@ -54,7 +55,7 @@ const Layout = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="Home"
+      initialRouteName="Library"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
@@ -64,6 +65,10 @@ const Layout = () => {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="UploadImage" component={UploadImage} />
       <Stack.Screen name="EditImage" component={EditImage} />
+
+      {/* Admin */}
+      <Stack.Screen name="Library" component={Library} />
+
     </Stack.Navigator>
   );
 };
