@@ -18,9 +18,18 @@ const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     const checkVerificationStatus = async () => {
       const verified = await AsyncStorage.getItem("isVerified");
+      const role = await AsyncStorage.getItem("role");
+        
       if (verified === "true") {
+        if(role ==="admin"){
+          navigation.replace("Library"); // change when before going to production
+
+        }
+        else if(role ==="user"){
+          
+          navigation.replace("Home"); // change when before going to production
+        }
         // navigation.replace('Home');  
-        navigation.replace("PhoneNumberAuth"); // change when before going to production
       } else {
         navigation.replace("PhoneNumberAuth");
       }
@@ -55,7 +64,7 @@ const Layout = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="Library"
+      initialRouteName="Splash"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />

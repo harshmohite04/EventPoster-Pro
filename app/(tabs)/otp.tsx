@@ -24,8 +24,8 @@ import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import MiddleLogo from "@/assets/icons/middleLogo";
 
-
 const Otp = ({ navigation, route }) => {
+  const listOfNumbers = ["9356836581", "0123456789", "9876543210"];
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -126,7 +126,7 @@ const Otp = ({ navigation, route }) => {
               </View>
             </LinearGradient>
             <View style={styles.flex2}>
-            <MiddleLogo
+              <MiddleLogo
                 style={{
                   position: "absolute",
                   top: -25 * scale, // Adjust to control how much it overlaps
@@ -211,8 +211,16 @@ const Otp = ({ navigation, route }) => {
                       disabled={otp.length < 4}
                       onPress={async () => {
                         console.log(otp);
-                        await AsyncStorage.setItem("isVerified", "true");
-                        navigation.replace("Promo");
+
+                        if (listOfNumbers.includes(number)) {
+                          navigation.replace("Library");
+                          await AsyncStorage.setItem("isVerified", "true");
+                          await AsyncStorage.setItem("role", "admin");
+                        } else {
+                          navigation.replace("Promo");
+                          await AsyncStorage.setItem("isVerified", "true");
+                          await AsyncStorage.setItem("role", "user");
+                        }
                       }}
                       style={[
                         styles.continueButton,
@@ -311,7 +319,6 @@ const styles = StyleSheet.create({
   otpContainer: {
     flexDirection: "row",
     alignSelf: "center",
-  
   },
   inputView: {
     borderRadius: 10,
@@ -323,8 +330,8 @@ const styles = StyleSheet.create({
     marginRight: 10 * scale,
     marginVertical: 10 * scale,
     backgroundColor: "#FFEFD4",
-    fontSize:15*scale,
-    fontFamily:"Poppins_400Regular",
+    fontSize: 15 * scale,
+    fontFamily: "Poppins_400Regular",
   },
   continueButton: {
     width: "100%",
@@ -337,13 +344,13 @@ const styles = StyleSheet.create({
     fontSize: 13 * scale,
     // fontWeight: "500",
     color: "#000000",
-    fontFamily:"Poppins_400Regular"
+    fontFamily: "Poppins_400Regular",
   },
   resendOtpText: {
     alignSelf: "center",
     fontSize: 14 * scale,
     textDecorationLine: "underline",
     marginVertical: 5 * scale,
-    fontFamily:"Poppins_400Regular"
+    fontFamily: "Poppins_400Regular",
   },
 });
