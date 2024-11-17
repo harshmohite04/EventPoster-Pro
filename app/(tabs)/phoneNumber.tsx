@@ -27,6 +27,7 @@ import {
   Poppins_800ExtraBold,
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
+import axios from 'axios';
 
 const PhoneNumber = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
@@ -73,10 +74,24 @@ const PhoneNumber = ({ navigation }) => {
   //   Gotham: require("../../assets/fonts/GothamMedium.ttf"),
   //   GothamBold: require("../../assets/fonts/GothamBold.ttf")
   // })
-  const handleSubmit = (values) => {
-    const phoneNumber = values.phoneLength;
+  const handleSubmit = async (values) => {
+    const phoneNumber = `+91${values.phoneLength}`;  // Add the country code to the phone number
     console.log(phoneNumber);
-    navigation.push("Otp", { number: phoneNumber });
+
+    try {
+      // Call the API to generate OTP
+      const response = await axios.post('https://9be00ac7-f3aa-4c5e-834a-b0f25f504504-00-1qgu85yeymzke.pike.replit.dev/generate-otp', { phoneNumber });
+
+      if (response.status === 200) {
+        // Navigate to the OTP screen, passing the phone number
+        navigation.push('Otp', { number: phoneNumber });
+      } else {
+        alert('Failed to send OTP. Please try again.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error sending OTP. Please try again.');
+    }
   };
   const phoneNumeberSchema = Yup.object().shape({
     phoneLength: Yup.string()
@@ -116,8 +131,8 @@ const PhoneNumber = ({ navigation }) => {
                 {/* <Logo size={170*scale} /> */}
                 <Image
                   style={{
-                    width: 150 * scale * 1.0228310502283105022831050228311,
-                    height: 150 * scale,
+                    width: 200 * scale * 1.0228310502283105022831050228311,
+                    height: 200 * scale,
                   }}
                   source={require("../../assets/images/logo2.png")}
                 ></Image>

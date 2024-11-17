@@ -118,8 +118,8 @@ const Otp = ({ navigation, route }) => {
                 {/* <Logo size={170 * scale} /> */}
                 <Image
                   style={{
-                    width: 150 * scale * 1.0228310502283105022831050228311,
-                    height: 150 * scale,
+                    width: 200 * scale * 1.0228310502283105022831050228311,
+                    height: 200 * scale,
                   }}
                   source={require("../../assets/images/logo2.png")}
                 ></Image>

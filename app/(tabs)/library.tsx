@@ -167,6 +167,11 @@ const DATA = [
     imageUrl:
       "https://ideogram.ai/assets/progressive-image/balanced/response/2T3vLk22TZiHRo2ROTUH6A",
   },
+  {
+    id: "6",
+    imageUrl:
+      "https://ideogram.ai/assets/progressive-image/balanced/response/2T3vLk22TZiHRo2ROTUH6A",
+  },
 ];
 
 type ItemProps = { imageUrl: string };

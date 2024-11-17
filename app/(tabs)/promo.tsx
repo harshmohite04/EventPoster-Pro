@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, Text, View, Dimensions,Image } from "react-native";
 import React from "react";
 import PromoImg from "@/assets/icons/promoImg";
 import { LinearGradient } from "expo-linear-gradient";
@@ -8,6 +8,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
+
 const Promo = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
@@ -41,7 +42,7 @@ const Promo = ({ navigation }) => {
           <AntDesign
             style={{ alignSelf: "flex-end" }}
             name="arrowright"
-            size={24}
+            size={20*scale}
             color="black"
           />
         </TouchableOpacity>
@@ -54,7 +55,13 @@ const Promo = ({ navigation }) => {
             alignItems: "center",
           }}
         >
-          <PromoImg size={250*scale}/>
+          <Image
+                  style={{
+                    width: 280 * scale * 1.0228310502283105022831050228311,
+                    height: 280 * scale,
+                  }}
+                  source={require("../../assets/images/logo3.png")}
+                ></Image>
         </LinearGradient>
       </View>
       <View style={styles.flex2}>
@@ -230,6 +237,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "flex-end",
     paddingHorizontal: 10 * scale,
-    marginBottom: 15 * scale,
+    marginBottom: 5 * scale,
   },
 });
