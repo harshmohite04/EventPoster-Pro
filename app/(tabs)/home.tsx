@@ -191,8 +191,13 @@ const ImageReel = () => {
   );
 };
 
+
 const Home = ({ navigation }) => {
   const [search, setSearch] = useState("");
+
+  const profileClicked=()=>{
+    navigation.navigate('Profile')
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.flex1}>
@@ -234,7 +239,11 @@ const Home = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity
+        onPress={profileClicked}>
+
         <ProfilePhoto size={35 * scale} />
+        </TouchableOpacity>
       </View>
 
       <View

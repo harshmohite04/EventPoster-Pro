@@ -88,6 +88,7 @@ const EditImage = ({ navigation, route }) => {
         quality: 1,
       });
       const newUri = `${FileSystem.documentDirectory}edited_image.png`;
+      console.log(newUri)
       await FileSystem.moveAsync({
         from: uri,
         to: newUri,
@@ -718,9 +719,10 @@ const EditImage = ({ navigation, route }) => {
           backgroundColor: "#ffffff",
           flex: 1,
           paddingVertical: 25 * scale,
+          paddingHorizontal:10*scale
         }}
       >
-        <Text>Line Spacing</Text>
+        <Text style={{color:"#686868"}}>Line Spacing</Text>
         <Slider
           style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
           onValueChange={(value) => {

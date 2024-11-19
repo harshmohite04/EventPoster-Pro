@@ -9,10 +9,12 @@ import Home from "./home";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import UploadImage from "./uploadImage";
 import EditImage from "./editImage";
+import EditFlyer from "./EditFlyer";
 
 import { useFonts } from "expo-font";
 import AppLoading from 'expo-app-loading';
 import Library from "./library";
+import Profile from "./profile";
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
@@ -64,7 +66,7 @@ const Layout = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="UploadImage"
+      initialRouteName="Profile"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
@@ -74,6 +76,8 @@ const Layout = () => {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="UploadImage" component={UploadImage} />
       <Stack.Screen name="EditImage" component={EditImage} />
+      <Stack.Screen name="EditFlyer" component={EditFlyer} />
+      <Stack.Screen name="Profile" component={Profile} />
 
       {/* Admin */}
       <Stack.Screen name="Library" component={Library} />

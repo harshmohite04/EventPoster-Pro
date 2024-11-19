@@ -41,7 +41,9 @@ const UploadImage = ({ navigation }) => {
     }
   };
 
-  const editFlyer=()=>{}
+  const editFlyer=()=>{
+    navigation.navigate("EditFlyer")
+  }
 
   return (
     <ScrollView style={styles.container}>
