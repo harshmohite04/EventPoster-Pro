@@ -12,6 +12,7 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
+  KeyboardAvoidingView,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import ViewShot, { captureRef } from "react-native-view-shot";
@@ -116,18 +117,6 @@ const EditImage = ({ navigation, route }) => {
               marginTop: 15 * scale,
             }}
           >
-            <TextInput
-              style={{
-                borderWidth: 1,
-                width: "70%",
-                borderRadius: 10 * scale,
-                paddingHorizontal: 10 * scale,
-                paddingVertical: 3 * scale,
-              }}
-              value={text1}
-              onChangeText={setText1}
-              placeholder="Type your text"
-            />
           </View>
           <View
             style={{
@@ -628,6 +617,7 @@ const EditImage = ({ navigation, route }) => {
         >
           <Text>OK</Text>
         </TouchableOpacity>
+
       </ScrollView>
     );
   };
@@ -820,6 +810,7 @@ const EditImage = ({ navigation, route }) => {
             OK
           </Text>
         </TouchableOpacity>
+  
       </View>
     );
   };
@@ -1178,7 +1169,8 @@ const EditImage = ({ navigation, route }) => {
   ).current;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
+    <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
+      
       <View
         style={{
           flexDirection: "row",
@@ -1253,6 +1245,19 @@ const EditImage = ({ navigation, route }) => {
             >
               {text}
             </Text>
+            <TextInput
+              style={{
+                borderWidth: 1,
+                width: "70%",
+                borderRadius: 10 * scale,
+                paddingHorizontal: 10 * scale,
+                paddingVertical: 3 * scale,
+                marginTop:10*scale
+              }}
+              value={text}
+              onChangeText={setText}
+              placeholder="Type your text"
+            />
           </ViewShot>
         ) : (
           <Text>Image not selected</Text>
@@ -1305,7 +1310,7 @@ const EditImage = ({ navigation, route }) => {
           />
         </Tab.Navigator>
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

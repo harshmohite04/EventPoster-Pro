@@ -124,7 +124,7 @@ const PhoneNumber = ({ navigation }) => {
                 </View>
                 <View style={[styles.txt, { marginBottom: 20 * scale }]}>
                   <Text style={styles.txt1}> with </Text>
-                  <Text style={styles.txt2}>your photo </Text>
+                  <Text style={styles.txt2}> your photo </Text>
                   <Text style={styles.txt1}>and </Text>
                   <Text style={styles.txt2}>name</Text>
                 </View>
