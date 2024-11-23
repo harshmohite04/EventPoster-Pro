@@ -1245,23 +1245,25 @@ const EditImage = ({ navigation, route }) => {
             >
               {text}
             </Text>
-            <TextInput
+            
+          </ViewShot>
+        ) : (
+          <Text>Image not selected</Text>
+        )}
+        <TextInput
               style={{
                 borderWidth: 1,
                 width: "70%",
                 borderRadius: 10 * scale,
                 paddingHorizontal: 10 * scale,
                 paddingVertical: 3 * scale,
-                marginTop:10*scale
+                marginTop:10*scale,
+                alignSelf:"center"
               }}
               value={text}
               onChangeText={setText}
               placeholder="Type your text"
             />
-          </ViewShot>
-        ) : (
-          <Text>Image not selected</Text>
-        )}
       </View>
       <View
         style={{

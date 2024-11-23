@@ -5,7 +5,7 @@ import {
   Dimensions,
   TextInput,
   ScrollView,
-  Image
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 const { width } = Dimensions.get("window");
@@ -27,7 +27,7 @@ const pickImage = async (setImageUri) => {
   }
 };
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -36,6 +36,9 @@ const Profile = () => {
   const [logoUri, setLogoUri] = useState(null);
   const [photoUri, setPhotoUri] = useState(null);
 
+  const saveProfile = () => {
+    console.log("Save Pressed");
+  };
   return (
     <ScrollView style={{ flex: 1 }}>
       <View
@@ -48,7 +51,13 @@ const Profile = () => {
           paddingHorizontal: 15 * scale,
         }}
       >
-        <Feather name="arrow-left" size={20 * scale} color="black" />
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Feather name="arrow-left" size={20 * scale} color="black" />
+        </TouchableOpacity>
         <Text style={{ fontSize: 18 * scale, marginLeft: 15 * scale }}>
           Profile
         </Text>
@@ -223,6 +232,28 @@ const Profile = () => {
           value={website}
           onChangeText={setWebsite}
         />
+        <TouchableOpacity
+          onPress={saveProfile}
+          style={{
+            marginTop: 10 * scale,
+            borderRadius: 20 * scale,
+            backgroundColor: "#FF8017",
+            paddingVertical: 10 * scale,
+            width: "50%",
+            alignSelf: "center",
+          }}
+        >
+          <Text
+            style={{
+              color: "#000000",
+              textAlign: "center",
+              fontSize: 13 * scale,
+              fontWeight: "bold",
+            }}
+          >
+            SAVE
+          </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );

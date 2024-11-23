@@ -12,6 +12,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
 } from "react-native";
+
 import React, { useState, useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 const { width } = Dimensions.get("window");
@@ -19,28 +20,26 @@ const scale = width / 320;
 import MiddleLogo from "../../assets/icons/middleLogo";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import { useFonts } from "expo-font";
+import AppLoading from "expo-app-loading";
 import {
   Poppins_400Regular,
   Poppins_700Bold,
   Poppins_800ExtraBold,
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
-import axios from 'axios';
+import axios from "axios";
 
 const PhoneNumber = ({ navigation }) => {
   const [fontsLoaded] = useFonts({
-    'Poppins-Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
-    'Poppins-Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
-    'Poppins-ExtraBold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
-    'Poppins-SemiBold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-ExtraBold": require("../../assets/fonts/Poppins-ExtraBold.ttf"),
+    "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
   });
 
   if (!fontsLoaded) {
-    return (
-      <AppLoading />
-    )
+    return <AppLoading />;
   }
 
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -75,24 +74,12 @@ const PhoneNumber = ({ navigation }) => {
   //   GothamBold: require("../../assets/fonts/GothamBold.ttf")
   // })
   const handleSubmit = async (values) => {
-    const phoneNumber = `+91${values.phoneLength}`;  // Add the country code to the phone number
+    const phoneNumber = `+91${values.phoneLength}`; // Add the country code to the phone number
     console.log(phoneNumber);
-
-    try {
-      // Call the API to generate OTP
-      const response = await axios.post('https://9be00ac7-f3aa-4c5e-834a-b0f25f504504-00-1qgu85yeymzke.pike.replit.dev/generate-otp', { phoneNumber });
-
-      if (response.status === 200) {
-        // Navigate to the OTP screen, passing the phone number
-        navigation.push('Otp', { number: phoneNumber });
-      } else {
-        alert('Failed to send OTP. Please try again.');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Error sending OTP. Please try again.');
-    }
+    navigation.push('Otp', { number: phoneNumber });
+    
   };
+
   const phoneNumeberSchema = Yup.object().shape({
     phoneLength: Yup.string()
       .length(10, "Must be 10 numbers")
