@@ -25,7 +25,7 @@ import AppLoading from "expo-app-loading";
 import MiddleLogo from "@/assets/icons/middleLogo";
 
 const Otp = ({ navigation, route }) => {
-  const listOfNumbers = ["9356836581", "0123456789", "9876543210"];
+  const listOfNumbers = ["+919356836581", "+910123456789", "+919876543210"];
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -38,6 +38,8 @@ const Otp = ({ navigation, route }) => {
   }
 
   const { number = "" } = route?.params || {};
+
+  console.log("Numberssss "+number)
   const et1 = useRef();
   const et2 = useRef();
   const et3 = useRef();

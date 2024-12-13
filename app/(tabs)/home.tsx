@@ -17,7 +17,6 @@ const { width } = Dimensions.get("window");
 const scale = width / 320;
 import WhatsAppLogo from "@/assets/icons/WhatsLogo";
 import ProfilePhoto from "@/assets/icons/profilePhoto";
-import Upload from "@/assets/icons/upload";
 import Download from "@/assets/icons/download";
 import Swipe from "@/assets/icons/swipe";
 const images = [
@@ -126,7 +125,10 @@ const ImageReel = () => {
       <Image source={{ uri: item.url }} style={styles.image} />
 
       <View style={{ width: "100%" }}>
-        <View
+        <TouchableOpacity
+          onPress={() => {
+            console.log("share to whatsapp");
+          }}
           style={{
             backgroundColor: "#60D669",
             width: "90%",
@@ -148,8 +150,11 @@ const ImageReel = () => {
             Share
           </Text>
           <WhatsAppLogo size={20 * scale} />
-        </View>
-        <View
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            console.log("Download pressed");
+          }}
           style={{
             backgroundColor: "#ffffff",
             width: "90%",
@@ -173,7 +178,7 @@ const ImageReel = () => {
           >
             Download
           </Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -191,13 +196,12 @@ const ImageReel = () => {
   );
 };
 
-
 const Home = ({ navigation }) => {
   const [search, setSearch] = useState("");
 
-  const profileClicked=()=>{
-    navigation.navigate('Profile')
-  }
+  const profileClicked = () => {
+    navigation.navigate("Profile");
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.flex1}>
@@ -239,10 +243,8 @@ const Home = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-        onPress={profileClicked}>
-
-        <ProfilePhoto size={35 * scale} />
+        <TouchableOpacity onPress={profileClicked}>
+          <ProfilePhoto size={35 * scale} />
         </TouchableOpacity>
       </View>
 

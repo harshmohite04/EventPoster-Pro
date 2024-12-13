@@ -82,6 +82,8 @@ const EditImage = ({ navigation, route }) => {
   const ok = (text1) => {
     setText(text1);
   };
+
+  
   const handleDownload = async () => {
     try {
       const uri = await captureRef(viewShotRef, {

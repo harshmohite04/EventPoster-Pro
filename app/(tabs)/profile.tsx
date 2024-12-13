@@ -237,7 +237,7 @@ const Profile = ({ navigation }) => {
           style={{
             marginTop: 10 * scale,
             borderRadius: 20 * scale,
-            backgroundColor: "#FF8017",
+            backgroundColor: "red",
             paddingVertical: 10 * scale,
             width: "50%",
             alignSelf: "center",

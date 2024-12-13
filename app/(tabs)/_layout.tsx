@@ -10,28 +10,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import UploadImage from "./uploadImage";
 import EditImage from "./editImage";
 import EditFlyer from "./EditFlyer";
-
 import { useFonts } from "expo-font";
-import AppLoading from 'expo-app-loading';
+import AppLoading from "expo-app-loading";
 import Library from "./library";
 import Profile from "./profile";
+import AdminEditImage from "./adminEditImage";
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     const checkVerificationStatus = async () => {
       const verified = await AsyncStorage.getItem("isVerified");
       const role = await AsyncStorage.getItem("role");
-        
-      if (verified === "true") {
-        if(role ==="admin"){
-          navigation.replace("Library"); // change when before going to production
 
-        }
-        else if(role ==="user"){
-          
+      if (verified === "true") {
+        if (role === "admin") {
+          navigation.replace("Library"); // change when before going to production
+        } else if (role === "user") {
           navigation.replace("Home"); // change when before going to production
         }
-        // navigation.replace('Home');  
+        // navigation.replace('Home');
       } else {
         navigation.replace("PhoneNumberAuth");
       }
@@ -49,24 +46,21 @@ const SplashScreen = ({ navigation }) => {
 };
 
 const Layout = () => {
-
   const [fontsLoaded] = useFonts({
-    'Poppins-Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
-    'Poppins-Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
-    'Poppins-ExtraBold': require('../../assets/fonts/Poppins-ExtraBold.ttf'),
-    'Poppins-SemiBold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-ExtraBold": require("../../assets/fonts/Poppins-ExtraBold.ttf"),
+    "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
   });
 
   if (!fontsLoaded) {
-    return (
-      <AppLoading />
-    )
+    return <AppLoading />;
   }
 
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="UploadImage"
+      initialRouteName="Splash"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
@@ -81,7 +75,7 @@ const Layout = () => {
 
       {/* Admin */}
       <Stack.Screen name="Library" component={Library} />
-
+      <Stack.Screen name="AdminEditImage" component={AdminEditImage} />
     </Stack.Navigator>
   );
 };
