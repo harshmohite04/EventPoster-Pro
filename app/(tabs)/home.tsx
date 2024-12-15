@@ -9,16 +9,19 @@ import {
   Image,
   FlatList,
   Modal,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Entypo from "@expo/vector-icons/Entypo";
-const { width } = Dimensions.get("window");
-const scale = width / 320;
 import WhatsAppLogo from "@/assets/icons/WhatsLogo";
 import ProfilePhoto from "@/assets/icons/profilePhoto";
 import Download from "@/assets/icons/download";
 import Swipe from "@/assets/icons/swipe";
+
+const { width, height } = Dimensions.get("window");
+const scale = width / 320;
+
 const images = [
   {
     url: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
@@ -54,164 +57,66 @@ const images = [
   },
 ];
 
-const ImageReel = () => {
-  const { height, width } = Dimensions.get("window");
+
+const Home = ({ navigation }) => {
+  const [search, setSearch] = useState("");
+
   const [modalVisible, setModalVisible] = useState(true);
+  const profileClicked = () => {
+    navigation.navigate("Profile");
+  };
+
+  
   const renderItem = ({ item }) => (
     <View style={[styles.imageContainer, { height, width }]}>
       <Modal
-        // animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
           Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
-        style={{ justifyContent: "center", alignContent: "center" }}
       >
-        <View
-          style={{
-            backgroundColor: "#FFF8ED",
-            alignSelf: "center",
-            justifyContent: "center",
-            marginTop: 150 * scale,
-            paddingVertical: 30 * scale,
-            paddingHorizontal: 30 * scale,
-            borderRadius: 10 * scale,
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{
-              color: "#000000",
-              fontSize: 16 * scale,
-              marginBottom: 10 * scale,
-            }}
-          >
-            Swipe Up for more
-          </Text>
-          <Swipe size={80 * scale} />
-          <Text
-            style={{
-              color: "#000000",
-              fontSize: 16 * scale,
-              marginTop: 10 * scale,
-              marginBottom: 20 * scale,
-            }}
-          >
-            Just like Instagram
-          </Text>
-          <TouchableOpacity
-            style={{
-              backgroundColor: "#FF8017",
-              paddingHorizontal: 30 * scale,
-              paddingVertical: 5 * scale,
-              borderRadius: 25 * scale,
-            }}
-            onPress={() => setModalVisible(!modalVisible)}
-          >
-            <Text
-              style={{
-                color: "#000000",
-                fontSize: 16 * scale,
-                textAlign: "center",
-              }}
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Swipe Up for more</Text>
+            <Swipe size={80 * scale} />
+            <Text style={styles.modalText}>Just like Instagram</Text>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(!modalVisible)}
             >
-              Close
-            </Text>
-          </TouchableOpacity>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
+
       <Image source={{ uri: item.url }} style={styles.image} />
 
-      <View style={{ width: "100%" }}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => {
-            console.log("share to whatsapp");
-          }}
-          style={{
-            backgroundColor: "#60D669",
-            width: "90%",
-            paddingVertical: 10 * scale,
-            marginTop: 10 * scale,
-            flexDirection: "row",
-            justifyContent: "center",
-            borderRadius: 50 * scale,
-            alignSelf: "center",
-          }}
+          onPress={() => console.log("share to WhatsApp")}
+          style={styles.shareButton}
         >
-          <Text
-            style={{
-              color: "#ffffff",
-              fontSize: 15 * scale,
-              paddingRight: 10 * scale,
-            }}
-          >
-            Share
-          </Text>
+          <Text style={styles.shareButtonText}>Share</Text>
           <WhatsAppLogo size={20 * scale} />
         </TouchableOpacity>
+
         <TouchableOpacity
-          onPress={() => {
-            console.log("Download pressed");
-          }}
-          style={{
-            backgroundColor: "#ffffff",
-            width: "90%",
-            paddingVertical: 10 * scale,
-            marginTop: 10 * scale,
-            flexDirection: "row",
-            justifyContent: "center",
-            borderRadius: 50 * scale,
-            alignSelf: "center",
-            borderWidth: 2,
-            borderColor: "#FF9A37",
-          }}
+          onPress={() => console.log("Download pressed")}
+          style={styles.downloadButton}
         >
           <Download size={20 * scale} />
-          <Text
-            style={{
-              color: "#000000",
-              fontSize: 15 * scale,
-              paddingLeft: 10 * scale,
-            }}
-          >
-            Download
-          </Text>
+          <Text style={styles.downloadButtonText}>Download</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
-
-  return (
-    <FlatList
-      data={images}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-      pagingEnabled
-      showsVerticalScrollIndicator={false}
-      snapToAlignment="start"
-      decelerationRate="fast"
-    />
-  );
-};
-
-const Home = ({ navigation }) => {
-  const [search, setSearch] = useState("");
-
-  const profileClicked = () => {
-    navigation.navigate("Profile");
-  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.flex1}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-around",
-            alignItems: "center",
-          }}
-        >
+        <View style={styles.header}>
           <View style={styles.search}>
             <EvilIcons name="search" size={20 * scale} color="black" />
             <TextInput
@@ -220,75 +125,45 @@ const Home = ({ navigation }) => {
               placeholder="Search"
               placeholderTextColor={"#49454F"}
               clearButtonMode="always"
-              style={{ marginLeft: 5 * scale, fontSize: 14 * scale }}
+              style={styles.searchInput}
             />
           </View>
+
           <TouchableOpacity
-            onPress={() => {
-              navigation.push("UploadImage");
-            }}
-            style={{
-              flexDirection: "row",
-              backgroundColor: "#FF9A37",
-              justifyContent: "center",
-              alignItems: "center",
-              paddingHorizontal: 10 * scale,
-              paddingVertical: 5 * scale,
-              borderRadius: 25 * scale,
-            }}
+            onPress={() => navigation.push("UploadImage")}
+            style={styles.createButton}
           >
             <Entypo name="plus" size={24} color="black" />
-            <Text style={{ fontSize: 12 * scale, marginLeft: 5 * scale }}>
-              Create
-            </Text>
+            <Text style={styles.createButtonText}>Create</Text>
           </TouchableOpacity>
         </View>
+
         <TouchableOpacity onPress={profileClicked}>
           <ProfilePhoto size={35 * scale} />
         </TouchableOpacity>
       </View>
 
-      <View
-        style={{
-          paddingVertical: 15 * scale,
-          width: "100%",
-        }}
-      >
-        <View
-          style={{
-            paddingHorizontal: 5 * scale,
-            borderBottomColor: "#F0F0F0",
-            borderBottomWidth: 1,
-            paddingVertical: 10 * scale,
-          }}
-        >
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
-            <Text style={styles.category}>All</Text>
-            <Text style={styles.category}>Jokes</Text>
-            <Text style={styles.category}>Morning</Text>
-            <Text style={styles.category}>Birthday</Text>
-            <Text style={styles.category}>Birthday</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              marginTop: 5 * scale,
-            }}
-          >
-            <Text style={styles.category}>Birthday</Text>
-            <Text style={styles.category}>Jokes</Text>
-            <Text style={styles.category}>Morning</Text>
-            <Text style={styles.category}>Birthday</Text>
-            <Text style={styles.category}>All</Text>
-          </View>
+      <View style={styles.categoryContainer}>
+        <View style={styles.categoryRow}>
+          <Text style={styles.category}>All</Text>
+          <Text style={styles.category}>Jokes</Text>
+          <Text style={styles.category}>Morning</Text>
+          <Text style={styles.category}>Birthday</Text>
+          <Text style={styles.category}>Night</Text>
         </View>
       </View>
-      <View style={{}}>
-        <ImageReel />
-      </View>
+
+      {/* <ImageReel /> */}
+
+      <FlatList
+      data={images}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      pagingEnabled
+      showsVerticalScrollIndicator={false}
+      snapToAlignment="start"
+      decelerationRate="fast"
+    />
     </SafeAreaView>
   );
 };
@@ -309,6 +184,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10 * scale,
     paddingBottom: 5 * scale,
   },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
   search: {
     flexDirection: "row",
     backgroundColor: "#FFEFD4",
@@ -318,7 +198,41 @@ const styles = StyleSheet.create({
     paddingVertical: 5 * scale,
     alignItems: "center",
   },
-
+  searchInput: {
+    marginLeft: 5 * scale,
+    fontSize: 14 * scale,
+  },
+  createButton: {
+    flexDirection: "row",
+    backgroundColor: "#FF9A37",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10 * scale,
+    paddingVertical: 5 * scale,
+    borderRadius: 25 * scale,
+  },
+  createButtonText: {
+    fontSize: 12 * scale,
+    marginLeft: 5 * scale,
+  },
+  categoryContainer: {
+    paddingVertical: 15 * scale,
+    width: "100%",
+  },
+  categoryRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingHorizontal: 5 * scale,
+  },
+  category: {
+    color: "#000000",
+    borderWidth: 1,
+    borderColor: "#FF9A37",
+    borderRadius: 25 * scale,
+    paddingHorizontal: 8 * scale,
+    paddingVertical: 2 * scale,
+    fontSize: 12 * scale,
+  },
   imageContainer: {
     alignItems: "center",
     paddingTop: 10 * scale,
@@ -329,13 +243,62 @@ const styles = StyleSheet.create({
     height: "60%",
     resizeMode: "cover",
   },
-  category: {
-    color: "#000000",
-    borderWidth: 1,
+  buttonContainer: {
+    width: "100%",
+  },
+  shareButton: {
+    backgroundColor: "#60D669",
+    width: "90%",
+    paddingVertical: 10 * scale,
+    marginTop: 10 * scale,
+    flexDirection: "row",
+    justifyContent: "center",
+    borderRadius: 50 * scale,
+    alignSelf: "center",
+  },
+  shareButtonText: {
+    color: "#ffffff",
+    fontSize: 15 * scale,
+    paddingRight: 10 * scale,
+  },
+  downloadButton: {
+    backgroundColor: "#ffffff",
+    width: "90%",
+    paddingVertical: 10 * scale,
+    marginTop: 10 * scale,
+    flexDirection: "row",
+    justifyContent: "center",
+    borderRadius: 50 * scale,
+    alignSelf: "center",
+    borderWidth: 2,
     borderColor: "#FF9A37",
-    borderRadius: 25 * scale,
-    paddingHorizontal: 8 * scale,
-    paddingVertical: 2 * scale,
-    fontSize: 12 * scale,
+  },
+  downloadButtonText: {
+    color: "#000000",
+    fontSize: 15 * scale,
+    paddingLeft: 10 * scale,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.155)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#ffffff",
+    padding: 30 * scale,
+    borderRadius: 10 * scale,
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 18 * scale,
+    marginBottom: 10 * scale,
+  },
+  closeButton: {
+    marginTop: 20 * scale,
+  },
+  closeButtonText: {
+    fontSize: 16 * scale,
+    color: "#FF9A37",
   },
 });

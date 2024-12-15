@@ -76,8 +76,8 @@ const PhoneNumber = ({ navigation }) => {
   const handleSubmit = async (values) => {
     const phoneNumber = `+91${values.phoneLength}`; // Add the country code to the phone number
     console.log(phoneNumber);
-    navigation.push('Otp', { number: phoneNumber });
-    
+
+    navigation.push("Otp", { number: phoneNumber });
   };
 
   const phoneNumeberSchema = Yup.object().shape({

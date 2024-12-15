@@ -166,7 +166,7 @@ const Profile = ({ navigation }) => {
           Personal Details
         </Text>
 
-        <Text style={styles.labelText}>Enter your name</Text>
+        <Text style={[styles.labelText]}>Enter your name</Text>
         <TextInput
           style={styles.input}
           value={userName}
@@ -237,7 +237,7 @@ const Profile = ({ navigation }) => {
           style={{
             marginTop: 10 * scale,
             borderRadius: 20 * scale,
-            backgroundColor: "red",
+            backgroundColor: "#FF8017",
             paddingVertical: 10 * scale,
             width: "50%",
             alignSelf: "center",
@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
     fontSize: 12 * scale,
     paddingHorizontal: 10 * scale,
     paddingVertical: 3 * scale,
+    marginTop:8*scale
   },
   input: {
     borderWidth: 1,

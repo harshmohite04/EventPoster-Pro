@@ -23,8 +23,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import MiddleLogo from "@/assets/icons/middleLogo";
+import axios from "axios";
 
 const Otp = ({ navigation, route }) => {
+
   const listOfNumbers = ["+919356836581", "+910123456789", "+919876543210"];
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
@@ -240,7 +242,7 @@ const Otp = ({ navigation, route }) => {
                       style={[
                         styles.resendOtpText,
                         {
-                          color: secondsRemaining === 0 ? "blue" : "grey",
+                          color: secondsRemaining === 0 ? "#FF8017" : "grey",
                         },
                       ]}
                     >
@@ -353,6 +355,8 @@ const styles = StyleSheet.create({
     fontSize: 14 * scale,
     textDecorationLine: "underline",
     marginVertical: 5 * scale,
+    marginTop:15*scale,
     fontFamily: "Poppins_400Regular",
+    
   },
 });

@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import * as ImagePicker from "expo-image-picker";
 const { width } = Dimensions.get("window");
@@ -183,7 +183,7 @@ const Item = ({ imageUrl }: ItemProps) => {
     <View
       style={{
         alignItems: "center",
-        backgroundColor: "rgb(255, 255, 200)",
+        backgroundColor: "#292929",
         marginHorizontal: 2 * scale,
         paddingBottom: 8 * scale,
         borderBottomRightRadius: 20 * scale,
@@ -210,16 +210,16 @@ const Item = ({ imageUrl }: ItemProps) => {
       >
         <TouchableOpacity onPress={() => {setEye(!eye)}}>
           {eye ? (
-            <Ionicons name="eye-off-outline" size={19 * scale} color="black" />
+            <Ionicons name="eye-off-outline" size={20 * scale} color="white" />
           ) : (
-            <Ionicons name="eye-outline" size={19 * scale} color="black" />
+            <Ionicons name="eye-outline" size={20 * scale} color="white" />
           )}
         </TouchableOpacity>
         <TouchableOpacity
         onPress={()=>{
           // Remove img from list
         }}>
-          <AntDesign name="delete" size={19 * scale} color="black" />
+          <MaterialCommunityIcons name="delete" size={20 * scale} color="white" />
         </TouchableOpacity>
       </View>
     </View>

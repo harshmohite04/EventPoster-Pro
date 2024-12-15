@@ -140,10 +140,15 @@ const EditFlyer = () => {
           paddingVertical: 5 * scale,
           marginTop: 15 * scale,
           justifyContent: "space-between",
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.8,
+          shadowRadius: 2,  
+          elevation: 5
         }}
       >
         <View>
-          <Text style={{ fontSize: 20 * scale }}>Yearly Plan</Text>
+          <Text style={{ fontSize: 20 * scale }}>Monthy Plan</Text>
           <Text
             style={{
               color: "#000000",
