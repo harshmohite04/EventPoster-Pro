@@ -171,7 +171,7 @@ const Profile = ({ navigation }) => {
           style={styles.input}
           value={userName}
           onChangeText={setUserName}
-          placeholder="Enter your name"
+          placeholder="Aryan Sharma"
           placeholderTextColor="#7c7c7c"
         />
 
@@ -180,7 +180,7 @@ const Profile = ({ navigation }) => {
           style={styles.input}
           value={phoneNumber}
           onChangeText={setPhoneNumber}
-          placeholder="9356836581"
+          placeholder="9988776655"
           placeholderTextColor="#7c7c7c"
         />
 

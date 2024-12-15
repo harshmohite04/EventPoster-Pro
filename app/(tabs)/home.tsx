@@ -11,7 +11,7 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import WhatsAppLogo from "@/assets/icons/WhatsLogo";
@@ -22,51 +22,52 @@ import Swipe from "@/assets/icons/swipe";
 const { width, height } = Dimensions.get("window");
 const scale = width / 320;
 
-const images = [
-  {
-    url: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
-    id: "1",
-  },
-  {
-    url: "https://ideogram.ai/assets/image/lossless/response/A7eOEfrLRdK8gZI88L3Yjw",
-    id: "2",
-  },
-  {
-    url: "https://ideogram.ai/assets/progressive-image/balanced/response/d6I5TyfcRYy8Pb_MSEjAQw",
-    id: "3",
-  },
-  {
-    url: "https://ideogram.ai/assets/progressive-image/balanced/response/mZKT1ae5SPWexGn5OTnOWQ",
-    id: "5",
-  },
-  {
-    url: "https://ideogram.ai/assets/progressive-image/balanced/response/2T3vLk22TZiHRo2ROTUH6A",
-    id: "6",
-  },
-  {
-    url: "https://ideogram.ai/assets/progressive-image/balanced/response/POhRvFN5QRmud-vx75SUYQ",
-    id: "7",
-  },
-  {
-    url: "https://ideogram.ai/assets/progressive-image/balanced/response/H9kSy8zhR3-J16Jy-OeSKQ",
-    id: "8",
-  },
-  {
-    url: "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
-    id: "9",
-  },
-];
 
 
 const Home = ({ navigation }) => {
   const [search, setSearch] = useState("");
-
+const [images,setImages]=useState([])
   const [modalVisible, setModalVisible] = useState(true);
   const profileClicked = () => {
     navigation.navigate("Profile");
   };
+  useEffect(() => {
+    setImages([
+      {
+        url: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
+        id: "1",
+      },
+      {
+        url: "https://ideogram.ai/assets/image/lossless/response/A7eOEfrLRdK8gZI88L3Yjw",
+        id: "2",
+      },
+      {
+        url: "https://ideogram.ai/assets/progressive-image/balanced/response/d6I5TyfcRYy8Pb_MSEjAQw",
+        id: "3",
+      },
+      {
+        url: "https://ideogram.ai/assets/progressive-image/balanced/response/mZKT1ae5SPWexGn5OTnOWQ",
+        id: "5",
+      },
+      {
+        url: "https://ideogram.ai/assets/progressive-image/balanced/response/2T3vLk22TZiHRo2ROTUH6A",
+        id: "6",
+      },
+      {
+        url: "https://ideogram.ai/assets/progressive-image/balanced/response/POhRvFN5QRmud-vx75SUYQ",
+        id: "7",
+      },
+      {
+        url: "https://ideogram.ai/assets/progressive-image/balanced/response/H9kSy8zhR3-J16Jy-OeSKQ",
+        id: "8",
+      },
+      {
+        url: "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
+        id: "9",
+      },
+    ]);
+  }, []);
 
-  
   const renderItem = ({ item }) => (
     <View style={[styles.imageContainer, { height, width }]}>
       <Modal
@@ -201,6 +202,7 @@ const styles = StyleSheet.create({
   searchInput: {
     marginLeft: 5 * scale,
     fontSize: 14 * scale,
+    paddingRight:25*scale,
   },
   createButton: {
     flexDirection: "row",
@@ -240,7 +242,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "80%",
-    height: "60%",
+    height: "65%",
     resizeMode: "cover",
   },
   buttonContainer: {
