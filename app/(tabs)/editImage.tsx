@@ -9,12 +9,12 @@ import {
   PanResponder,
   TextInput,
   ScrollView,
-  Alert,  
+  Alert,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import ViewShot, { captureRef } from "react-native-view-shot";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
@@ -27,9 +27,7 @@ import {
   Kanit_500Medium,
   Kanit_700Bold,
 } from "@expo-google-fonts/kanit";
-import {
-  Fondamento_400Regular,
-} from "@expo-google-fonts/fondamento";
+import { Fondamento_400Regular } from "@expo-google-fonts/fondamento";
 import { FjallaOne_400Regular } from "@expo-google-fonts/fjalla-one";
 import LeftAlign from "@/assets/icons/left-align";
 import RightAlign from "@/assets/icons/right-align";
@@ -38,6 +36,7 @@ import SkipLogo from "@/assets/icons/skip";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 const Tab = createMaterialTopTabNavigator();
+import { throttle } from "lodash";
 
 const EditImage = ({ navigation, route }) => {
   let { image } = route?.params || {};
@@ -56,15 +55,19 @@ const EditImage = ({ navigation, route }) => {
 
   const [textPosition, setTextPosition] = useState({ x: 10, y: 10 });
   const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
-  const imageRef = useRef(null); // Reference to the image for getting its dimensions
-  const viewShotRef = useRef(null); // Reference to ViewShot for capturing the screen
+  const imageRef = useRef(null);
+  const viewShotRef = useRef(null);
+  
+  const throttledSetTextPosition = throttle((newX, newY) => {
+    setTextPosition({ x: newX, y: newY });
+  }, 16);
 
   useFonts({
     Kanit_400Regular,
     Kanit_500Medium,
     Kanit_700Bold,
     FjallaOne_400Regular,
-    Fondamento_400Regular
+    Fondamento_400Regular,
   });
 
   const [imageDimensions, setImageDimensions] = useState({
@@ -83,7 +86,10 @@ const EditImage = ({ navigation, route }) => {
     setText(text1);
   };
 
-  
+  const handleSliderChange = useCallback((value) => {
+    setFontSize(Math.round(value));
+  }, []);
+
   const handleDownload = async () => {
     try {
       const uri = await captureRef(viewShotRef, {
@@ -91,7 +97,7 @@ const EditImage = ({ navigation, route }) => {
         quality: 1,
       });
       const newUri = `${FileSystem.documentDirectory}edited_image.png`;
-      console.log(newUri)
+      console.log(newUri);
       await FileSystem.moveAsync({
         from: uri,
         to: newUri,
@@ -104,8 +110,6 @@ const EditImage = ({ navigation, route }) => {
 
   const FontTab = React.memo(() => {
     const [text1, setText1] = useState(text);
-    const [fontSize1, setFontSize1] = useState(20);
-    const [fontFamily1, setFontFamily1] = useState("");
 
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -118,8 +122,7 @@ const EditImage = ({ navigation, route }) => {
               paddingHorizontal: 5 * scale,
               marginTop: 15 * scale,
             }}
-          >
-          </View>
+          ></View>
           <View
             style={{
               flexDirection: "row",
@@ -170,12 +173,8 @@ const EditImage = ({ navigation, route }) => {
           </View>
           <Slider
             style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
-            onValueChange={(value) => {
-              setFontSize1(Math.round(value));
-              console.log(fontSize1);
-              console.log(fontSize);
-              setFontSize(Math.round(value));
-            }}
+            value={fontSize}
+            onValueChange={handleSliderChange}
             minimumValue={0}
             maximumValue={100}
             minimumTrackTintColor="#FF9A37"
@@ -191,120 +190,98 @@ const EditImage = ({ navigation, route }) => {
           >
             <Text>Select Font</Text>
             <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
             >
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  setFontFamily("Kanit_400Regular");
+              <View
+                style={{
+                  flexDirection: "row",
                 }}
-                style={styles.fontView}
               >
-                <Text
-                  style={[styles.fontText, { fontFamily: "Kanit_400Regular" }]}
+                <TouchableOpacity
+                  onPress={() => {
+                    setFontFamily("Kanit_400Regular");
+                  }}
+                  style={styles.fontView}
                 >
-                  Select
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setFontFamily("FjallaOne_400Regular");
-                }}
-                style={styles.fontView}
-              >
-                <Text
-                  style={[
-                    styles.fontText,
-                    { fontFamily: "FjallaOne_400Regular" },
-                  ]}
+                  <Text
+                    style={[
+                      styles.fontText,
+                      { fontFamily: "Kanit_400Regular" },
+                    ]}
+                  >
+                    Select
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setFontFamily("FjallaOne_400Regular");
+                  }}
+                  style={styles.fontView}
                 >
-                  Select
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setFontFamily("Fondamento_400Regular");
-                }}
-                style={styles.fontView}
-              >
-                <Text style={[styles.fontText,{fontFamily:"Fondamento_400Regular"}]}>Select</Text>
-              </TouchableOpacity>
+                  <Text
+                    style={[
+                      styles.fontText,
+                      { fontFamily: "FjallaOne_400Regular" },
+                    ]}
+                  >
+                    Select
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setFontFamily("Fondamento_400Regular");
+                  }}
+                  style={styles.fontView}
+                >
+                  <Text
+                    style={[
+                      styles.fontText,
+                      { fontFamily: "Fondamento_400Regular" },
+                    ]}
+                  >
+                    Select
+                  </Text>
+                </TouchableOpacity>
 
+                <TouchableOpacity
+                  onPress={() => {
+                    setFontFamily("Pressed");
+                  }}
+                  style={styles.fontView}
+                >
+                  <Text style={[styles.fontText]}>Select</Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => {
-                  setFontFamily("Pressed");
-                }}
-                style={styles.fontView}
-              >
-                <Text style={[styles.fontText]}>Select</Text>
-              </TouchableOpacity>
-            
-              <TouchableOpacity
-                onPress={() => {
-                  setFontFamily("Pressed");
-                }}
-                style={styles.fontView}
-              >
-                <Text style={[styles.fontText]}>Select</Text>
-              </TouchableOpacity>
-            
-              <TouchableOpacity
-                onPress={() => {
-                  setFontFamily("Pressed");
-                }}
-                style={styles.fontView}
-              >
-                <Text style={[styles.fontText]}>Select</Text>
-              </TouchableOpacity>
-            
-              <TouchableOpacity
-                onPress={() => {
-                  setFontFamily("Pressed");
-                }}
-                style={styles.fontView}
-              >
-                <Text style={[styles.fontText]}>Select</Text>
-              </TouchableOpacity>
-            
+                <TouchableOpacity
+                  onPress={() => {
+                    setFontFamily("Pressed");
+                  }}
+                  style={styles.fontView}
+                >
+                  <Text style={[styles.fontText]}>Select</Text>
+                </TouchableOpacity>
 
-            </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setFontFamily("Pressed");
+                  }}
+                  style={styles.fontView}
+                >
+                  <Text style={[styles.fontText]}>Select</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    setFontFamily("Pressed");
+                  }}
+                  style={styles.fontView}
+                >
+                  <Text style={[styles.fontText]}>Select</Text>
+                </TouchableOpacity>
+              </View>
             </ScrollView>
           </View>
-          <TouchableOpacity
-            style={{
-              width: "30%",
-              borderWidth: 1,
-              borderRadius: 15 * scale,
-              alignItems: "center",
-              alignSelf: "center",
-            }}
-            onPress={() => {
-              if (text1.trim() === "") {
-                Alert.alert("Error", "Please enter some text.");
-              } else {
-                ok(text1);
-                //setFontSize(Number(fontSize1));
-                console.log(fontW);
-              }
-            }}
-          >
-            <Text
-              style={{
-                paddingVertical: 3 * scale,
-                textAlign: "center",
-                fontSize: 15 * scale,
-                fontWeight: "700",
-              }}
-            >
-              ok
-            </Text>
-          </TouchableOpacity>
         </ScrollView>
       </TouchableWithoutFeedback>
     );
@@ -326,10 +303,9 @@ const EditImage = ({ navigation, route }) => {
           <Text style={{}}>Opacity</Text>
           <Slider
             style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
+            value={opacity}
             onValueChange={(value) => {
-              setOpacity1(Number(value.toFixed(1)));
-              console.log(opacity1);
-              console.log(value.toFixed(1));
+              setOpacity(Number(value.toFixed(1)));
             }}
             minimumValue={0}
             maximumValue={1}
@@ -604,22 +580,6 @@ const EditImage = ({ navigation, route }) => {
             ></TouchableOpacity>
           </ScrollView>
         </View>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "red",
-            alignSelf: "center",
-            paddingVertical: 5 * scale,
-            paddingHorizontal: 10 * scale,
-            borderRadius: 5 * scale,
-          }}
-          onPress={() => {
-            setOpacity(opacity1);
-            //setBgColor(BgColor1);
-          }}
-        >
-          <Text>OK</Text>
-        </TouchableOpacity>
-
       </ScrollView>
     );
   };
@@ -711,18 +671,18 @@ const EditImage = ({ navigation, route }) => {
           backgroundColor: "#ffffff",
           flex: 1,
           paddingVertical: 25 * scale,
-          paddingHorizontal:10*scale
+          paddingHorizontal: 10 * scale,
         }}
       >
-        <Text style={{color:"#686868"}}>Line Spacing</Text>
+        <Text style={{ color: "#686868" }}>Line Spacing</Text>
         <Slider
           style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
+          value={lineSpacing}
           onValueChange={(value) => {
-            setLineSpacing1(Number(Math.round(value)));
-            console.log(lineSpacing1);
+            setLineSpacing(Number(Math.round(value)));
           }}
-          minimumValue={0}
-          maximumValue={100}
+          minimumValue={50}
+          maximumValue={150}
           minimumTrackTintColor="#FF9A37"
           maximumTrackTintColor="#DBDBDB"
         />
@@ -791,28 +751,6 @@ const EditImage = ({ navigation, route }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            marginTop: 10 * scale,
-          }}
-          onPress={() => {
-            setAlign(align1);
-            setLineSpacing(lineSpacing1);
-          }}
-        >
-          <Text
-            style={{
-              paddingVertical: 5 * scale,
-              paddingHorizontal: 10 * scale,
-              backgroundColor: "red",
-              borderRadius: 8 * scale,
-            }}
-          >
-            OK
-          </Text>
-        </TouchableOpacity>
-  
       </View>
     );
   };
@@ -832,10 +770,9 @@ const EditImage = ({ navigation, route }) => {
         <Text>Shadow</Text>
         <Slider
           style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
+          value={shadow}
           onValueChange={(value) => {
-            setShadow1(Number(Math.round(value)));
-            console.log(shadow1);
-            console.log(shadow1);
+            setShadow(Number(Math.round(value)));
           }}
           minimumValue={0}
           maximumValue={100}
@@ -1121,27 +1058,6 @@ const EditImage = ({ navigation, route }) => {
             ></TouchableOpacity>
           </ScrollView>
         </View>
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            marginTop: 10 * scale,
-          }}
-          onPress={() => {
-            setShadow(shadow1);
-            //setShadowColor(shadowColor1);
-          }}
-        >
-          <Text
-            style={{
-              paddingVertical: 5 * scale,
-              paddingHorizontal: 10 * scale,
-              backgroundColor: "red",
-              borderRadius: 8 * scale,
-            }}
-          >
-            OK
-          </Text>
-        </TouchableOpacity>
       </View>
     );
   };
@@ -1151,20 +1067,7 @@ const EditImage = ({ navigation, route }) => {
       onPanResponderMove: (evt, gestureState) => {
         const newX = textPosition.x + gestureState.dx;
         const newY = textPosition.y + gestureState.dy;
-        const imageWidth = imageRef.current ? imageRef.current.width : 0;
-        const imageHeight = imageRef.current ? imageRef.current.height : 0;
-        const boundedX = Math.min(
-          Math.max(newX, 0),
-          imageWidth - textDimensions.width
-        );
-        const boundedY = Math.min(
-          Math.max(newY, 0),
-          imageHeight - textDimensions.height
-        );
-        setTextPosition({
-          x: boundedX,
-          y: boundedY,
-        });
+        throttledSetTextPosition(newX, newY);
       },
       onPanResponderRelease: () => {},
     })
@@ -1172,7 +1075,6 @@ const EditImage = ({ navigation, route }) => {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
-      
       <View
         style={{
           flexDirection: "row",
@@ -1247,25 +1149,24 @@ const EditImage = ({ navigation, route }) => {
             >
               {text}
             </Text>
-            
           </ViewShot>
         ) : (
           <Text>Image not selected</Text>
         )}
         <TextInput
-              style={{
-                borderWidth: 1,
-                width: "70%",
-                borderRadius: 10 * scale,
-                paddingHorizontal: 10 * scale,
-                paddingVertical: 3 * scale,
-                marginTop:10*scale,
-                alignSelf:"center"
-              }}
-              value={text}
-              onChangeText={setText}
-              placeholder="Type your text"
-            />
+          style={{
+            borderWidth: 1,
+            width: "70%",
+            borderRadius: 10 * scale,
+            paddingHorizontal: 10 * scale,
+            paddingVertical: 3 * scale,
+            marginTop: 10 * scale,
+            alignSelf: "center",
+          }}
+          value={text}
+          onChangeText={setText}
+          placeholder="Type your text"
+        />
       </View>
       <View
         style={{

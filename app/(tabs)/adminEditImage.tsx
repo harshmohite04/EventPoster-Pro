@@ -20,7 +20,6 @@ import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import Feather from "@expo/vector-icons/Feather";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Slider from "@react-native-community/slider";
 import {
   useFonts,
   Kanit_400Regular,
@@ -38,11 +37,13 @@ import SkipLogo from "@/assets/icons/skip";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 const Tab = createMaterialTopTabNavigator();
+import { throttle } from "lodash";
+import Slider from "@react-native-community/slider";
 
 const AdminEditImage = ({ navigation, route }) => {
-  // let { image } = route?.params || {};
-  let image =
-    "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg";
+  let { image } = route?.params || {};
+  // let image =
+  // "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg";
   const [fontW, setFontW] = useState(true);
   const [fontI, setFontI] = useState(true);
   const [text, setText] = useState("Your Text Here");
@@ -58,11 +59,18 @@ const AdminEditImage = ({ navigation, route }) => {
   const [choosing, setChoosing] = useState(0);
   const [textPosition, setTextPosition] = useState({ x: 10, y: 10 });
   const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
-  const [imageSize, setImageSize] = useState({ width: 200, height: 200 });
-  const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
-  const [logoImage, setLogoImage] = useState(0);
+  
   const imageRef = useRef(null); // Reference to the image for getting its dimensions
   const viewShotRef = useRef(null); // Reference to ViewShot for capturing the screen
+  
+  // Position Of Logo and Photo
+  const [logoImage, setLogoImage] = useState(false);
+  const [logoPosition, setLogoPosition] = useState({ x: 0, y: 0 });
+  const [logoSize, setLogoSize] = useState({ width: 200, height: 200 });
+  
+  const [photoImage, setPhotoImage] = useState(false);
+  const [photoPosition, setPhotoPosition] = useState({ x: 0, y: 0 });
+  const [photoSize, setPhotoSize] = useState({ width: 200, height: 200 });
 
   useFonts({
     Kanit_400Regular,
@@ -77,6 +85,10 @@ const AdminEditImage = ({ navigation, route }) => {
     height: 0,
   });
 
+  const throttledSetTextPosition = throttle((newX, newY) => {
+    setTextPosition({ x: newX, y: newY });
+  }, 16);
+
   useEffect(() => {
     if (image) {
       Image.getSize(image, (width, height) => {
@@ -88,19 +100,11 @@ const AdminEditImage = ({ navigation, route }) => {
     setText(text1);
   };
 
-  const handleDownload = async () => {
+  const handleUpload = async () => {
     try {
-      const uri = await captureRef(viewShotRef, {
-        format: "png",
-        quality: 1,
-      });
-      const newUri = `${FileSystem.documentDirectory}edited_image.png`;
-      console.log(newUri);
-      await FileSystem.moveAsync({
-        from: uri,
-        to: newUri,
-      });
-      await Sharing.shareAsync(newUri);
+      console.log(logoPosition);
+      console.log(photoPosition);
+      console.log(image);
     } catch (error) {
       console.error("Error capturing and sharing image:", error);
     }
@@ -182,11 +186,9 @@ const AdminEditImage = ({ navigation, route }) => {
           <Slider
             style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
             onValueChange={(value) => {
-              setFontSize1(Math.round(value));
-              console.log(fontSize1);
-              console.log(fontSize);
               setFontSize(Math.round(value));
             }}
+            value={fontSize}
             minimumValue={0}
             maximumValue={100}
             minimumTrackTintColor="#FF9A37"
@@ -294,35 +296,6 @@ const AdminEditImage = ({ navigation, route }) => {
               </View>
             </ScrollView>
           </View>
-          <TouchableOpacity
-            style={{
-              width: "30%",
-              borderWidth: 1,
-              borderRadius: 15 * scale,
-              alignItems: "center",
-              alignSelf: "center",
-            }}
-            onPress={() => {
-              if (text1.trim() === "") {
-                Alert.alert("Error", "Please enter some text.");
-              } else {
-                ok(text1);
-                //setFontSize(Number(fontSize1));
-                console.log(fontW);
-              }
-            }}
-          >
-            <Text
-              style={{
-                paddingVertical: 3 * scale,
-                textAlign: "center",
-                fontSize: 15 * scale,
-                fontWeight: "700",
-              }}
-            >
-              ok
-            </Text>
-          </TouchableOpacity>
         </ScrollView>
       </TouchableWithoutFeedback>
     );
@@ -345,10 +318,9 @@ const AdminEditImage = ({ navigation, route }) => {
           <Slider
             style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
             onValueChange={(value) => {
-              setOpacity1(Number(value.toFixed(1)));
-              console.log(opacity1);
-              console.log(value.toFixed(1));
+              setOpacity(Number(value.toFixed(1)));
             }}
+            value={opacity}
             minimumValue={0}
             maximumValue={1}
             minimumTrackTintColor="#FF9A37"
@@ -622,21 +594,6 @@ const AdminEditImage = ({ navigation, route }) => {
             ></TouchableOpacity>
           </ScrollView>
         </View>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "red",
-            alignSelf: "center",
-            paddingVertical: 5 * scale,
-            paddingHorizontal: 10 * scale,
-            borderRadius: 5 * scale,
-          }}
-          onPress={() => {
-            setOpacity(opacity1);
-            //setBgColor(BgColor1);
-          }}
-        >
-          <Text>OK</Text>
-        </TouchableOpacity>
       </ScrollView>
     );
   };
@@ -736,11 +693,12 @@ const AdminEditImage = ({ navigation, route }) => {
         <Slider
           style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
           onValueChange={(value) => {
-            setLineSpacing1(Number(Math.round(value)));
+            setLineSpacing(Number(Math.round(value)));
             console.log(lineSpacing1);
           }}
-          minimumValue={0}
-          maximumValue={100}
+          value={lineSpacing}
+          minimumValue={70}
+          maximumValue={150}
           minimumTrackTintColor="#FF9A37"
           maximumTrackTintColor="#DBDBDB"
         />
@@ -809,27 +767,6 @@ const AdminEditImage = ({ navigation, route }) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            marginTop: 10 * scale,
-          }}
-          onPress={() => {
-            setAlign(align1);
-            setLineSpacing(lineSpacing1);
-          }}
-        >
-          <Text
-            style={{
-              paddingVertical: 5 * scale,
-              paddingHorizontal: 10 * scale,
-              backgroundColor: "red",
-              borderRadius: 8 * scale,
-            }}
-          >
-            OK
-          </Text>
-        </TouchableOpacity>
       </View>
     );
   };
@@ -850,10 +787,11 @@ const AdminEditImage = ({ navigation, route }) => {
         <Slider
           style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
           onValueChange={(value) => {
-            setShadow1(Number(Math.round(value)));
+            setShadow(Number(Math.round(value)));
             console.log(shadow1);
             console.log(shadow1);
           }}
+          value={shadow}
           minimumValue={0}
           maximumValue={100}
           minimumTrackTintColor="#FF9A37"
@@ -1138,99 +1076,72 @@ const AdminEditImage = ({ navigation, route }) => {
             ></TouchableOpacity>
           </ScrollView>
         </View>
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            marginTop: 10 * scale,
-          }}
-          onPress={() => {
-            setShadow(shadow1);
-            //setShadowColor(shadowColor1);
-          }}
-        >
-          <Text
-            style={{
-              paddingVertical: 5 * scale,
-              paddingHorizontal: 10 * scale,
-              backgroundColor: "red",
-              borderRadius: 8 * scale,
-            }}
-          >
-            OK
-          </Text>
-        </TouchableOpacity>
       </View>
     );
   };
-
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderMove: (evt, gestureState) => {
         const newX = textPosition.x + gestureState.dx;
         const newY = textPosition.y + gestureState.dy;
-        const imageWidth = imageRef.current ? imageRef.current.width : 0;
-        const imageHeight = imageRef.current ? imageRef.current.height : 0;
-        const boundedX = Math.min(
-          Math.max(newX, 0),
-          imageWidth - textDimensions.width
-        );
-        const boundedY = Math.min(
-          Math.max(newY, 0),
-          imageHeight - textDimensions.height
-        );
-        setTextPosition({
-          x: boundedX,
-          y: boundedY,
-        });
+        throttledSetTextPosition(newX, newY);
       },
       onPanResponderRelease: () => {},
     })
   ).current;
 
-  const imagePanResponder = useRef(
+  const LogoPanResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        const newX = imagePosition.x + gestureState.dx;
-        const newY = imagePosition.y + gestureState.dy;
-        setImagePosition({ x: newX, y: newY });
+      onPanResponderGrant: (evt, gestureState) => {
+        // Record the current position when the gesture starts
+        setLogoPosition({
+          x: logoPosition.x + gestureState.dx,
+          y: logoPosition.y + gestureState.dy,
+        });
       },
-      onPanResponderRelease: () => {},
+      onPanResponderMove: (evt, gestureState) => {
+        const newX = logoPosition.x + gestureState.dx;
+        const newY = logoPosition.y + gestureState.dy;
+
+        // Optional: Check for bounds here to prevent dragging outside
+        setLogoPosition({
+          x: newX,
+          y: newY,
+        });
+      },
+      onPanResponderRelease: () => {
+        // Can include logic for smooth stop or reset if necessary
+      },
     })
   ).current;
 
-  const handlePinch = ({ nativeEvent }) => {
-    const { scale } = nativeEvent;
+  const PhotoPanResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: (evt, gestureState) => {
+        // Record the current position when the gesture starts
+        setPhotoPosition({
+          x: photoPosition.x + gestureState.dx,
+          y: photoPosition.y + gestureState.dy,
+        });
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        const newX = photoPosition.x + gestureState.dx;
+        const newY = photoPosition.y + gestureState.dy;
 
-    setImageSize((prevSize) => ({
-      width: Math.max(50, prevSize.width * scale),
-      height: Math.max(50, prevSize.height * scale),
-    }));
-  };
-
-  const handleImageResize = (gestureState) => {
-    setImageSize((prev) => ({
-      width: prev.width + gestureState.dx,
-      height: prev.height + gestureState.dy,
-    }));
-  };
-
-  const handleTextResize = (gestureState) => {
-    setTextBoxSize((prev) => ({
-      width: prev.width + gestureState.dx,
-      height: prev.height + gestureState.dy,
-    }));
-  };
-  const imageResizeResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gestureState) => handleImageResize(gestureState),
-  });
-
-  const textResizeResponder = PanResponder.create({
-    onMoveShouldSetPanResponder: () => true,
-    onPanResponderMove: (_, gestureState) => handleTextResize(gestureState),
-  });
+        // Optional: Check for bounds here to prevent dragging outside
+        setPhotoPosition({
+          x: newX,
+          y: newY,
+        });
+      },
+      onPanResponderRelease: () => {
+        // Can include logic for smooth stop or reset if necessary
+      },
+    })
+  ).current;
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
@@ -1252,22 +1163,43 @@ const AdminEditImage = ({ navigation, route }) => {
           <Feather name="arrow-left" size={24 * scale} color="black" />
         </TouchableOpacity>
         <Text style={{ fontSize: 16 * scale }}>Add Placeholders</Text>
-        <TouchableOpacity
-          onPress={handleDownload}
-          style={{
-            backgroundColor: "#FF9A37",
-            flexDirection: "row",
-            paddingHorizontal: 18 * scale,
-            paddingVertical: 8 * scale,
-            borderRadius: 28 * scale,
-            alignItems: "center",
-          }}
-        >
-          <Feather name="check" size={24} color="black" />
-          <Text style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
-            Done
-          </Text>
-        </TouchableOpacity>
+        {choosing ? (
+          <TouchableOpacity
+            onPress={handleUpload}
+            style={{
+              backgroundColor: "#FF9A37",
+              flexDirection: "row",
+              paddingHorizontal: 18 * scale,
+              paddingVertical: 8 * scale,
+              borderRadius: 28 * scale,
+              alignItems: "center",
+            }}
+          >
+            <Feather name="check" size={24} color="black" />
+            <Text style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
+              Done
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => {
+              setChoosing(1);
+            }}
+            style={{
+              backgroundColor: "#FF9A37",
+              flexDirection: "row",
+              paddingHorizontal: 18 * scale,
+              paddingVertical: 8 * scale,
+              borderRadius: 28 * scale,
+              alignItems: "center",
+            }}
+          >
+            <Feather name="check" size={24} color="black" />
+            <Text style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
+              Finish
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={{ paddingVertical: 20 * scale }}>
         {image ? (
@@ -1281,64 +1213,87 @@ const AdminEditImage = ({ navigation, route }) => {
                 imageRef.current = { width, height };
               }}
             />
-            {choosing ? (
-              <View
-                style={{
-                  position: "absolute",
-                  left: textPosition.x,
-                  top: textPosition.y,
-                  width: textDimensions.width,
-                  height: textDimensions.height,
-                  borderWidth: 2,
-                  borderColor: "blue",
-                }}
-              >
-                <Text
-                  {...panResponder.panHandlers}
-                  onLayout={(event) => {
-                    const { width, height } = event.nativeEvent.layout;
-                    setTextDimensions({ width, height });
-                  }}
-                  style={[
-                    styles.textOverlay,
-                    {
-                      fontSize,
-                      color: fontColor,
-                      backgroundColor: BgColor,
-                      fontFamily,
-                      opacity,
-                      textAlign: align,
-                      lineHeight: lineSpacing,
-                      textShadowColor: shadowColor,
-                      textShadowOffset: { width: -1, height: 1 },
-                      textShadowRadius: shadow,
-                      fontWeight: fontW ? "100" : "bold",
-                      fontStyle: fontI ? "normal" : "italic",
-                    },
-                  ]}
-                >
-                  {text}
-                </Text>
-              </View>
-            ) : null}
-
-{logoImage?  <PinchGestureHandler onGestureEvent={handlePinch}>
+            {logoImage ? (
+              <PinchGestureHandler>
                 <View
-                  {...imagePanResponder.panHandlers}
+                  {...LogoPanResponder.panHandlers}
                   style={{
                     position: "absolute",
-                    left: imagePosition.x,
-                    top: imagePosition.y,
-                    width: imageSize.width,
-                    height: imageSize.height,
+                    left: logoPosition.x,
+                    top: logoPosition.y,
+                    width: logoSize.width,
+                    height: logoSize.height,
                   }}
                 >
                   <Image
-                    source={{ uri: image }}
-                    style={{ width: "100%", height: "100%" }}
+                    // source={{ uri: "https://www.svgrepo.com/show/497407/profile-circle.svg" }}
+                    source={require("../../assets/images/profileIcon.png")}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      position: "relative",
+                    }}
                   />
                 </View>
-              </PinchGestureHandler>:null}
+              </PinchGestureHandler>
+            ) : null}
+
+            {photoImage ? (
+              <PinchGestureHandler>
+                <View
+                  {...PhotoPanResponder.panHandlers}
+                  style={{
+                    position: "absolute",
+                    left: photoPosition.x,
+                    top: photoPosition.y,
+                    width: photoSize.width,
+                    height: photoSize.height,
+                  }}
+                >
+                  <Image
+                    source={{
+                      uri: "https://toolxox.com/images/result-circle-cropped.png",
+                    }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      position: "relative",
+                    }}
+                  />
+                </View>
+              </PinchGestureHandler>
+            ) : null}
+
+            {choosing ? (
+              <Text
+                {...panResponder.panHandlers}
+                onLayout={(event) => {
+                  const { width, height } = event.nativeEvent.layout;
+                  setTextDimensions({ width, height });
+                }}
+                style={[
+                  styles.textOverlay,
+                  {
+                    fontSize,
+                    color: fontColor,
+                    backgroundColor: BgColor,
+                    left: textPosition.x,
+                    top: textPosition.y,
+                    fontFamily: fontFamily,
+                    opacity: opacity,
+                    textAlign: align,
+                    lineHeight: lineSpacing,
+                    textShadowColor: shadowColor,
+                    textShadowOffset: { width: -1, height: 1 },
+                    textShadowRadius: shadow,
+                    fontWeight: fontW ? "100" : "bold",
+                    fontStyle: fontI ? "normal" : "italic",
+                  },
+                ]}
+              >
+                {text}
+              </Text>
+            ) : null}
           </ViewShot>
         ) : (
           <Text>Image not selected</Text>
@@ -1383,11 +1338,6 @@ const AdminEditImage = ({ navigation, route }) => {
             swipeEnabled={false}
           >
             <Tab.Screen
-              name="Features"
-              component={Features}
-              options={{ tabBarLabel: "Features" }}
-            />
-            <Tab.Screen
               name="Fonts"
               component={FontTab}
               options={{ tabBarLabel: "Font" }}
@@ -1421,54 +1371,149 @@ const AdminEditImage = ({ navigation, route }) => {
                 style={{
                   flexDirection: "row",
                   justifyContent: "center",
-                  marginTop: 10,
+                  marginTop: 10 * scale,
                 }}
               >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    alignSelf: "center",
+                    fontSize: 15 * scale,
+                  }}
+                >
+                  Logo :
+                </Text>
                 <TouchableOpacity
                   style={{
                     backgroundColor: "#007BFF",
-                    padding: 10,
-                    borderRadius: 5,
-                    marginHorizontal: 5,
+                    height:25*scale,
+                    alignSelf:"center",
+                    paddingHorizontal:15*scale,
+                    borderRadius:8*scale,
+                    justifyContent:"center",
+                    marginHorizontal:5*scale
                   }}
                   onPress={() => {
                     // Decrease image size (min limit 50px)
-                    if (imageSize.width > 50 && imageSize.height > 50) {
-                      setImageSize({
-                        width: imageSize.width - 20, // Decrease width by 20
-                        height: imageSize.height - 20, // Decrease height by 20
+                    if (
+                      logoSize.width > 50 * scale &&
+                      logoSize.height > 50 * scale
+                    ) {
+                      setLogoSize({
+                        width: logoSize.width - 20 * scale, // Decrease width by 20
+                        height: logoSize.height - 20 * scale, // Decrease height by 20
                       });
                     }
                   }}
                 >
-                  <Text style={{ color: "#fff", fontSize: 16 }}>-</Text>
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   style={{
                     backgroundColor: "#007BFF",
-                    padding: 10,
-                    borderRadius: 5,
-                    marginHorizontal: 5,
+                    height:25*scale,
+                    alignSelf:"center",
+                    paddingHorizontal:15*scale,
+                    borderRadius:8*scale,
+                    justifyContent:"center",
+                    marginHorizontal:5*scale
                   }}
                   onPress={() => {
                     // Increase image size (max limit 400px)
-                    if (imageSize.width < 400 && imageSize.height < 400) {
-                      setImageSize({
-                        width: imageSize.width + 20, // Increase width by 20
-                        height: imageSize.height + 20, // Increase height by 20
+                    if (
+                      logoSize.width < 400 * scale &&
+                      logoSize.height < 400 * scale
+                    ) {
+                      setLogoSize({
+                        width: logoSize.width + 20 * scale, // Increase width by 20
+                        height: logoSize.height + 20 * scale, // Increase height by 20
                       });
                     }
                   }}
                 >
-                  <Text style={{ color: "#fff", fontSize: 16 }}>+</Text>
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
                 </TouchableOpacity>
               </View>
             ) : null}
+
+
+{photoImage ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 10 * scale,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    alignSelf: "center",
+                    fontSize: 15 * scale,
+                  }}
+                >
+                  Photo :
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height:25*scale,
+                    alignSelf:"center",
+                    paddingHorizontal:15*scale,
+                    borderRadius:8*scale,
+                    justifyContent:"center",
+                    marginHorizontal:5*scale
+                  }}
+                  onPress={() => {
+                    // Decrease image size (min limit 50px)
+                    if (
+                      photoSize.width > 50 * scale &&
+                      photoSize.height > 50 * scale
+                    ) {
+                      setPhotoSize({
+                        width: photoSize.width - 20 * scale, // Decrease width by 20
+                        height: photoSize.height - 20 * scale, // Decrease height by 20
+                      });
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height:25*scale,
+                    alignSelf:"center",
+                    paddingHorizontal:15*scale,
+                    borderRadius:8*scale,
+                    justifyContent:"center",
+                    marginHorizontal:5*scale
+                  }}
+                  onPress={() => {
+                    // Increase image size (max limit 400px)
+                    if (
+                      photoSize.width < 400 * scale &&
+                      photoSize.height < 400 * scale
+                    ) {
+                      setPhotoSize({
+                        width: photoSize.width + 20 * scale, // Increase width by 20
+                        height: photoSize.height + 20 * scale, // Increase height by 20
+                      });
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+
+
             <View style={{ flexDirection: "row", marginTop: 25 * scale }}>
               <TouchableOpacity
                 onPress={() => {
-                  setLogoImage(1);
+                  setLogoImage(!logoImage);
                 }}
                 style={{
                   flexDirection: "row",
@@ -1485,6 +1530,9 @@ const AdminEditImage = ({ navigation, route }) => {
                 <Entypo name="plus" size={15 * scale} color="#FF8017" />
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => {
+                  setPhotoImage(!photoImage);
+                }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",

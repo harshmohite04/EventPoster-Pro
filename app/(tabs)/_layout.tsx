@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import { Slot,Stack } from 'expo-router'
 import { createStackNavigator } from "@react-navigation/stack";
 import PhoneNumber from "./phoneNumber";
@@ -15,6 +15,7 @@ import AppLoading from "expo-app-loading";
 import Library from "./library";
 import Profile from "./profile";
 import AdminEditImage from "./adminEditImage";
+
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
@@ -60,7 +61,7 @@ const Layout = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="AdminEditImage"
+      initialRouteName="Splash"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
