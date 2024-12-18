@@ -15,6 +15,7 @@ import AppLoading from "expo-app-loading";
 import Library from "./library";
 import Profile from "./profile";
 import AdminEditImage from "./adminEditImage";
+import Delete from "./delete";
 
 
 const SplashScreen = ({ navigation }) => {
@@ -61,7 +62,8 @@ const Layout = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="Splash"
+      // initialRouteName="Delete"
+      initialRouteName="Library"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
@@ -77,6 +79,9 @@ const Layout = () => {
       {/* Admin */}
       <Stack.Screen name="Library" component={Library} />
       <Stack.Screen name="AdminEditImage" component={AdminEditImage} />
+
+      {/* User Side Logo Poistion */}
+      <Stack.Screen name="Delete" component={Delete} />
     </Stack.Navigator>
   );
 };

@@ -215,6 +215,8 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setFontFamily("Kanit_400Regular");
+                    setFontW(true);
+                    setFontI(true);
                   }}
                   style={styles.fontView}
                 >
@@ -230,6 +232,8 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setFontFamily("FjallaOne_400Regular");
+                    setFontW(true);
+                    setFontI(true);
                   }}
                   style={styles.fontView}
                 >
@@ -245,6 +249,8 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setFontFamily("Fondamento_400Regular");
+                    setFontW(true);
+                    setFontI(true);
                   }}
                   style={styles.fontView}
                 >
@@ -261,6 +267,8 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setFontFamily("Pressed");
+                    setFontW(true);
+                    setFontI(true);
                   }}
                   style={styles.fontView}
                 >
@@ -270,6 +278,8 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setFontFamily("Pressed");
+                    setFontW(true);
+                    setFontI(true);
                   }}
                   style={styles.fontView}
                 >
@@ -279,6 +289,8 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setFontFamily("Pressed");
+                    setFontW(true);
+                    setFontI(true);
                   }}
                   style={styles.fontView}
                 >
@@ -288,6 +300,8 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setFontFamily("Pressed");
+                    setFontW(true);
+                    setFontI(true);
                   }}
                   style={styles.fontView}
                 >
@@ -1214,7 +1228,8 @@ const AdminEditImage = ({ navigation, route }) => {
               }}
             />
             {logoImage ? (
-              <PinchGestureHandler>
+              
+              <PinchGestureHandler> 
                 <View
                   {...LogoPanResponder.panHandlers}
                   style={{
