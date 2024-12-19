@@ -72,6 +72,10 @@ const AdminEditImage = ({ navigation, route }) => {
   const [photoPosition, setPhotoPosition] = useState({ x: 0, y: 0 });
   const [photoSize, setPhotoSize] = useState({ width: 200, height: 200 });
 
+  const [nameText, setNameText] = useState(false);
+  const [namePosition, setNamePosition] = useState({ x: 0, y: 0 });
+  const [nameDimensions, setNameDimensions] = useState({ width: 0, height: 0 });
+
   useFonts({
     Kanit_400Regular,
     Kanit_500Medium,
@@ -87,7 +91,12 @@ const AdminEditImage = ({ navigation, route }) => {
 
   const throttledSetTextPosition = throttle((newX, newY) => {
     setTextPosition({ x: newX, y: newY });
-  }, 16);
+  }, 30);
+
+
+  const throttledSetNamePosition = throttle((newX, newY) => {
+    setNamePosition({ x: newX, y: newY });
+  }, 30);
 
   useEffect(() => {
     if (image) {
@@ -1157,6 +1166,19 @@ const AdminEditImage = ({ navigation, route }) => {
     })
   ).current;
 
+  const namePanResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        const newX = namePosition.x + gestureState.dx;
+        const newY = namePosition.y + gestureState.dy;
+        throttledSetNamePosition(newX, newY);
+      },
+      onPanResponderRelease: () => {},
+    })
+  ).current;
+
+
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
       <View
@@ -1279,6 +1301,27 @@ const AdminEditImage = ({ navigation, route }) => {
               </PinchGestureHandler>
             ) : null}
 
+{
+  nameText?<Text
+  {...namePanResponder.panHandlers}
+  onLayout={(event) => {
+    const { width, height } = event.nativeEvent.layout;
+    setNameDimensions({ width, height });
+  }}
+  style={[
+    styles.textOverlay,
+    {
+      fontSize:20,
+      color: "#000000",
+      left: namePosition.x,
+      top: namePosition.y,
+    },
+  ]}
+>
+  Your Name
+</Text>:null
+}
+
             {choosing ? (
               <Text
                 {...panResponder.panHandlers}
@@ -1330,6 +1373,7 @@ const AdminEditImage = ({ navigation, route }) => {
             placeholder="Type your text"
           />
         ) : null}
+
       </View>
       <View
         style={{
@@ -1564,6 +1608,7 @@ const AdminEditImage = ({ navigation, route }) => {
                 <Entypo name="plus" size={15 * scale} color="#FF8017" />
               </TouchableOpacity>
               <TouchableOpacity
+              onPress={()=>{setNameText(!nameText)}}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
