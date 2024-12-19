@@ -40,41 +40,65 @@ const Tab = createMaterialTopTabNavigator();
 import { throttle } from "lodash";
 import Slider from "@react-native-community/slider";
 
-const AdminEditImage = ({ navigation, route }) => {
+const AdminEditImage = ({ navigation, route }: any) => {
   let { image } = route?.params || {};
   // let image =
   // "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg";
-  const [fontW, setFontW] = useState(true);
-  const [fontI, setFontI] = useState(true);
-  const [text, setText] = useState("Your Text Here");
-  const [fontSize, setFontSize] = useState(20);
-  const [fontFamily, setFontFamily] = useState("");
-  const [fontColor, setFontColor] = useState("#000000");
-  const [opacity, setOpacity] = useState(1);
-  const [BgColor, setBgColor] = useState("rgba(0, 0, 0, 0)");
-  const [align, setAlign] = useState("left");
-  const [lineSpacing, setLineSpacing] = useState();
-  const [shadow, setShadow] = useState();
-  const [shadowColor, setShadowColor] = useState();
-  const [choosing, setChoosing] = useState(0);
-  const [textPosition, setTextPosition] = useState({ x: 10, y: 10 });
-  const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
   
-  const imageRef = useRef(null); // Reference to the image for getting its dimensions
-  const viewShotRef = useRef(null); // Reference to ViewShot for capturing the screen
-  
-  // Position Of Logo and Photo
-  const [logoImage, setLogoImage] = useState(false);
-  const [logoPosition, setLogoPosition] = useState({ x: 0, y: 0 });
-  const [logoSize, setLogoSize] = useState({ width: 200, height: 200 });
-  
-  const [photoImage, setPhotoImage] = useState(false);
-  const [photoPosition, setPhotoPosition] = useState({ x: 0, y: 0 });
-  const [photoSize, setPhotoSize] = useState({ width: 200, height: 200 });
 
-  const [nameText, setNameText] = useState(false);
-  const [namePosition, setNamePosition] = useState({ x: 0, y: 0 });
-  const [nameDimensions, setNameDimensions] = useState({ width: 0, height: 0 });
+    const [fontW, setFontW] = useState(true);
+    const [fontI, setFontI] = useState(true);
+    const [text, setText] = useState("Your Text Here");
+    const [fontSize, setFontSize] = useState(20);
+    const [fontFamily, setFontFamily] = useState("");
+    const [fontColor, setFontColor] = useState("#000000");
+    const [opacity, setOpacity] = useState(1);
+    const [BgColor, setBgColor] = useState("rgba(0, 0, 0, 0)");
+    const [align, setAlign] = useState("left");
+    const [lineSpacing, setLineSpacing] = useState();
+    const [shadow, setShadow] = useState();
+    const [shadowColor, setShadowColor] = useState();
+    const [choosing, setChoosing] = useState(0);
+    const [textPosition, setTextPosition] = useState({ x: 10, y: 10 });
+    const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
+    
+    const imageRef = useRef(null); // Reference to the image for getting its dimensions
+    const viewShotRef = useRef(null); // Reference to ViewShot for capturing the screen
+    
+    // Position Of Logo and Photo
+    const [logoImage, setLogoImage] = useState(false);
+    const [logoPosition, setLogoPosition] = useState({ x: 0, y: 0 });
+    const [logoSize, setLogoSize] = useState({ width: 200, height: 200 });
+    
+    const [photoImage, setPhotoImage] = useState(false);
+    const [photoPosition, setPhotoPosition] = useState({ x: 0, y: 0 });
+    const [photoSize, setPhotoSize] = useState({ width: 200, height: 200 });
+    
+    const [nameText, setNameText] = useState(false);
+    const [namePosition, setNamePosition] = useState({ x: 0, y: 0 });
+    const [nameDimensions, setNameDimensions] = useState({ width: 0, height: 0 });
+    const [nameSize, setNameSize] = useState(20);
+    
+    const [businessText, setBusinessText] = useState(false);
+    const [businessPosition, setBusinessPosition] = useState({ x: 0, y: 0 });
+    const [businessDimensions, setBusinessDimensions] = useState({ width: 0, height: 0 });
+    const [businessSize, setBusinessSize] = useState(20);
+    
+    const [websiteNameText, setWebsiteNameText] = useState(false);
+    const [websiteNamePosition, setWebsiteNamePosition] = useState({ x: 0, y: 0 });
+    const [websiteNameDimensions, setWebsiteNameDimensions] = useState({ width: 0, height: 0 });
+    const [websiteNameSize, setWebsiteNameSize] = useState(20);
+    
+    const [phoneNumberText, setPhoneNumberText] = useState(false);
+    const [phoneNumberPosition, setPhoneNumberPosition] = useState({ x: 0, y: 0 });
+    const [phoneNumberDimensions, setPhoneNumberDimensions] = useState({ width: 0, height: 0 });
+    const [phoneNumberSize, setPhoneNumberSize] = useState(20);
+    
+    const [emailText, setEmailText] = useState(false);
+    const [emailPosition, setEmailPosition] = useState({ x: 0, y: 0 });
+    const [emailDimensions, setEmailDimensions] = useState({ width: 0, height: 0 });
+    const [emailSize, setEmailSize] = useState(20);
+  
 
   useFonts({
     Kanit_400Regular,
@@ -89,13 +113,28 @@ const AdminEditImage = ({ navigation, route }) => {
     height: 0,
   });
 
-  const throttledSetTextPosition = throttle((newX, newY) => {
+  const throttledSetTextPosition = throttle((newX: any, newY: any) => {
     setTextPosition({ x: newX, y: newY });
   }, 30);
 
-
-  const throttledSetNamePosition = throttle((newX, newY) => {
+  const throttledSetNamePosition = throttle((newX: any, newY: any) => {
     setNamePosition({ x: newX, y: newY });
+  }, 30);
+
+  const throttledSetBusinessPosition = throttle((newX: any, newY: any) => {
+    setBusinessPosition({ x: newX, y: newY });
+  }, 30);
+
+  const throttledSetWebsiteNamePosition = throttle((newX: any, newY: any) => {
+    setWebsiteNamePosition({ x: newX, y: newY });
+  }, 30);
+
+  const throttledSetPhoneNumberPosition = throttle((newX: any, newY: any) => {
+    setPhoneNumberPosition({ x: newX, y: newY });
+  }, 30);
+
+  const throttledSetEmailPosition = throttle((newX: any, newY: any) => {
+    setEmailPosition({ x: newX, y: newY });
   }, 30);
 
   useEffect(() => {
@@ -105,33 +144,50 @@ const AdminEditImage = ({ navigation, route }) => {
       });
     }
   }, [image]);
-  const ok = (text1) => {
-    setText(text1);
-  };
 
   const handleUpload = async () => {
     try {
+      console.log("Logo");
       console.log(logoPosition);
+      console.log(logoImage);
+      console.log(logoSize);
+      console.log("Photo");
       console.log(photoPosition);
+      console.log(photoImage);
+      console.log(photoSize);
+      console.log("Name");
+      console.log(nameText);
+      console.log(namePosition);
+      console.log(nameDimensions);
+      console.log(nameSize);
+      console.log("Business");
+      console.log(businessText);
+      console.log(businessPosition);
+      console.log(businessDimensions);
+      console.log(businessSize);
+      console.log("Website");
+      console.log(websiteNameText);
+      console.log(websiteNamePosition);
+      console.log(websiteNameDimensions);
+      console.log(websiteNameSize);
+      console.log("Phone Number");
+      console.log(phoneNumberText);
+      console.log(phoneNumberPosition);
+      console.log(phoneNumberDimensions);
+      console.log(phoneNumberSize);
+      console.log("Email");
+      console.log(emailText);
+      console.log(emailPosition);
+      console.log(emailDimensions);
+      console.log(emailSize);
+      console.log("BackGround Image");
       console.log(image);
     } catch (error) {
       console.error("Error capturing and sharing image:", error);
     }
   };
 
-  const Features = () => {
-    return (
-      <View style={{ backgroundColor: "#ffffff", flex: 1 }}>
-        <Text>Features</Text>
-      </View>
-    );
-  };
-
   const FontTab = React.memo(() => {
-    const [text1, setText1] = useState(text);
-    const [fontSize1, setFontSize1] = useState(20);
-    const [fontFamily1, setFontFamily1] = useState("");
-
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <ScrollView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
@@ -325,8 +381,6 @@ const AdminEditImage = ({ navigation, route }) => {
   });
 
   const BoxColorTab = () => {
-    const [opacity1, setOpacity1] = useState(1);
-    const [BgColor1, setBgColor1] = useState("rgba(0, 0, 0, 0)");
     return (
       <ScrollView
         style={{
@@ -622,13 +676,6 @@ const AdminEditImage = ({ navigation, route }) => {
   };
 
   const ColorTab = () => {
-    const [fontColor1, setFontColor1] = useState("");
-
-    // useEffect to apply the fontColor1 to the textColor whenever fontColor1 changes
-    useEffect(() => {
-      setFontColor(fontColor1);
-    }, [fontColor1]); // Runs whenever fontColor1 changes
-
     return (
       <View
         style={{
@@ -655,7 +702,7 @@ const AdminEditImage = ({ navigation, route }) => {
             ].map((color) => (
               <TouchableOpacity
                 key={color}
-                onPress={() => setFontColor1(color)} // Apply color directly on press
+                onPress={() => setFontColor(color)} // Apply color directly on press
                 style={{
                   width: 35 * scale,
                   height: 35 * scale,
@@ -685,7 +732,7 @@ const AdminEditImage = ({ navigation, route }) => {
             ].map((color) => (
               <TouchableOpacity
                 key={color}
-                onPress={() => setFontColor1(color)} // Apply color directly on press
+                onPress={() => setFontColor(color)} // Apply color directly on press
                 style={{
                   width: 35 * scale,
                   height: 35 * scale,
@@ -701,8 +748,6 @@ const AdminEditImage = ({ navigation, route }) => {
   };
 
   const AlignTab = () => {
-    const [align1, setAlign1] = useState("");
-    const [lineSpacing1, setLineSpacing1] = useState();
     return (
       <View
         style={{
@@ -717,7 +762,6 @@ const AdminEditImage = ({ navigation, route }) => {
           style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
           onValueChange={(value) => {
             setLineSpacing(Number(Math.round(value)));
-            console.log(lineSpacing1);
           }}
           value={lineSpacing}
           minimumValue={70}
@@ -795,8 +839,6 @@ const AdminEditImage = ({ navigation, route }) => {
   };
 
   const ShadowTab = () => {
-    const [shadow1, setShadow1] = useState();
-    const [shadowColor1, setShadowColor1] = useState();
     return (
       <View
         style={{
@@ -811,8 +853,6 @@ const AdminEditImage = ({ navigation, route }) => {
           style={{ width: "80%", height: 40 * scale, alignSelf: "center" }}
           onValueChange={(value) => {
             setShadow(Number(Math.round(value)));
-            console.log(shadow1);
-            console.log(shadow1);
           }}
           value={shadow}
           minimumValue={0}
@@ -1177,7 +1217,50 @@ const AdminEditImage = ({ navigation, route }) => {
       onPanResponderRelease: () => {},
     })
   ).current;
-
+  const businessPanResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        const newX = businessPosition.x + gestureState.dx;
+        const newY = businessPosition.y + gestureState.dy;
+        throttledSetBusinessPosition(newX, newY);
+      },
+      onPanResponderRelease: () => {},
+    })
+  ).current;
+  const websiteNamePanResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        const newX = websiteNamePosition.x + gestureState.dx;
+        const newY = websiteNamePosition.y + gestureState.dy;
+        throttledSetWebsiteNamePosition(newX, newY);
+      },
+      onPanResponderRelease: () => {},
+    })
+  ).current;
+  const phoneNumberPanResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        const newX = phoneNumberPosition.x + gestureState.dx;
+        const newY = phoneNumberPosition.y + gestureState.dy;
+        throttledSetPhoneNumberPosition(newX, newY);
+      },
+      onPanResponderRelease: () => {},
+    })
+  ).current;
+  const emailPanResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        const newX = emailPosition.x + gestureState.dx;
+        const newY = emailPosition.y + gestureState.dy;
+        throttledSetEmailPosition(newX, newY);
+      },
+      onPanResponderRelease: () => {},
+    })
+  ).current;
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
@@ -1213,7 +1296,7 @@ const AdminEditImage = ({ navigation, route }) => {
           >
             <Feather name="check" size={24} color="black" />
             <Text style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
-              Done
+              Upload
             </Text>
           </TouchableOpacity>
         ) : (
@@ -1250,8 +1333,7 @@ const AdminEditImage = ({ navigation, route }) => {
               }}
             />
             {logoImage ? (
-              
-              <PinchGestureHandler> 
+              <PinchGestureHandler>
                 <View
                   {...LogoPanResponder.panHandlers}
                   style={{
@@ -1301,27 +1383,115 @@ const AdminEditImage = ({ navigation, route }) => {
               </PinchGestureHandler>
             ) : null}
 
-{
-  nameText?<Text
-  {...namePanResponder.panHandlers}
-  onLayout={(event) => {
-    const { width, height } = event.nativeEvent.layout;
-    setNameDimensions({ width, height });
-  }}
-  style={[
-    styles.textOverlay,
-    {
-      fontSize:20,
-      color: "#000000",
-      left: namePosition.x,
-      top: namePosition.y,
-    },
-  ]}
->
-  Your Name
-</Text>:null
-}
+            {nameText ? (
+              <Text
+                {...namePanResponder.panHandlers}
+                onLayout={(event) => {
+                  const { width, height } = event.nativeEvent.layout;
+                  setNameDimensions({ width, height });
+                }}
+                style={[
+                  styles.textOverlay,
+                  {
+                    fontSize: nameSize,
+                    color: "#000000",
+                    left: namePosition.x,
+                    top: namePosition.y,
+                  },
+                ]}
+              >
+                Your Name
+              </Text>
+            ) : null}
+ 
 
+            {businessText ? (
+              <Text
+                {...businessPanResponder.panHandlers}
+                onLayout={(event) => {
+                  const { width, height } = event.nativeEvent.layout;
+                  setBusinessDimensions({ width, height });
+                }}
+                style={[
+                  styles.textOverlay,
+                  {
+                    fontSize: businessSize,
+                    color: "#000000",
+                    left: businessPosition.x,
+                    top: businessPosition.y,
+                  },
+                ]}
+              >
+                Business Name
+              </Text>
+            ) : null}
+ 
+
+            {websiteNameText ? (
+              <Text
+                {...websiteNamePanResponder.panHandlers}
+                onLayout={(event) => {
+                  const { width, height } = event.nativeEvent.layout;
+                  setWebsiteNameDimensions({ width, height });
+                }}
+                style={[
+                  styles.textOverlay,
+                  {
+                    fontSize: websiteNameSize,
+                    color: "#000000",
+                    left: websiteNamePosition.x,
+                    top: websiteNamePosition.y,
+                  },
+                ]}
+              >
+                Website URL
+              </Text>
+            ) : null}
+ 
+
+            {phoneNumberText ? (
+              <Text
+                {...phoneNumberPanResponder.panHandlers}
+                onLayout={(event) => {
+                  const { width, height } = event.nativeEvent.layout;
+                  setPhoneNumberDimensions({ width, height });
+                }}
+                style={[
+                  styles.textOverlay,
+                  {
+                    fontSize: phoneNumberSize,
+                    color: "#000000",
+                    left: phoneNumberPosition.x,
+                    top: phoneNumberPosition.y,
+                  },
+                ]}
+              >
+                93568365412
+              </Text>
+            ) : null}
+ 
+
+            {emailText ? (
+              <Text
+                {...emailPanResponder.panHandlers}
+                onLayout={(event) => {
+                  const { width, height } = event.nativeEvent.layout;
+                  setEmailDimensions({ width, height });
+                }}
+                style={[
+                  styles.textOverlay,
+                  {
+                    fontSize: emailSize,
+                    color: "#000000",
+                    left: emailPosition.x,
+                    top: emailPosition.y,
+                  },
+                ]}
+              >
+                Your Name
+              </Text>
+            ) : null}
+ 
             {choosing ? (
               <Text
                 {...panResponder.panHandlers}
@@ -1373,7 +1543,6 @@ const AdminEditImage = ({ navigation, route }) => {
             placeholder="Type your text"
           />
         ) : null}
-
       </View>
       <View
         style={{
@@ -1423,7 +1592,11 @@ const AdminEditImage = ({ navigation, route }) => {
               options={{ tabBarLabel: "Shadow" }}
             />
           </Tab.Navigator>
-        ) : (
+        ) : 
+        
+        (
+          <ScrollView>
+          
           <View style={{ paddingHorizontal: 10 * scale }}>
             {logoImage ? (
               <View
@@ -1445,12 +1618,12 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   style={{
                     backgroundColor: "#007BFF",
-                    height:25*scale,
-                    alignSelf:"center",
-                    paddingHorizontal:15*scale,
-                    borderRadius:8*scale,
-                    justifyContent:"center",
-                    marginHorizontal:5*scale
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
                   }}
                   onPress={() => {
                     // Decrease image size (min limit 50px)
@@ -1471,12 +1644,12 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   style={{
                     backgroundColor: "#007BFF",
-                    height:25*scale,
-                    alignSelf:"center",
-                    paddingHorizontal:15*scale,
-                    borderRadius:8*scale,
-                    justifyContent:"center",
-                    marginHorizontal:5*scale
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
                   }}
                   onPress={() => {
                     // Increase image size (max limit 400px)
@@ -1496,8 +1669,7 @@ const AdminEditImage = ({ navigation, route }) => {
               </View>
             ) : null}
 
-
-{photoImage ? (
+            {photoImage ? (
               <View
                 style={{
                   flexDirection: "row",
@@ -1517,12 +1689,12 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   style={{
                     backgroundColor: "#007BFF",
-                    height:25*scale,
-                    alignSelf:"center",
-                    paddingHorizontal:15*scale,
-                    borderRadius:8*scale,
-                    justifyContent:"center",
-                    marginHorizontal:5*scale
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
                   }}
                   onPress={() => {
                     // Decrease image size (min limit 50px)
@@ -1543,12 +1715,12 @@ const AdminEditImage = ({ navigation, route }) => {
                 <TouchableOpacity
                   style={{
                     backgroundColor: "#007BFF",
-                    height:25*scale,
-                    alignSelf:"center",
-                    paddingHorizontal:15*scale,
-                    borderRadius:8*scale,
-                    justifyContent:"center",
-                    marginHorizontal:5*scale
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
                   }}
                   onPress={() => {
                     // Increase image size (max limit 400px)
@@ -1568,7 +1740,345 @@ const AdminEditImage = ({ navigation, route }) => {
               </View>
             ) : null}
 
+            {nameText ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 10 * scale,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    alignSelf: "center",
+                    fontSize: 15 * scale,
+                  }}
+                >
+                  Name :
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Decrease image size (min limit 50px)
+                    if (
+                      nameSize> 20 * scale
+                    ) {
+                      setNameSize(
+                       nameSize - 5 * scale, // Decrease by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
+                </TouchableOpacity>
 
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Increase image size (max limit 400px)
+                    if (
+                      nameSize < 100 * scale
+                    ) {
+                      setNameSize(
+                         nameSize + 5 * scale, // Increase width by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+ 
+
+            {businessText ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 10 * scale,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    alignSelf: "center",
+                    fontSize: 15 * scale,
+                  }}
+                >
+                  Business :
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Decrease image size (min limit 50px)
+                    if (
+                      businessSize> 20 * scale
+                    ) {
+                      setBusinessSize(
+                        businessSize - 5 * scale, // Decrease by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Increase image size (max limit 400px)
+                    if (
+                      businessSize < 100 * scale
+                    ) {
+                      setBusinessSize(
+                        businessSize + 5 * scale, // Increase width by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+ 
+
+            {websiteNameText ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 10 * scale,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    alignSelf: "center",
+                    fontSize: 15 * scale,
+                  }}
+                >
+                  Website URL :
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Decrease image size (min limit 50px)
+                    if (
+                      websiteNameSize> 20 * scale
+                    ) {
+                      setWebsiteNameSize(
+                        websiteNameSize - 5 * scale, // Decrease by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Increase image size (max limit 400px)
+                    if (
+                      websiteNameSize < 100 * scale
+                    ) {
+                      setWebsiteNameSize(
+                         websiteNameSize + 5 * scale, // Increase width by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+ 
+
+            {phoneNumberText ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 10 * scale,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    alignSelf: "center",
+                    fontSize: 15 * scale,
+                  }}
+                >
+                  Phone Number :
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Decrease image size (min limit 50px)
+                    if (
+                      phoneNumberSize> 20 * scale
+                    ) {
+                      setPhoneNumberSize(
+                        phoneNumberSize - 5 * scale, // Decrease by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Increase image size (max limit 400px)
+                    if (
+                      phoneNumberSize < 100 * scale
+                    ) {
+                      setPhoneNumberSize(
+                        phoneNumberSize + 5 * scale, // Increase width by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+ 
+
+            {emailText ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 10 * scale,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    alignSelf: "center",
+                    fontSize: 15 * scale,
+                  }}
+                >
+                  Email :
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Decrease image size (min limit 50px)
+                    if (
+                      emailSize> 20 * scale
+                    ) {
+                      setEmailSize(
+                        emailSize - 5 * scale, // Decrease by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#007BFF",
+                    height: 25 * scale,
+                    alignSelf: "center",
+                    paddingHorizontal: 15 * scale,
+                    borderRadius: 8 * scale,
+                    justifyContent: "center",
+                    marginHorizontal: 5 * scale,
+                  }}
+                  onPress={() => {
+                    // Increase image size (max limit 400px)
+                    if (
+                      emailSize < 100 * scale
+                    ) {
+                      setEmailSize(
+                         emailSize + 5 * scale, // Increase width by 20
+                      );
+                    }
+                  }}
+                >
+                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+ 
             <View style={{ flexDirection: "row", marginTop: 25 * scale }}>
               <TouchableOpacity
                 onPress={() => {
@@ -1608,7 +2118,9 @@ const AdminEditImage = ({ navigation, route }) => {
                 <Entypo name="plus" size={15 * scale} color="#FF8017" />
               </TouchableOpacity>
               <TouchableOpacity
-              onPress={()=>{setNameText(!nameText)}}
+                onPress={() => {
+                  setNameText(!nameText);
+                }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -1627,6 +2139,7 @@ const AdminEditImage = ({ navigation, route }) => {
             </View>
             <View style={{ flexDirection: "row", marginTop: 18 * scale }}>
               <TouchableOpacity
+              onPress={()=>{setBusinessText(!businessText)}}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -1642,6 +2155,9 @@ const AdminEditImage = ({ navigation, route }) => {
                 <Entypo name="plus" size={15 * scale} color="#FF8017" />
               </TouchableOpacity>
               <TouchableOpacity
+              onPress={()=>{
+                setWebsiteNameText(!websiteNameText)
+              }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -1658,6 +2174,9 @@ const AdminEditImage = ({ navigation, route }) => {
                 <Entypo name="plus" size={15 * scale} color="#FF8017" />
               </TouchableOpacity>
               <TouchableOpacity
+              onPress={()=>{
+                setPhoneNumberText(!phoneNumberText)
+              }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -1676,6 +2195,9 @@ const AdminEditImage = ({ navigation, route }) => {
             </View>
 
             <TouchableOpacity
+            onPress={()=>{
+              setEmailText(!emailText)
+            }}
               style={{
                 flexDirection: "row",
                 alignItems: "center",
@@ -1692,6 +2214,7 @@ const AdminEditImage = ({ navigation, route }) => {
               <Entypo name="plus" size={15 * scale} color="#FF8017" />
             </TouchableOpacity>
           </View>
+          </ScrollView>
         )}
       </View>
     </KeyboardAvoidingView>
