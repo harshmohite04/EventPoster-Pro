@@ -1,283 +1,145 @@
 import {
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
   Dimensions,
-  TextInput,
-  ScrollView,
   Image,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Feather from "@expo/vector-icons/Feather";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
 const { width } = Dimensions.get("window");
 const scale = width / 320;
-import Feather from "@expo/vector-icons/Feather";
-import * as ImagePicker from "expo-image-picker";
-import { TouchableOpacity } from "react-native-gesture-handler";
+const Tab = createMaterialTopTabNavigator();
 
-const pickImage = async (setImageUri) => {
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    allowsEditing: true,
-    aspect: [1, 1],
-    quality: 1,
-  });
-
-  if (!result.canceled) {
-    setImageUri(result.assets[0].uri);
-  }
-};
-
-const Profile = ({ navigation }) => {
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [businessName, setBusinessName] = useState("");
-  const [website, setWebsite] = useState("");
-  const [logoUri, setLogoUri] = useState(null);
-  const [photoUri, setPhotoUri] = useState(null);
-
-  const saveProfile = () => {
-    console.log("Save Pressed");
-  };
+const Created = () => {
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
+      <Text>Created</Text>
+    </View>
+  );
+};
+const Downloaded = () => {
+  return (
+    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
+      <Text>Downloaded</Text>
+    </View>
+  );
+};
+const Profile = ({ navigation }: any) => {
+  return (
+    <View style={{ flex: 1 }}>
       <View
         style={{
-          height: "8%",
-          backgroundColor: "#ffffff",
-          marginTop: 20 * scale,
           flexDirection: "row",
-          alignItems: "center",
-          paddingHorizontal: 15 * scale,
+          backgroundColor: "#ffffff",
+          marginTop: 10 * scale,
+          paddingVertical: 10 * scale,
+          paddingHorizontal: 10 * scale,
+          justifyContent: "space-between",
+          paddingRight: 10 * scale,
         }}
       >
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack();
+            }}
+          >
+            <AntDesign name="arrowleft" size={20 * scale} />
+          </TouchableOpacity>
+          <Text style={{ fontSize: 16 * scale, marginLeft: 10 * scale }}>
+            Profile
+          </Text>
+        </View>
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack();
+            navigation.push("UserSettings");
           }}
         >
-          <Feather name="arrow-left" size={20 * scale} color="black" />
-        </TouchableOpacity>
-        <Text style={{ fontSize: 18 * scale, marginLeft: 15 * scale }}>
-          Profile
-        </Text>
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-          marginTop: 20 * scale,
-        }}
-      >
-        {/* Upload Logo Section */}
-        <TouchableOpacity onPress={() => pickImage(setLogoUri)}>
-          <View>
-            {logoUri ? (
-              <Image
-                source={{ uri: logoUri }}
-                style={{
-                  height: 120 * scale,
-                  width: 120 * scale,
-                  borderRadius: 60 * scale,
-                }}
-              />
-            ) : (
-              <View
-                style={{
-                  backgroundColor: "#D9D9D9",
-                  height: 120 * scale,
-                  width: 120 * scale,
-                  borderRadius: 60 * scale,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Feather name="edit-3" size={24 * scale} color="#FF8017" />
-              </View>
-            )}
-          </View>
-          <Text
-            style={{
-              fontSize: 15 * scale,
-              marginTop: 10 * scale,
-              textAlign: "center",
-            }}
-          >
-            Upload Logo
-          </Text>
-        </TouchableOpacity>
-
-        {/* Upload Photo Section */}
-        <TouchableOpacity onPress={() => pickImage(setPhotoUri)}>
-          <View>
-            {photoUri ? (
-              <Image
-                source={{ uri: photoUri }}
-                style={{
-                  height: 120 * scale,
-                  width: 120 * scale,
-                  borderRadius: 60 * scale,
-                }}
-              />
-            ) : (
-              <View
-                style={{
-                  backgroundColor: "#D9D9D9",
-                  height: 120 * scale,
-                  width: 120 * scale,
-                  borderRadius: 60 * scale,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Feather name="edit-3" size={24 * scale} color="#FF8017" />
-              </View>
-            )}
-          </View>
-          <Text
-            style={{
-              fontSize: 15 * scale,
-              marginTop: 10 * scale,
-              textAlign: "center",
-            }}
-          >
-            Upload Photo
-          </Text>
+          <Feather name="settings" size={20 * scale} color="#000000" />
         </TouchableOpacity>
       </View>
 
-      {/* Personal Details Section */}
-      <View
-        style={{
-          backgroundColor: "#ffffff",
-          marginTop: 28 * scale,
-          paddingHorizontal: 10 * scale,
-          paddingVertical: 10 * scale,
-        }}
-      >
-        <Text
+      <View style={{ marginVertical: 20 * scale }}>
+        <View
           style={{
-            fontSize: 15 * scale,
-            paddingBottom: 10 * scale,
-            fontWeight: "bold",
-          }}
-        >
-          Personal Details
-        </Text>
-
-        <Text style={[styles.labelText]}>Enter your name</Text>
-        <TextInput
-          style={styles.input}
-          value={userName}
-          onChangeText={setUserName}
-          placeholder="Aryan Sharma"
-          placeholderTextColor="#7c7c7c"
-        />
-
-        <Text style={styles.labelText}>Phone Number</Text>
-        <TextInput
-          style={styles.input}
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          placeholder="9988776655"
-          placeholderTextColor="#7c7c7c"
-        />
-
-        <Text style={styles.labelText}>Email</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="abc@gmail.com"
-          placeholderTextColor="#7c7c7c"
-        />
-      </View>
-
-      {/* Business Details Section */}
-      <View
-        style={{
-          backgroundColor: "#ffffff",
-          marginTop: 20 * scale,
-          paddingBottom: 60 * scale,
-          paddingTop: 12 * scale,
-          paddingHorizontal: 10 * scale,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 15 * scale,
-            color: "#000000",
-            fontWeight: "bold",
-            paddingBottom: 5 * scale,
-          }}
-        >
-          Business Details
-        </Text>
-
-        <Text style={styles.labelText}>Business Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Event Poster Pro"
-          placeholderTextColor="#7c7c7c"
-          value={businessName}
-          onChangeText={setBusinessName}
-        />
-
-        <Text style={styles.labelText}>Website Link</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="https://abc.com"
-          placeholderTextColor="#7c7c7c"
-          value={website}
-          onChangeText={setWebsite}
-        />
-        <TouchableOpacity
-          onPress={saveProfile}
-          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
             marginTop: 10 * scale,
-            borderRadius: 20 * scale,
-            backgroundColor: "#FF8017",
-            paddingVertical: 10 * scale,
-            width: "50%",
-            alignSelf: "center",
+            paddingHorizontal: 30 * scale,
           }}
         >
+          <Image
+            source={{
+              uri: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
+            }}
+            style={{
+              width: 100 * scale,
+              height: 100 * scale,
+              borderRadius: 50 * scale,
+            }}
+          />
           <Text
             style={{
-              color: "#000000",
-              textAlign: "center",
-              fontSize: 13 * scale,
-              fontWeight: "bold",
+              alignSelf: "center",
+              fontSize: 16 * scale,
+              marginLeft: 10 * scale,
+              paddingHorizontal: 40 * scale,
             }}
           >
-            SAVE
+            Naman Sharma
           </Text>
-        </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity
+          onPress={() => {navigation.push("ProfileEdit")}}
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            backgroundColor: "#FF8017",
+            width: "90%",
+            alignSelf: "center",
+            borderRadius: 10 * scale,
+            paddingVertical: 10 * scale,
+            marginTop: 10 * scale,
+          }}
+        >
+          <FontAwesome5 name="pen" size={20 * scale} color="#000000" />
+            <Text style={{ marginLeft: 10 * scale, fontSize: 15 * scale }}>
+              Edit Profile
+            </Text>
+          </TouchableOpacity>
       </View>
-    </ScrollView>
+
+      <Tab.Navigator
+        style={{
+          backgroundColor: "#fff",
+          flex: 1,
+          marginTop: 20 * scale,
+          borderTopRightRadius: 30 * scale,
+          borderTopLeftRadius: 30 * scale,
+          paddingTop: 10 * scale,
+        }}
+        screenOptions={{
+          tabBarActiveTintColor: "#000000",
+          tabBarIndicatorStyle: {
+            backgroundColor: "#FF8017", // Change this to your desired color
+            height: 3, // Adjust the height of the line
+          },
+        }}
+      >
+        <Tab.Screen name="Created" component={Created} />
+        <Tab.Screen name="Downloaded" component={Downloaded} />
+      </Tab.Navigator>
+    </View>
   );
 };
 
 export default Profile;
 
-const styles = StyleSheet.create({
-  labelText: {
-    color: "#FF8017",
-    fontSize: 12 * scale,
-    paddingHorizontal: 10 * scale,
-    paddingVertical: 3 * scale,
-    marginTop:8*scale
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#000",
-    width: "95%",
-    alignSelf: "center",
-    borderRadius: 10 * scale,
-    paddingHorizontal: 20 * scale,
-    paddingVertical: 5 * scale,
-    fontSize: 15 * scale,
-    color: "#000000",
-  },
-});
+const styles = StyleSheet.create({});

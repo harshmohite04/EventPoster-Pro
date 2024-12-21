@@ -29,7 +29,7 @@ const Home = ({ navigation }) => {
 const [images,setImages]=useState([])
   const [modalVisible, setModalVisible] = useState(true);
   const profileClicked = () => {
-    navigation.navigate("Profile");
+    navigation.navigate("MainProfile");
   };
   useEffect(() => {
     setImages([

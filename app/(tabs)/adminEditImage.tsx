@@ -163,6 +163,28 @@ const AdminEditImage = ({ navigation, route }: any) => {
     }
   }, [image]);
 
+  const handleDownload = async () => {
+    try {
+      const uri = await captureRef(viewShotRef, {
+        format: "png",
+        quality: 1,
+      });
+      const newUri = `${FileSystem.documentDirectory}edited_image.png`;
+      console.log(newUri);
+      await FileSystem.moveAsync({
+        from: uri,
+        to: newUri,
+      });
+      // Store the new URI in a variable for further use
+      const savedImageUri = newUri;
+
+      // Return the image URI or perform further operations here
+      return savedImageUri;
+    } catch (error) {
+      console.error("Error capturing and sharing image:", error);
+    }
+  };
+
   const handleUpload = async () => {
     try {
       console.log("Logo");
@@ -200,6 +222,9 @@ const AdminEditImage = ({ navigation, route }: any) => {
       console.log(emailSize);
       console.log("BackGround Image");
       console.log(image);
+
+      const seeImage = handleDownload();
+      console.log(seeImage)
     } catch (error) {
       console.error("Error capturing and sharing image:", error);
     }
@@ -1627,12 +1652,13 @@ const AdminEditImage = ({ navigation, route }: any) => {
               <TextInput
                 style={{
                   borderWidth: 1 * scale,
-                  width: "70%",
-                  borderRadius: 10 * scale,
+                  width: "80%",
+                  borderRadius: 8 * scale,
                   paddingHorizontal: 10 * scale,
-                  paddingVertical: 3 * scale,
+                  paddingVertical: 5 * scale,
                   marginTop: 10 * scale,
                   alignSelf: "center",
+                  borderColor: "#ccc",
                 }}
                 value={title}
                 onChangeText={setTitle}
@@ -1687,8 +1713,9 @@ const AdminEditImage = ({ navigation, route }: any) => {
                   >
                     <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
                     <TouchableOpacity
-                    key={index}
-                    onPress={() => removeTag(tag)}>
+                      key={index}
+                      onPress={() => removeTag(tag)}
+                    >
                       <Text
                         style={{
                           marginLeft: 4 * scale,
@@ -1740,7 +1767,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
               <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
                 {languageTags.map((tag, index) => (
                   <View
-                    
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
@@ -1752,8 +1778,9 @@ const AdminEditImage = ({ navigation, route }: any) => {
                   >
                     <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
                     <TouchableOpacity
-                    key={index}
-                    onPress={() => languageRemoveTag(tag)}>
+                      key={index}
+                      onPress={() => languageRemoveTag(tag)}
+                    >
                       <Text
                         style={{
                           marginLeft: 4 * scale,

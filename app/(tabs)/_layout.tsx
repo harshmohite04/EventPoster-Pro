@@ -13,13 +13,15 @@ import ProfileEditor from "./profileEditor";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import Library from "./library";
-import Profile from "./profile";
+import ProfileEdit from "./profileEdit";
 import AdminEditImage from "./adminEditImage";
 import Delete from "./delete";
 import EditFlyer from "./editFlyer";
-import Upload from "./upload";
+import AdminSettings from "./adminSettings";
+import Profile from "./profile";
+import UserSettings from "./userSettings";
 
-const SplashScreen = ({ navigation }:any) => {
+const SplashScreen = ({ navigation }: any) => {
   useEffect(() => {
     const checkVerificationStatus = async () => {
       const verified = await AsyncStorage.getItem("isVerified");
@@ -63,7 +65,7 @@ const Layout = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="Library"
+      initialRouteName="UserSettings"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />
@@ -75,11 +77,14 @@ const Layout = () => {
       <Stack.Screen name="EditImage" component={EditImage} />
       <Stack.Screen name="EditFlyer" component={EditFlyer} />
       {/* <Stack.Screen name="EditFlyer" component={ProfileEditor} /> */}
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="ProfileEdit" component={ProfileEdit} />
+      <Stack.Screen name="MainProfile" component={Profile} />
+      <Stack.Screen name="UserSettings" component={UserSettings} />
 
       {/* Admin */}
       <Stack.Screen name="Library" component={Library} />
       <Stack.Screen name="AdminEditImage" component={AdminEditImage} />
+      <Stack.Screen name="AdminSettings" component={AdminSettings} />
 
       {/* User Side Logo Poistion */}
       <Stack.Screen name="Delete" component={Delete} />

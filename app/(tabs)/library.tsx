@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Entypo from "@expo/vector-icons/Entypo";
+import Feather from "@expo/vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
@@ -208,7 +209,11 @@ const Item = ({ imageUrl }: ItemProps) => {
           marginTop: 8 * scale,
         }}
       >
-        <TouchableOpacity onPress={() => {setEye(!eye)}}>
+        <TouchableOpacity
+          onPress={() => {
+            setEye(!eye);
+          }}
+        >
           {eye ? (
             <Ionicons name="eye-off-outline" size={20 * scale} color="white" />
           ) : (
@@ -216,46 +221,63 @@ const Item = ({ imageUrl }: ItemProps) => {
           )}
         </TouchableOpacity>
         <TouchableOpacity
-        onPress={()=>{
-          // Remove img from list
-        }}>
-          <MaterialCommunityIcons name="delete" size={20 * scale} color="white" />
+          onPress={() => {
+            // Remove img from list
+          }}
+        >
+          <MaterialCommunityIcons
+            name="delete"
+            size={20 * scale}
+            color="white"
+          />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-const Library = ({ navigation }:any) => {
+const Library = ({ navigation }: any) => {
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
 
-  
-const pickImage = async () => {
-  // No permissions request is necessary for launching the image library
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
+    });
 
-    quality: 1,
-  });
-
-  console.log("result",result);
-  if (!result.canceled) {
-    console.log("This image was sent",result.assets[0].uri)
-    let image=result.assets[0].uri
-    navigation.push("AdminEditImage", { image: image });
-  }
-};
-
+    console.log("result", result);
+    if (!result.canceled) {
+      console.log("This image was sent", result.assets[0].uri);
+      let image = result.assets[0].uri;
+      navigation.push("AdminEditImage", { image: image });
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View style={{ flex: 1 }}>
-        <View style={{ paddingBottom: 5 * scale }}>
+        <View
+          style={{
+            paddingBottom: 5 * scale,
+            flexDirection: "row",
+            paddingHorizontal: 10 * scale,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.push("AdminSettings");
+            }}
+          >
+            <Feather name="settings" size={30 * scale} color="#000000" />
+          </TouchableOpacity>
+
           <Text
             style={{
               color: "#000000",
               fontSize: 20 * scale,
               textAlign: "center",
               fontWeight: "bold",
+              marginLeft: 95 * scale,
             }}
           >
             Library
