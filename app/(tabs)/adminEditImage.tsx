@@ -39,6 +39,7 @@ const scale = width / 320;
 const Tab = createMaterialTopTabNavigator();
 import { throttle } from "lodash";
 import Slider from "@react-native-community/slider";
+import TagInput from "react-native-tag-input";
 
 const AdminEditImage = ({ navigation, route }: any) => {
   let { image } = route?.params || {};
@@ -57,10 +58,11 @@ const AdminEditImage = ({ navigation, route }: any) => {
   const [lineSpacing, setLineSpacing] = useState();
   const [shadow, setShadow] = useState();
   const [shadowColor, setShadowColor] = useState();
-  const [choosing, setChoosing] = useState(0);
+  const [choosing, setChoosing] = useState(false);
   const [textPosition, setTextPosition] = useState({ x: 10, y: 10 });
   const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
-
+  const [uploadFlag, setUploadFlag] = useState(false);
+  const [title, setTitle] = useState("");
   const imageRef = useRef(null); // Reference to the image for getting its dimensions
   const viewShotRef = useRef(null); // Reference to ViewShot for capturing the screen
 
@@ -1158,6 +1160,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
       </View>
     );
   };
+
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
@@ -1278,6 +1281,37 @@ const AdminEditImage = ({ navigation, route }: any) => {
     })
   ).current;
 
+  const [tags, setTags] = useState([]);
+  const [tagsInputValue, setTagsInputValue] = useState("");
+
+  const addTag = () => {
+    if (tagsInputValue.trim() && !tags.includes(tagsInputValue.trim())) {
+      setTags([...tags, tagsInputValue.trim()]);
+      setTagsInputValue("");
+    }
+  };
+
+  const removeTag = (tagToRemove) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
+
+  const [languageTags, setLanguageTags] = useState([]);
+  const [languageTagsInputValue, setLanguageTagsInputValue] = useState("");
+
+  const languageAddTag = () => {
+    if (
+      languageTagsInputValue.trim() &&
+      !languageTags.includes(languageTagsInputValue.trim())
+    ) {
+      setLanguageTags([...languageTags, languageTagsInputValue.trim()]);
+      setLanguageTagsInputValue("");
+    }
+  };
+
+  const languageRemoveTag = (languageTagToRemove) => {
+    setLanguageTags(languageTags.filter((tag) => tag !== languageTagToRemove));
+  };
+
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "#f7f7f7" }}>
       <View
@@ -1299,26 +1333,47 @@ const AdminEditImage = ({ navigation, route }: any) => {
         </TouchableOpacity>
         <Text style={{ fontSize: 16 * scale }}>Add Placeholders</Text>
         {choosing ? (
-          <TouchableOpacity
-            onPress={handleUpload}
-            style={{
-              backgroundColor: "#FF9A37",
-              flexDirection: "row",
-              paddingHorizontal: 18 * scale,
-              paddingVertical: 8 * scale,
-              borderRadius: 28 * scale,
-              alignItems: "center",
-            }}
-          >
-            <Feather name="check" size={24*scale} color="black" />
-            <Text style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
-              Upload
-            </Text>
-          </TouchableOpacity>
+          uploadFlag ? (
+            <TouchableOpacity
+              onPress={handleUpload}
+              style={{
+                backgroundColor: "#FF9A37",
+                flexDirection: "row",
+                paddingHorizontal: 18 * scale,
+                paddingVertical: 8 * scale,
+                borderRadius: 28 * scale,
+                alignItems: "center",
+              }}
+            >
+              <Feather name="check" size={24 * scale} color="black" />
+              <Text style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
+                Upload
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => {
+                setUploadFlag(!uploadFlag);
+              }}
+              style={{
+                backgroundColor: "#FF9A37",
+                flexDirection: "row",
+                paddingHorizontal: 18 * scale,
+                paddingVertical: 8 * scale,
+                borderRadius: 28 * scale,
+                alignItems: "center",
+              }}
+            >
+              <Feather name="check" size={24 * scale} color="black" />
+              <Text style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
+                Done
+              </Text>
+            </TouchableOpacity>
+          )
         ) : (
           <TouchableOpacity
             onPress={() => {
-              setChoosing(1);
+              setChoosing(true);
             }}
             style={{
               backgroundColor: "#FF9A37",
@@ -1540,20 +1595,22 @@ const AdminEditImage = ({ navigation, route }: any) => {
         )}
 
         {choosing ? (
-          <TextInput
-            style={{
-              borderWidth: 1,
-              width: "70%",
-              borderRadius: 10 * scale,
-              paddingHorizontal: 10 * scale,
-              paddingVertical: 3 * scale,
-              marginTop: 10 * scale,
-              alignSelf: "center",
-            }}
-            value={text}
-            onChangeText={setText}
-            placeholder="Type your text"
-          />
+          uploadFlag ? null : (
+            <TextInput
+              style={{
+                borderWidth: 1,
+                width: "70%",
+                borderRadius: 10 * scale,
+                paddingHorizontal: 10 * scale,
+                paddingVertical: 3 * scale,
+                marginTop: 10 * scale,
+                alignSelf: "center",
+              }}
+              value={text}
+              onChangeText={setText}
+              placeholder="Type your text"
+            />
+          )
         ) : null}
       </View>
       <View
@@ -1565,45 +1622,196 @@ const AdminEditImage = ({ navigation, route }: any) => {
         }}
       >
         {choosing ? (
-          <Tab.Navigator
-            screenOptions={{
-              tabBarLabelStyle: { fontSize: 10 * scale, textTransform: "none" },
-              tabBarItemStyle: { width: 65 * scale },
-              tabBarStyle: { backgroundColor: "#ffffff" },
-            }}
-            style={{
-              borderTopLeftRadius: 20 * scale,
-              borderTopRightRadius: 20 * scale,
-            }}
-            swipeEnabled={false}
-          >
-            <Tab.Screen
-              name="Fonts"
-              component={FontTab}
-              options={{ tabBarLabel: "Font" }}
-            />
+          uploadFlag ? (
+            <ScrollView>
+              <TextInput
+                style={{
+                  borderWidth: 1 * scale,
+                  width: "70%",
+                  borderRadius: 10 * scale,
+                  paddingHorizontal: 10 * scale,
+                  paddingVertical: 3 * scale,
+                  marginTop: 10 * scale,
+                  alignSelf: "center",
+                }}
+                value={title}
+                onChangeText={setTitle}
+                placeholder="Name of templete"
+              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 16 * scale,
+                  width: "80%",
+                  alignSelf: "center",
+                  marginTop: 10 * scale,
+                }}
+              >
+                <TextInput
+                  style={{
+                    flex: 1,
+                    borderWidth: 1 * scale,
+                    borderColor: "#ccc",
+                    borderRadius: 4 * scale,
+                    padding: 8 * scale,
+                  }}
+                  placeholder="Add a tag"
+                  value={tagsInputValue}
+                  onChangeText={setTagsInputValue}
+                  onSubmitEditing={addTag}
+                />
+                <TouchableOpacity
+                  onPress={addTag}
+                  style={{
+                    marginLeft: 8 * scale,
+                    backgroundColor: "#007bff",
+                    padding: 8 * scale,
+                    borderRadius: 4 * scale,
+                  }}
+                >
+                  <Text style={{ color: "#fff" }}>Add</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                {tags.map((tag, index) => (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: "#f0f0f0",
+                      padding: 8 * scale,
+                      margin: 4 * scale,
+                      borderRadius: 16 * scale,
+                    }}
+                  >
+                    <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
+                    <TouchableOpacity
+                    key={index}
+                    onPress={() => removeTag(tag)}>
+                      <Text
+                        style={{
+                          marginLeft: 4 * scale,
+                          fontSize: 16 * scale,
+                          color: "#ff0000",
+                        }}
+                      >
+                        ×
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 16 * scale,
+                  width: "80%",
+                  alignSelf: "center",
+                  marginTop: 10 * scale,
+                }}
+              >
+                <TextInput
+                  style={{
+                    flex: 1,
+                    borderWidth: 1 * scale,
+                    borderColor: "#ccc",
+                    borderRadius: 4 * scale,
+                    padding: 8 * scale,
+                  }}
+                  placeholder="Add a Language tag"
+                  value={languageTagsInputValue}
+                  onChangeText={setLanguageTagsInputValue}
+                  onSubmitEditing={languageAddTag}
+                />
+                <TouchableOpacity
+                  onPress={languageAddTag}
+                  style={{
+                    marginLeft: 8 * scale,
+                    backgroundColor: "#007bff",
+                    padding: 8 * scale,
+                    borderRadius: 4 * scale,
+                  }}
+                >
+                  <Text style={{ color: "#fff" }}>Add</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                {languageTags.map((tag, index) => (
+                  <View
+                    
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      backgroundColor: "#f0f0f0",
+                      padding: 8 * scale,
+                      margin: 4 * scale,
+                      borderRadius: 16 * scale,
+                    }}
+                  >
+                    <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
+                    <TouchableOpacity
+                    key={index}
+                    onPress={() => languageRemoveTag(tag)}>
+                      <Text
+                        style={{
+                          marginLeft: 4 * scale,
+                          fontSize: 16 * scale,
+                          color: "#ff0000",
+                        }}
+                      >
+                        ×
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+          ) : (
+            <Tab.Navigator
+              screenOptions={{
+                tabBarLabelStyle: {
+                  fontSize: 10 * scale,
+                  textTransform: "none",
+                },
+                tabBarItemStyle: { width: 65 * scale },
+                tabBarStyle: { backgroundColor: "#ffffff" },
+              }}
+              style={{
+                borderTopLeftRadius: 20 * scale,
+                borderTopRightRadius: 20 * scale,
+              }}
+              swipeEnabled={false}
+            >
+              <Tab.Screen
+                name="Fonts"
+                component={FontTab}
+                options={{ tabBarLabel: "Font" }}
+              />
 
-            <Tab.Screen
-              name="Boxcolor"
-              component={BoxColorTab}
-              options={{ tabBarLabel: "Box Color" }}
-            />
-            <Tab.Screen
-              name="Color"
-              component={ColorTab}
-              options={{ tabBarLabel: "Color" }}
-            />
-            <Tab.Screen
-              name="Align"
-              component={AlignTab}
-              options={{ tabBarLabel: "Align" }}
-            />
-            <Tab.Screen
-              name="Shadow"
-              component={ShadowTab}
-              options={{ tabBarLabel: "Shadow" }}
-            />
-          </Tab.Navigator>
+              <Tab.Screen
+                name="Boxcolor"
+                component={BoxColorTab}
+                options={{ tabBarLabel: "Box Color" }}
+              />
+              <Tab.Screen
+                name="Color"
+                component={ColorTab}
+                options={{ tabBarLabel: "Color" }}
+              />
+              <Tab.Screen
+                name="Align"
+                component={AlignTab}
+                options={{ tabBarLabel: "Align" }}
+              />
+              <Tab.Screen
+                name="Shadow"
+                component={ShadowTab}
+                options={{ tabBarLabel: "Shadow" }}
+              />
+            </Tab.Navigator>
+          )
         ) : (
           <ScrollView>
             <View style={{ paddingHorizontal: 10 * scale }}>
@@ -2231,6 +2439,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
             </View>
           </ScrollView>
         )}
+        {}
       </View>
     </KeyboardAvoidingView>
   );

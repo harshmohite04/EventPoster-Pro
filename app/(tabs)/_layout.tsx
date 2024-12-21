@@ -17,6 +17,7 @@ import Profile from "./profile";
 import AdminEditImage from "./adminEditImage";
 import Delete from "./delete";
 import EditFlyer from "./editFlyer";
+import Upload from "./upload";
 
 const SplashScreen = ({ navigation }:any) => {
   useEffect(() => {

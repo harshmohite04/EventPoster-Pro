@@ -249,9 +249,6 @@ const pickImage = async () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View style={{ flex: 1 }}>
-        <View style={{}}>
-          <Text style={{color:"red"}}>Hello World</Text>
-        </View>
         <View style={{ paddingBottom: 5 * scale }}>
           <Text
             style={{
