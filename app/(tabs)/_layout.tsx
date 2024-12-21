@@ -9,16 +9,16 @@ import Home from "./home";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import UploadImage from "./uploadImage";
 import EditImage from "./editImage";
-import EditFlyer from "./EditFlyer";
+import ProfileEditor from "./profileEditor";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 import Library from "./library";
 import Profile from "./profile";
 import AdminEditImage from "./adminEditImage";
 import Delete from "./delete";
+import EditFlyer from "./editFlyer";
 
-
-const SplashScreen = ({ navigation }) => {
+const SplashScreen = ({ navigation }:any) => {
   useEffect(() => {
     const checkVerificationStatus = async () => {
       const verified = await AsyncStorage.getItem("isVerified");
@@ -62,7 +62,6 @@ const Layout = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      // initialRouteName="Delete"
       initialRouteName="Library"
       screenOptions={{ headerShown: false }}
     >
@@ -74,6 +73,7 @@ const Layout = () => {
       <Stack.Screen name="UploadImage" component={UploadImage} />
       <Stack.Screen name="EditImage" component={EditImage} />
       <Stack.Screen name="EditFlyer" component={EditFlyer} />
+      {/* <Stack.Screen name="EditFlyer" component={ProfileEditor} /> */}
       <Stack.Screen name="Profile" component={Profile} />
 
       {/* Admin */}

@@ -44,61 +44,77 @@ const AdminEditImage = ({ navigation, route }: any) => {
   let { image } = route?.params || {};
   // let image =
   // "https://gratisography.com/wp-content/uploads/2024/10/gratisography-cool-cat-800x525.jpg";
-  
 
-    const [fontW, setFontW] = useState(true);
-    const [fontI, setFontI] = useState(true);
-    const [text, setText] = useState("Your Text Here");
-    const [fontSize, setFontSize] = useState(20);
-    const [fontFamily, setFontFamily] = useState("");
-    const [fontColor, setFontColor] = useState("#000000");
-    const [opacity, setOpacity] = useState(1);
-    const [BgColor, setBgColor] = useState("rgba(0, 0, 0, 0)");
-    const [align, setAlign] = useState("left");
-    const [lineSpacing, setLineSpacing] = useState();
-    const [shadow, setShadow] = useState();
-    const [shadowColor, setShadowColor] = useState();
-    const [choosing, setChoosing] = useState(0);
-    const [textPosition, setTextPosition] = useState({ x: 10, y: 10 });
-    const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
-    
-    const imageRef = useRef(null); // Reference to the image for getting its dimensions
-    const viewShotRef = useRef(null); // Reference to ViewShot for capturing the screen
-    
-    // Position Of Logo and Photo
-    const [logoImage, setLogoImage] = useState(false);
-    const [logoPosition, setLogoPosition] = useState({ x: 0, y: 0 });
-    const [logoSize, setLogoSize] = useState({ width: 200, height: 200 });
-    
-    const [photoImage, setPhotoImage] = useState(false);
-    const [photoPosition, setPhotoPosition] = useState({ x: 0, y: 0 });
-    const [photoSize, setPhotoSize] = useState({ width: 200, height: 200 });
-    
-    const [nameText, setNameText] = useState(false);
-    const [namePosition, setNamePosition] = useState({ x: 0, y: 0 });
-    const [nameDimensions, setNameDimensions] = useState({ width: 0, height: 0 });
-    const [nameSize, setNameSize] = useState(20);
-    
-    const [businessText, setBusinessText] = useState(false);
-    const [businessPosition, setBusinessPosition] = useState({ x: 0, y: 0 });
-    const [businessDimensions, setBusinessDimensions] = useState({ width: 0, height: 0 });
-    const [businessSize, setBusinessSize] = useState(20);
-    
-    const [websiteNameText, setWebsiteNameText] = useState(false);
-    const [websiteNamePosition, setWebsiteNamePosition] = useState({ x: 0, y: 0 });
-    const [websiteNameDimensions, setWebsiteNameDimensions] = useState({ width: 0, height: 0 });
-    const [websiteNameSize, setWebsiteNameSize] = useState(20);
-    
-    const [phoneNumberText, setPhoneNumberText] = useState(false);
-    const [phoneNumberPosition, setPhoneNumberPosition] = useState({ x: 0, y: 0 });
-    const [phoneNumberDimensions, setPhoneNumberDimensions] = useState({ width: 0, height: 0 });
-    const [phoneNumberSize, setPhoneNumberSize] = useState(20);
-    
-    const [emailText, setEmailText] = useState(false);
-    const [emailPosition, setEmailPosition] = useState({ x: 0, y: 0 });
-    const [emailDimensions, setEmailDimensions] = useState({ width: 0, height: 0 });
-    const [emailSize, setEmailSize] = useState(20);
-  
+  const [fontW, setFontW] = useState(true);
+  const [fontI, setFontI] = useState(true);
+  const [text, setText] = useState("Your Text Here");
+  const [fontSize, setFontSize] = useState(20);
+  const [fontFamily, setFontFamily] = useState("");
+  const [fontColor, setFontColor] = useState("#000000");
+  const [opacity, setOpacity] = useState(1);
+  const [BgColor, setBgColor] = useState("rgba(0, 0, 0, 0)");
+  const [align, setAlign] = useState("left");
+  const [lineSpacing, setLineSpacing] = useState();
+  const [shadow, setShadow] = useState();
+  const [shadowColor, setShadowColor] = useState();
+  const [choosing, setChoosing] = useState(0);
+  const [textPosition, setTextPosition] = useState({ x: 10, y: 10 });
+  const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
+
+  const imageRef = useRef(null); // Reference to the image for getting its dimensions
+  const viewShotRef = useRef(null); // Reference to ViewShot for capturing the screen
+
+  // Position Of Logo and Photo
+  const [logoImage, setLogoImage] = useState(false);
+  const [logoPosition, setLogoPosition] = useState({ x: 0, y: 0 });
+  const [logoSize, setLogoSize] = useState({ width: 200, height: 200 });
+
+  const [photoImage, setPhotoImage] = useState(false);
+  const [photoPosition, setPhotoPosition] = useState({ x: 0, y: 0 });
+  const [photoSize, setPhotoSize] = useState({ width: 200, height: 200 });
+
+  const [nameText, setNameText] = useState(false);
+  const [namePosition, setNamePosition] = useState({ x: 0, y: 0 });
+  const [nameDimensions, setNameDimensions] = useState({ width: 0, height: 0 });
+  const [nameSize, setNameSize] = useState(20);
+
+  const [businessText, setBusinessText] = useState(false);
+  const [businessPosition, setBusinessPosition] = useState({ x: 0, y: 0 });
+  const [businessDimensions, setBusinessDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+  const [businessSize, setBusinessSize] = useState(20);
+
+  const [websiteNameText, setWebsiteNameText] = useState(false);
+  const [websiteNamePosition, setWebsiteNamePosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [websiteNameDimensions, setWebsiteNameDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+  const [websiteNameSize, setWebsiteNameSize] = useState(20);
+
+  const [phoneNumberText, setPhoneNumberText] = useState(false);
+  const [phoneNumberPosition, setPhoneNumberPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [phoneNumberDimensions, setPhoneNumberDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+  const [phoneNumberSize, setPhoneNumberSize] = useState(20);
+
+  const [emailText, setEmailText] = useState(false);
+  const [emailPosition, setEmailPosition] = useState({ x: 0, y: 0 });
+  const [emailDimensions, setEmailDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+  const [emailSize, setEmailSize] = useState(20);
 
   useFonts({
     Kanit_400Regular,
@@ -1294,7 +1310,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
               alignItems: "center",
             }}
           >
-            <Feather name="check" size={24} color="black" />
+            <Feather name="check" size={24*scale} color="black" />
             <Text style={{ fontSize: 14 * scale, paddingLeft: 8 * scale }}>
               Upload
             </Text>
@@ -1403,7 +1419,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 Your Name
               </Text>
             ) : null}
- 
 
             {businessText ? (
               <Text
@@ -1425,7 +1440,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 Business Name
               </Text>
             ) : null}
- 
 
             {websiteNameText ? (
               <Text
@@ -1447,7 +1461,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 Website URL
               </Text>
             ) : null}
- 
 
             {phoneNumberText ? (
               <Text
@@ -1469,7 +1482,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 93568365412
               </Text>
             ) : null}
- 
 
             {emailText ? (
               <Text
@@ -1491,7 +1503,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 Your Name
               </Text>
             ) : null}
- 
+
             {choosing ? (
               <Text
                 {...panResponder.panHandlers}
@@ -1592,497 +1604,614 @@ const AdminEditImage = ({ navigation, route }: any) => {
               options={{ tabBarLabel: "Shadow" }}
             />
           </Tab.Navigator>
-        ) : 
-        
-        (
+        ) : (
           <ScrollView>
-          
-          <View style={{ paddingHorizontal: 10 * scale }}>
-            {logoImage ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 10 * scale,
-                }}
-              >
-                <Text
+            <View style={{ paddingHorizontal: 10 * scale }}>
+              {logoImage ? (
+                <View
                   style={{
-                    textAlign: "center",
-                    alignSelf: "center",
-                    fontSize: 15 * scale,
-                  }}
-                >
-                  Logo :
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
+                    flexDirection: "row",
                     justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Decrease image size (min limit 50px)
-                    if (
-                      logoSize.width > 50 * scale &&
-                      logoSize.height > 50 * scale
-                    ) {
-                      setLogoSize({
-                        width: logoSize.width - 20 * scale, // Decrease width by 20
-                        height: logoSize.height - 20 * scale, // Decrease height by 20
-                      });
-                    }
+                    marginTop: 10 * scale,
                   }}
                 >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
-                </TouchableOpacity>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      alignSelf: "center",
+                      fontSize: 15 * scale,
+                    }}
+                  >
+                    Logo :
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Decrease image size (min limit 50px)
+                      if (
+                        logoSize.width > 50 * scale &&
+                        logoSize.height > 50 * scale
+                      ) {
+                        setLogoSize({
+                          width: logoSize.width - 20 * scale, // Decrease width by 20
+                          height: logoSize.height - 20 * scale, // Decrease height by 20
+                        });
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Increase image size (max limit 400px)
+                      if (
+                        logoSize.width < 400 * scale &&
+                        logoSize.height < 400 * scale
+                      ) {
+                        setLogoSize({
+                          width: logoSize.width + 20 * scale, // Increase width by 20
+                          height: logoSize.height + 20 * scale, // Increase height by 20
+                        });
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+
+              {photoImage ? (
+                <View
                   style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
+                    flexDirection: "row",
                     justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Increase image size (max limit 400px)
-                    if (
-                      logoSize.width < 400 * scale &&
-                      logoSize.height < 400 * scale
-                    ) {
-                      setLogoSize({
-                        width: logoSize.width + 20 * scale, // Increase width by 20
-                        height: logoSize.height + 20 * scale, // Increase height by 20
-                      });
-                    }
+                    marginTop: 10 * scale,
                   }}
                 >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      alignSelf: "center",
+                      fontSize: 15 * scale,
+                    }}
+                  >
+                    Photo :
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Decrease image size (min limit 50px)
+                      if (
+                        photoSize.width > 50 * scale &&
+                        photoSize.height > 50 * scale
+                      ) {
+                        setPhotoSize({
+                          width: photoSize.width - 20 * scale, // Decrease width by 20
+                          height: photoSize.height - 20 * scale, // Decrease height by 20
+                        });
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Increase image size (max limit 400px)
+                      if (
+                        photoSize.width < 400 * scale &&
+                        photoSize.height < 400 * scale
+                      ) {
+                        setPhotoSize({
+                          width: photoSize.width + 20 * scale, // Increase width by 20
+                          height: photoSize.height + 20 * scale, // Increase height by 20
+                        });
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+
+              {nameText ? (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    marginTop: 10 * scale,
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      alignSelf: "center",
+                      fontSize: 15 * scale,
+                    }}
+                  >
+                    Name :
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Decrease image size (min limit 50px)
+                      if (nameSize > 20 * scale) {
+                        setNameSize(
+                          nameSize - 5 * scale // Decrease by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Increase image size (max limit 400px)
+                      if (nameSize < 100 * scale) {
+                        setNameSize(
+                          nameSize + 5 * scale // Increase width by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+
+              {businessText ? (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    marginTop: 10 * scale,
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      alignSelf: "center",
+                      fontSize: 15 * scale,
+                    }}
+                  >
+                    Business :
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Decrease image size (min limit 50px)
+                      if (businessSize > 20 * scale) {
+                        setBusinessSize(
+                          businessSize - 5 * scale // Decrease by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Increase image size (max limit 400px)
+                      if (businessSize < 100 * scale) {
+                        setBusinessSize(
+                          businessSize + 5 * scale // Increase width by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+
+              {websiteNameText ? (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    marginTop: 10 * scale,
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      alignSelf: "center",
+                      fontSize: 15 * scale,
+                    }}
+                  >
+                    Website URL :
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Decrease image size (min limit 50px)
+                      if (websiteNameSize > 20 * scale) {
+                        setWebsiteNameSize(
+                          websiteNameSize - 5 * scale // Decrease by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Increase image size (max limit 400px)
+                      if (websiteNameSize < 100 * scale) {
+                        setWebsiteNameSize(
+                          websiteNameSize + 5 * scale // Increase width by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+
+              {phoneNumberText ? (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    marginTop: 10 * scale,
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      alignSelf: "center",
+                      fontSize: 15 * scale,
+                    }}
+                  >
+                    Phone Number :
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Decrease image size (min limit 50px)
+                      if (phoneNumberSize > 20 * scale) {
+                        setPhoneNumberSize(
+                          phoneNumberSize - 5 * scale // Decrease by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Increase image size (max limit 400px)
+                      if (phoneNumberSize < 100 * scale) {
+                        setPhoneNumberSize(
+                          phoneNumberSize + 5 * scale // Increase width by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+
+              {emailText ? (
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    marginTop: 10 * scale,
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      alignSelf: "center",
+                      fontSize: 15 * scale,
+                    }}
+                  >
+                    Email :
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Decrease image size (min limit 50px)
+                      if (emailSize > 20 * scale) {
+                        setEmailSize(
+                          emailSize - 5 * scale // Decrease by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: "#007BFF",
+                      height: 25 * scale,
+                      alignSelf: "center",
+                      paddingHorizontal: 15 * scale,
+                      borderRadius: 8 * scale,
+                      justifyContent: "center",
+                      marginHorizontal: 5 * scale,
+                    }}
+                    onPress={() => {
+                      // Increase image size (max limit 400px)
+                      if (emailSize < 100 * scale) {
+                        setEmailSize(
+                          emailSize + 5 * scale // Increase width by 20
+                        );
+                      }
+                    }}
+                  >
+                    <Text style={{ color: "#fff", fontSize: 16 * scale }}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+
+              <View style={{ flexDirection: "row", marginTop: 25 * scale }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setLogoImage(!logoImage);
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#FFEFD4",
+                    paddingHorizontal: 15 * scale,
+                    paddingVertical: 12 * scale,
+                    borderRadius: 8 * scale,
+                    width: "30%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontSize: 12 * scale }}>Logo</Text>
+                  <Entypo name="plus" size={15 * scale} color="#FF8017" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setPhotoImage(!photoImage);
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#FFEFD4",
+                    paddingHorizontal: 15 * scale,
+                    paddingVertical: 12 * scale,
+                    borderRadius: 8 * scale,
+                    marginLeft: 10 * scale,
+                    width: "30%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontSize: 12 * scale }}>Photo</Text>
+                  <Entypo name="plus" size={15 * scale} color="#FF8017" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setNameText(!nameText);
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#FFEFD4",
+                    paddingHorizontal: 12 * scale,
+                    paddingVertical: 12 * scale,
+                    borderRadius: 8 * scale,
+                    marginLeft: 10 * scale,
+                    width: "30%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontSize: 12 * scale }}>Name</Text>
+                  <Entypo name="plus" size={15 * scale} color="#FF8017" />
                 </TouchableOpacity>
               </View>
-            ) : null}
-
-            {photoImage ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 10 * scale,
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    alignSelf: "center",
-                    fontSize: 15 * scale,
-                  }}
-                >
-                  Photo :
-                </Text>
+              <View style={{ flexDirection: "row", marginTop: 18 * scale }}>
                 <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
                   onPress={() => {
-                    // Decrease image size (min limit 50px)
-                    if (
-                      photoSize.width > 50 * scale &&
-                      photoSize.height > 50 * scale
-                    ) {
-                      setPhotoSize({
-                        width: photoSize.width - 20 * scale, // Decrease width by 20
-                        height: photoSize.height - 20 * scale, // Decrease height by 20
-                      });
-                    }
+                    setBusinessText(!businessText);
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#FFEFD4",
+                    paddingHorizontal: 15 * scale,
+                    paddingVertical: 12 * scale,
+                    borderRadius: 8 * scale,
+                    width: "30%",
+                    justifyContent: "space-between",
                   }}
                 >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
+                  <Text style={{ fontSize: 12 * scale }}>Business Name</Text>
+                  <Entypo name="plus" size={15 * scale} color="#FF8017" />
                 </TouchableOpacity>
-
                 <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
                   onPress={() => {
-                    // Increase image size (max limit 400px)
-                    if (
-                      photoSize.width < 400 * scale &&
-                      photoSize.height < 400 * scale
-                    ) {
-                      setPhotoSize({
-                        width: photoSize.width + 20 * scale, // Increase width by 20
-                        height: photoSize.height + 20 * scale, // Increase height by 20
-                      });
-                    }
+                    setWebsiteNameText(!websiteNameText);
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#FFEFD4",
+                    paddingHorizontal: 15 * scale,
+                    paddingVertical: 12 * scale,
+                    borderRadius: 8 * scale,
+                    marginLeft: 10 * scale,
+                    width: "30%",
+                    justifyContent: "space-between",
                   }}
                 >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
+                  <Text style={{ fontSize: 12 * scale }}>Website Link</Text>
+                  <Entypo name="plus" size={15 * scale} color="#FF8017" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setPhoneNumberText(!phoneNumberText);
+                  }}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#FFEFD4",
+                    paddingHorizontal: 15 * scale,
+                    paddingVertical: 12 * scale,
+                    borderRadius: 8 * scale,
+                    marginLeft: 10 * scale,
+                    width: "30%",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Text style={{ fontSize: 12 * scale }}>Phone Number</Text>
+                  <Entypo name="plus" size={15 * scale} color="#FF8017" />
                 </TouchableOpacity>
               </View>
-            ) : null}
 
-            {nameText ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 10 * scale,
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    alignSelf: "center",
-                    fontSize: 15 * scale,
-                  }}
-                >
-                  Name :
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Decrease image size (min limit 50px)
-                    if (
-                      nameSize> 20 * scale
-                    ) {
-                      setNameSize(
-                       nameSize - 5 * scale, // Decrease by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Increase image size (max limit 400px)
-                    if (
-                      nameSize < 100 * scale
-                    ) {
-                      setNameSize(
-                         nameSize + 5 * scale, // Increase width by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
- 
-
-            {businessText ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 10 * scale,
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    alignSelf: "center",
-                    fontSize: 15 * scale,
-                  }}
-                >
-                  Business :
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Decrease image size (min limit 50px)
-                    if (
-                      businessSize> 20 * scale
-                    ) {
-                      setBusinessSize(
-                        businessSize - 5 * scale, // Decrease by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Increase image size (max limit 400px)
-                    if (
-                      businessSize < 100 * scale
-                    ) {
-                      setBusinessSize(
-                        businessSize + 5 * scale, // Increase width by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
- 
-
-            {websiteNameText ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 10 * scale,
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    alignSelf: "center",
-                    fontSize: 15 * scale,
-                  }}
-                >
-                  Website URL :
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Decrease image size (min limit 50px)
-                    if (
-                      websiteNameSize> 20 * scale
-                    ) {
-                      setWebsiteNameSize(
-                        websiteNameSize - 5 * scale, // Decrease by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Increase image size (max limit 400px)
-                    if (
-                      websiteNameSize < 100 * scale
-                    ) {
-                      setWebsiteNameSize(
-                         websiteNameSize + 5 * scale, // Increase width by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
- 
-
-            {phoneNumberText ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 10 * scale,
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    alignSelf: "center",
-                    fontSize: 15 * scale,
-                  }}
-                >
-                  Phone Number :
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Decrease image size (min limit 50px)
-                    if (
-                      phoneNumberSize> 20 * scale
-                    ) {
-                      setPhoneNumberSize(
-                        phoneNumberSize - 5 * scale, // Decrease by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Increase image size (max limit 400px)
-                    if (
-                      phoneNumberSize < 100 * scale
-                    ) {
-                      setPhoneNumberSize(
-                        phoneNumberSize + 5 * scale, // Increase width by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
- 
-
-            {emailText ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 10 * scale,
-                }}
-              >
-                <Text
-                  style={{
-                    textAlign: "center",
-                    alignSelf: "center",
-                    fontSize: 15 * scale,
-                  }}
-                >
-                  Email :
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Decrease image size (min limit 50px)
-                    if (
-                      emailSize> 20 * scale
-                    ) {
-                      setEmailSize(
-                        emailSize - 5 * scale, // Decrease by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>-</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#007BFF",
-                    height: 25 * scale,
-                    alignSelf: "center",
-                    paddingHorizontal: 15 * scale,
-                    borderRadius: 8 * scale,
-                    justifyContent: "center",
-                    marginHorizontal: 5 * scale,
-                  }}
-                  onPress={() => {
-                    // Increase image size (max limit 400px)
-                    if (
-                      emailSize < 100 * scale
-                    ) {
-                      setEmailSize(
-                         emailSize + 5 * scale, // Increase width by 20
-                      );
-                    }
-                  }}
-                >
-                  <Text style={{ color: "#fff", fontSize: 16 * scale }}>+</Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
- 
-            <View style={{ flexDirection: "row", marginTop: 25 * scale }}>
               <TouchableOpacity
                 onPress={() => {
-                  setLogoImage(!logoImage);
+                  setEmailText(!emailText);
                 }}
                 style={{
                   flexDirection: "row",
@@ -2091,129 +2220,15 @@ const AdminEditImage = ({ navigation, route }: any) => {
                   paddingHorizontal: 15 * scale,
                   paddingVertical: 12 * scale,
                   borderRadius: 8 * scale,
+                  marginTop: 18 * scale,
                   width: "30%",
                   justifyContent: "space-between",
                 }}
               >
-                <Text style={{ fontSize: 12 * scale }}>Logo</Text>
-                <Entypo name="plus" size={15 * scale} color="#FF8017" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setPhotoImage(!photoImage);
-                }}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "#FFEFD4",
-                  paddingHorizontal: 15 * scale,
-                  paddingVertical: 12 * scale,
-                  borderRadius: 8 * scale,
-                  marginLeft: 10 * scale,
-                  width: "30%",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ fontSize: 12 * scale }}>Photo</Text>
-                <Entypo name="plus" size={15 * scale} color="#FF8017" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setNameText(!nameText);
-                }}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "#FFEFD4",
-                  paddingHorizontal: 12 * scale,
-                  paddingVertical: 12 * scale,
-                  borderRadius: 8 * scale,
-                  marginLeft: 10 * scale,
-                  width: "30%",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ fontSize: 12 * scale }}>Name</Text>
+                <Text style={{ fontSize: 12 * scale }}>Email</Text>
                 <Entypo name="plus" size={15 * scale} color="#FF8017" />
               </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: "row", marginTop: 18 * scale }}>
-              <TouchableOpacity
-              onPress={()=>{setBusinessText(!businessText)}}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "#FFEFD4",
-                  paddingHorizontal: 15 * scale,
-                  paddingVertical: 12 * scale,
-                  borderRadius: 8 * scale,
-                  width: "30%",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ fontSize: 12 * scale }}>Business Name</Text>
-                <Entypo name="plus" size={15 * scale} color="#FF8017" />
-              </TouchableOpacity>
-              <TouchableOpacity
-              onPress={()=>{
-                setWebsiteNameText(!websiteNameText)
-              }}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "#FFEFD4",
-                  paddingHorizontal: 15 * scale,
-                  paddingVertical: 12 * scale,
-                  borderRadius: 8 * scale,
-                  marginLeft: 10 * scale,
-                  width: "30%",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ fontSize: 12 * scale }}>Website Link</Text>
-                <Entypo name="plus" size={15 * scale} color="#FF8017" />
-              </TouchableOpacity>
-              <TouchableOpacity
-              onPress={()=>{
-                setPhoneNumberText(!phoneNumberText)
-              }}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  backgroundColor: "#FFEFD4",
-                  paddingHorizontal: 15 * scale,
-                  paddingVertical: 12 * scale,
-                  borderRadius: 8 * scale,
-                  marginLeft: 10 * scale,
-                  width: "30%",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Text style={{ fontSize: 12 * scale }}>Phone Number</Text>
-                <Entypo name="plus" size={15 * scale} color="#FF8017" />
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity
-            onPress={()=>{
-              setEmailText(!emailText)
-            }}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                backgroundColor: "#FFEFD4",
-                paddingHorizontal: 15 * scale,
-                paddingVertical: 12 * scale,
-                borderRadius: 8 * scale,
-                marginTop: 18 * scale,
-                width: "30%",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text style={{ fontSize: 12 * scale }}>Email</Text>
-              <Entypo name="plus" size={15 * scale} color="#FF8017" />
-            </TouchableOpacity>
-          </View>
           </ScrollView>
         )}
       </View>

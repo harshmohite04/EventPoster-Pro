@@ -38,7 +38,7 @@ const scale = width / 320;
 const Tab = createMaterialTopTabNavigator();
 import { throttle } from "lodash";
 
-const EditImage = ({ navigation, route }) => {
+const EditImage = ({ navigation, route }:any) => {
   let { image } = route?.params || {};
   const [fontW, setFontW] = useState(true);
   const [fontI, setFontI] = useState(true);
@@ -58,7 +58,7 @@ const EditImage = ({ navigation, route }) => {
   const imageRef = useRef(null);
   const viewShotRef = useRef(null);
   
-  const throttledSetTextPosition = throttle((newX, newY) => {
+  const throttledSetTextPosition = throttle((newX:any, newY:any) => {
     setTextPosition({ x: newX, y: newY });
   }, 16);
 
@@ -82,11 +82,9 @@ const EditImage = ({ navigation, route }) => {
       });
     }
   }, [image]);
-  const ok = (text1) => {
-    setText(text1);
-  };
 
-  const handleSliderChange = useCallback((value) => {
+
+  const handleSliderChange = useCallback((value:any) => {
     setFontSize(Math.round(value));
   }, []);
 

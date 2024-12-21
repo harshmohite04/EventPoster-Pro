@@ -226,7 +226,7 @@ const Item = ({ imageUrl }: ItemProps) => {
   );
 };
 
-const Library = ({ navigation }) => {
+const Library = ({ navigation }:any) => {
 
   
 const pickImage = async () => {
@@ -240,7 +240,7 @@ const pickImage = async () => {
   console.log("result",result);
   if (!result.canceled) {
     console.log("This image was sent",result.assets[0].uri)
-    image=result.assets[0].uri
+    let image=result.assets[0].uri
     navigation.push("AdminEditImage", { image: image });
   }
 };
@@ -249,6 +249,9 @@ const pickImage = async () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View style={{ flex: 1 }}>
+        <View style={{}}>
+          <Text style={{color:"red"}}>Hello World</Text>
+        </View>
         <View style={{ paddingBottom: 5 * scale }}>
           <Text
             style={{
