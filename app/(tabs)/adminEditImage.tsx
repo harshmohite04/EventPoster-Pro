@@ -233,7 +233,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
   const FontTab = React.memo(() => {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <ScrollView style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
+        <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
           <View
             style={{
               flexDirection: "row",
@@ -418,7 +418,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
               </View>
             </ScrollView>
           </View>
-        </ScrollView>
+        </View>
       </TouchableWithoutFeedback>
     );
   });
@@ -457,6 +457,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(0, 0, 0, 0)",
+                
                 marginRight: 5 * scale,
                 justifyContent: "center",
                 alignItems: "center",
@@ -472,6 +473,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(249, 255, 0, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -483,6 +485,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(246, 203, 0, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -494,6 +497,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(243, 140, 0, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -505,6 +509,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(241, 73, 0, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -516,6 +521,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(240, 0, 0, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -527,6 +533,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(240, 0, 64, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -538,6 +545,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(242, 0, 138, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -549,6 +557,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(244, 0, 201, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -560,6 +569,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(247, 0, 255, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -571,6 +581,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(196, 0, 255, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -582,6 +593,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(143, 0, 255, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -599,6 +611,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(199, 255, 0, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -610,6 +623,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(148, 255, 0, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -621,6 +635,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(100, 255, 0, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -632,6 +647,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(74, 255, 0, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -643,6 +659,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(81, 255, 131, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -654,6 +671,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(98, 255, 255, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -665,6 +683,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(85, 196, 255, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -676,6 +695,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(75, 131, 255, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -687,6 +707,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(68, 44, 255, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -698,6 +719,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(65, 0, 255, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -709,6 +731,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(68, 44, 255, 1)",
+                
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -742,6 +765,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
               "rgba(247, 0, 255, 1)",
               "rgba(196, 0, 255, 1)",
               "rgba(143, 0, 255, 1)",
+              "rgba(255, 255, 255, 1)",
             ].map((color) => (
               <TouchableOpacity
                 key={color}
@@ -751,6 +775,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                   height: 35 * scale,
                   backgroundColor: color,
                   marginRight: 5 * scale,
+                  borderWidth:1
                 }}
               ></TouchableOpacity>
             ))}
@@ -781,6 +806,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                   height: 35 * scale,
                   backgroundColor: color,
                   marginRight: 5 * scale,
+                  borderWidth:1
                 }}
               ></TouchableOpacity>
             ))}
@@ -1580,7 +1606,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                   },
                 ]}
               >
-                Your Name
+                abc@gmail.com
               </Text>
             ) : null}
 

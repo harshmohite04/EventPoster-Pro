@@ -31,7 +31,7 @@ const SplashScreen = ({ navigation }: any) => {
         if (role === "admin") {
           navigation.replace("Library"); // change when before going to production
         } else if (role === "user") {
-          navigation.replace("Home"); // change when before going to production
+          navigation.replace("Promo"); // change when before going to production
         }
         // navigation.replace('Home');
       } else {
@@ -65,7 +65,7 @@ const Layout = () => {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator
-      initialRouteName="UserSettings"
+      initialRouteName="Splash"
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Splash" component={SplashScreen} />

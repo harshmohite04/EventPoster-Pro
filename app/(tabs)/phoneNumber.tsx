@@ -76,8 +76,17 @@ const PhoneNumber = ({ navigation }) => {
   const handleSubmit = async (values) => {
     const phoneNumber = `+91${values.phoneLength}`; // Add the country code to the phone number
     console.log(phoneNumber);
-
-    navigation.push("Otp", { number: phoneNumber });
+    try {
+      axios.post(
+        "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/send-otp",
+        {
+          phoneNumber: phoneNumber,
+        }
+      );
+      navigation.push("Otp", { number: phoneNumber });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const phoneNumeberSchema = Yup.object().shape({

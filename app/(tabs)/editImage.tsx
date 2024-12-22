@@ -38,7 +38,7 @@ const scale = width / 320;
 const Tab = createMaterialTopTabNavigator();
 import { throttle } from "lodash";
 
-const EditImage = ({ navigation, route }:any) => {
+const EditImage = ({ navigation, route }: any) => {
   let { image } = route?.params || {};
   const [fontW, setFontW] = useState(true);
   const [fontI, setFontI] = useState(true);
@@ -57,8 +57,8 @@ const EditImage = ({ navigation, route }:any) => {
   const [textDimensions, setTextDimensions] = useState({ width: 0, height: 0 });
   const imageRef = useRef(null);
   const viewShotRef = useRef(null);
-  
-  const throttledSetTextPosition = throttle((newX:any, newY:any) => {
+
+  const throttledSetTextPosition = throttle((newX: any, newY: any) => {
     setTextPosition({ x: newX, y: newY });
   }, 16);
 
@@ -83,8 +83,7 @@ const EditImage = ({ navigation, route }:any) => {
     }
   }, [image]);
 
-
-  const handleSliderChange = useCallback((value:any) => {
+  const handleSliderChange = useCallback((value: any) => {
     setFontSize(Math.round(value));
   }, []);
 
@@ -324,6 +323,7 @@ const EditImage = ({ navigation, route }:any) => {
                 marginRight: 5 * scale,
                 justifyContent: "center",
                 alignItems: "center",
+                borderWidth:1
               }}
             >
               <SkipLogo size={20 * scale} />
@@ -336,6 +336,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(249, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -347,6 +348,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(246, 203, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -358,6 +360,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(243, 140, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -369,6 +372,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(241, 73, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -380,6 +384,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(240, 0, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -391,6 +396,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(240, 0, 64, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -402,6 +408,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(242, 0, 138, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -413,6 +420,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(244, 0, 201, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -424,6 +432,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(247, 0, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -435,6 +444,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(196, 0, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -446,6 +456,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(143, 0, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -463,6 +474,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(199, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -474,6 +486,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(148, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -485,6 +498,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(100, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -496,6 +510,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(74, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -507,6 +522,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(81, 255, 131, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -518,6 +534,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(98, 255, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -529,6 +546,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(85, 196, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -540,6 +558,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(75, 131, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -551,6 +570,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(68, 44, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -562,6 +582,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(65, 0, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -573,6 +594,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(68, 44, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -613,6 +635,7 @@ const EditImage = ({ navigation, route }:any) => {
               "rgba(247, 0, 255, 1)",
               "rgba(196, 0, 255, 1)",
               "rgba(143, 0, 255, 1)",
+              "rgba(255, 255, 255, 1)",
             ].map((color) => (
               <TouchableOpacity
                 key={color}
@@ -622,6 +645,7 @@ const EditImage = ({ navigation, route }:any) => {
                   height: 35 * scale,
                   backgroundColor: color,
                   marginRight: 5 * scale,
+                  borderWidth: 1,
                 }}
               ></TouchableOpacity>
             ))}
@@ -652,6 +676,7 @@ const EditImage = ({ navigation, route }:any) => {
                   height: 35 * scale,
                   backgroundColor: color,
                   marginRight: 5 * scale,
+                  borderWidth: 1,
                 }}
               ></TouchableOpacity>
             ))}
@@ -788,6 +813,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(255, 255, 255, 255)",
+                borderWidth:1,
                 marginRight: 5 * scale,
                 justifyContent: "center",
                 alignItems: "center",
@@ -803,6 +829,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(249, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -814,6 +841,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(246, 203, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -825,6 +853,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(243, 140, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -836,6 +865,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(241, 73, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -847,6 +877,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(240, 0, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -858,6 +889,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(240, 0, 64, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -869,6 +901,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(242, 0, 138, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -880,6 +913,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(244, 0, 201, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -891,6 +925,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(247, 0, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -902,6 +937,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(196, 0, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -913,6 +949,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(143, 0, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -930,6 +967,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(199, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -941,6 +979,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(148, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -952,6 +991,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(100, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -963,6 +1003,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(74, 255, 0, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -974,6 +1015,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(81, 255, 131, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -985,6 +1027,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(98, 255, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -996,6 +1039,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(85, 196, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -1007,6 +1051,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(75, 131, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -1018,6 +1063,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(68, 44, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -1029,6 +1075,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(65, 0, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -1040,6 +1087,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(68, 44, 255, 1)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -1051,6 +1099,7 @@ const EditImage = ({ navigation, route }:any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(0, 0, 0, 255)",
+                borderWidth:1,
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>

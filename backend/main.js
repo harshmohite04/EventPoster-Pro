@@ -1,4 +1,5 @@
-[POST] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/send-otp
+Done 
+[POST] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/send-otp  
 request:- 
 {
   "phoneNumber": "+917737433828"
@@ -9,7 +10,7 @@ response:-
   "sid": "SM01e8837018821602be64a8fca0fd9efb"
 }
 
-
+Issue
 [POST] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/verify-otp
 request:- 
 {
