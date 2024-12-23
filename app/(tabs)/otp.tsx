@@ -26,6 +26,7 @@ import MiddleLogo from "@/assets/icons/middleLogo";
 import axios from "axios";
 
 const Otp = ({ navigation, route }) => {
+  const [inCorrect, setInCorrect] = useState(false);
   const listOfNumbers = ["+919356836581", "+910123456789", "+919876543210"];
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
@@ -40,7 +41,6 @@ const Otp = ({ navigation, route }) => {
 
   const { number = "" } = route?.params || {};
 
-  console.log("Numberssss " + number);
   const et1 = useRef();
   const et2 = useRef();
   const et3 = useRef();
@@ -204,6 +204,19 @@ const Otp = ({ navigation, route }) => {
                   }}
                 />
               </View>
+              {inCorrect ? (
+                <View>
+                  <Text
+                    style={{
+                      textAlign: "center",
+                      color: "red",
+                      fontSize: 14 * scale,
+                    }}
+                  >
+                    Incorrect OTP
+                  </Text>
+                </View>
+              ) : null}
               <Formik
                 initialValues={{ otp: "" }}
                 onSubmit={(values) => console.log(values)}
@@ -214,32 +227,45 @@ const Otp = ({ navigation, route }) => {
                       disabled={otp.length < 4}
                       onPress={async () => {
                         console.log(otp);
-                        if (listOfNumbers.includes(number)) {
-                          navigation.replace("Library");
-                          await AsyncStorage.setItem("isVerified", "true");
-                          await AsyncStorage.setItem("role", "admin");
-                        } else {
-                          navigation.replace("Promo");
-                          await AsyncStorage.setItem("isVerified", "true");
-                          await AsyncStorage.setItem("role", "user");
-                        }
-                        // try {
-                        //   const response = axios
-                        //     .post(
-                        //       "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/verify-otp",
-                        //       {
-                        //         phoneNumber: number,
-                        //         otp: otp,
-                        //       }
-                        //     )
-                        //     console.log(response["_h"]);
-                        //     console.log(response["_i"]);
-                        //     console.log(response["_j"]);
-                        //     console.log(response["_k"]);
-                        //     console.log(response);
-                        // } catch (error) {
-                        //   console.log(error);
+                        // if (listOfNumbers.includes(number)) {
+                        //   navigation.replace("Library");
+                        //   await AsyncStorage.setItem("isVerified", "true");
+                        //   await AsyncStorage.setItem("role", "admin");
+                        // } else {
+                        //   navigation.replace("Promo");
+                        //   await AsyncStorage.setItem("isVerified", "true");
+                        //   await AsyncStorage.setItem("role", "user");
                         // }
+                        try {
+                          const response = await axios.post(
+                            "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/verify-otp",
+                            {
+                              phoneNumber: number,
+                              otp: otp,
+                            },
+                            {
+                              headers: {
+                                "Content-Type": "application/json", // Explicitly set content type
+                              },
+                            }
+                          );
+                          console.log(response.data);
+                          console.log(response.data.authToken);
+                          if (response.data.success) {
+                            navigation.push("Promo");
+                            if (listOfNumbers.includes(number)) {
+                              navigation.replace("Library");
+                              await AsyncStorage.setItem("authToken", response.data.authToken);
+                              await AsyncStorage.setItem("role", "admin");
+                            } else {
+                              navigation.replace("Promo");
+                              await AsyncStorage.setItem("authToken", response.data.authToken);
+                              await AsyncStorage.setItem("role", "user");
+                            }
+                          }
+                        } catch (error) {
+                          console.log(error);
+                        }
                       }}
                       style={[
                         styles.continueButton,
@@ -251,6 +277,7 @@ const Otp = ({ navigation, route }) => {
                     >
                       <Text style={styles.continueText}>Continue</Text>
                     </TouchableOpacity>
+
                     <Text
                       disabled={secondsRemaining > 1}
                       onPress={() => setSecondsRemaining(30)}

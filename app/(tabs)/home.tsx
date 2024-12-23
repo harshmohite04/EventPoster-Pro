@@ -31,6 +31,7 @@ const [images,setImages]=useState([])
   const profileClicked = () => {
     navigation.navigate("MainProfile");
   };
+  
   useEffect(() => {
     setImages([
       {

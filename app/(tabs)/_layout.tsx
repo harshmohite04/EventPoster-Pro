@@ -22,12 +22,14 @@ import Profile from "./profile";
 import UserSettings from "./userSettings";
 
 const SplashScreen = ({ navigation }: any) => {
+  
   useEffect(() => {
     const checkVerificationStatus = async () => {
-      const verified = await AsyncStorage.getItem("isVerified");
+      const authToken = await AsyncStorage.getItem("authToken");
       const role = await AsyncStorage.getItem("role");
-
-      if (verified === "true") {
+      console.log("authToken")
+      if (authToken!=null) {
+        console.log(authToken)
         if (role === "admin") {
           navigation.replace("Library"); // change when before going to production
         } else if (role === "user") {

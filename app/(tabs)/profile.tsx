@@ -6,11 +6,13 @@ import {
   Dimensions,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { width } = Dimensions.get("window");
 const scale = width / 320;
@@ -31,6 +33,37 @@ const Downloaded = () => {
   );
 };
 const Profile = ({ navigation }: any) => {
+  const [userData, setUserData] = useState("");
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+    console.log("Hello")
+    const apiCall = async () => {
+      try {
+        const authToken = await AsyncStorage.getItem("authToken");
+        if (!authToken) {
+          console.error("Auth Token not found");
+          return;
+        }
+        const response = await axios.get(
+          "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/getuser",
+          {
+            headers: {
+              "auth-token": authToken,
+            },
+          }
+        );
+        console.log(authToken)
+        console.log(response.data);
+        setUserName(response.data["name"])
+        console.log(response.data["name"])
+        console.log("Api");
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    apiCall();
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <View
@@ -45,6 +78,7 @@ const Profile = ({ navigation }: any) => {
         }}
       >
         <View style={{ flexDirection: "row" }}>
+          <Text>{userData}</Text>
           <TouchableOpacity
             onPress={() => {
               navigation.goBack();
@@ -92,12 +126,14 @@ const Profile = ({ navigation }: any) => {
               paddingHorizontal: 40 * scale,
             }}
           >
-            Naman Sharma
+            {userName}
           </Text>
         </View>
 
         <TouchableOpacity
-          onPress={() => {navigation.push("ProfileEdit")}}
+          onPress={() => {
+            navigation.push("ProfileEdit");
+          }}
           style={{
             flexDirection: "row",
             justifyContent: "center",
@@ -110,10 +146,10 @@ const Profile = ({ navigation }: any) => {
           }}
         >
           <FontAwesome5 name="pen" size={20 * scale} color="#000000" />
-            <Text style={{ marginLeft: 10 * scale, fontSize: 15 * scale }}>
-              Edit Profile
-            </Text>
-          </TouchableOpacity>
+          <Text style={{ marginLeft: 10 * scale, fontSize: 15 * scale }}>
+            Edit Profile
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <Tab.Navigator

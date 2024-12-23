@@ -77,13 +77,16 @@ const PhoneNumber = ({ navigation }) => {
     const phoneNumber = `+91${values.phoneLength}`; // Add the country code to the phone number
     console.log(phoneNumber);
     try {
-      axios.post(
+       const response = await axios.post(
         "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/send-otp",
         {
           phoneNumber: phoneNumber,
         }
       );
+      console.log(response.data)
       navigation.push("Otp", { number: phoneNumber });
+      console.log('Hello')
+
     } catch (error) {
       console.log(error);
     }

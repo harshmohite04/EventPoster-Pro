@@ -10,7 +10,7 @@ response:-
   "sid": "SM01e8837018821602be64a8fca0fd9efb"
 }
 
-Issue
+Done
 [POST] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/verify-otp
 request:- 
 {
@@ -24,7 +24,7 @@ response:-
   "authToken": "(authToken)"
 }
 
-
+DONE
 [GET] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/getuser
 Headers:- 
 auth-token: (authToken)
