@@ -305,7 +305,7 @@ const Library = ({ navigation }: any) => {
         <TouchableOpacity
           style={{
             position: "absolute",
-            bottom: 20 * scale,
+            bottom: 50 * scale,
             right: 20 * scale,
             backgroundColor: "#FF8017",
             borderRadius: 50,

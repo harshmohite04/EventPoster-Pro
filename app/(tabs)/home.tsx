@@ -18,20 +18,50 @@ import WhatsAppLogo from "@/assets/icons/WhatsLogo";
 import ProfilePhoto from "@/assets/icons/profilePhoto";
 import Download from "@/assets/icons/download";
 import Swipe from "@/assets/icons/swipe";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
 const scale = width / 320;
 
-
-
 const Home = ({ navigation }) => {
   const [search, setSearch] = useState("");
-const [images,setImages]=useState([])
+  const [images, setImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(true);
   const profileClicked = () => {
     navigation.navigate("MainProfile");
   };
-  
+
+  const [userLogo, setUserLogo] = useState("");
+  useEffect(() => {
+    console.log("Hello");
+    const apiCall = async () => {
+      try {
+        const authToken = await AsyncStorage.getItem("authToken");
+        if (!authToken) {
+          console.error("Auth Token not found");
+          return;
+        }
+        const response = await axios.get(
+          "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/getuser",
+          {
+            headers: {
+              "auth-token": authToken,
+            },
+          }
+        );
+        console.log(authToken);
+        console.log(response.data);
+        setUserLogo(response.data.photo);
+        console.log(response.data.name);
+        console.log("Api");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    apiCall();
+  }, []);
+
   useEffect(() => {
     setImages([
       {
@@ -141,7 +171,18 @@ const [images,setImages]=useState([])
         </View>
 
         <TouchableOpacity onPress={profileClicked}>
-          <ProfilePhoto size={35 * scale} />
+          <Image
+            source={{
+              uri: userLogo
+                ? userLogo
+                : "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
+            }}
+            style={{
+              width: 30 * scale,
+              height: 30 * scale,
+              borderRadius: 30 * scale,
+            }}
+          />
         </TouchableOpacity>
       </View>
 
@@ -158,14 +199,14 @@ const [images,setImages]=useState([])
       {/* <ImageReel /> */}
 
       <FlatList
-      data={images}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-      pagingEnabled
-      showsVerticalScrollIndicator={false}
-      snapToAlignment="start"
-      decelerationRate="fast"
-    />
+        data={images}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        pagingEnabled
+        showsVerticalScrollIndicator={false}
+        snapToAlignment="start"
+        decelerationRate="fast"
+      />
     </SafeAreaView>
   );
 };
@@ -203,7 +244,7 @@ const styles = StyleSheet.create({
   searchInput: {
     marginLeft: 5 * scale,
     fontSize: 14 * scale,
-    paddingRight:25*scale,
+    paddingRight: 25 * scale,
   },
   createButton: {
     flexDirection: "row",

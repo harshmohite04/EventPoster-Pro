@@ -35,6 +35,7 @@ const Downloaded = () => {
 const Profile = ({ navigation }: any) => {
   const [userData, setUserData] = useState("");
   const [userName, setUserName] = useState("");
+  const [userLogo, setUserLogo] = useState("");
   useEffect(() => {
     console.log("Hello")
     const apiCall = async () => {
@@ -54,8 +55,9 @@ const Profile = ({ navigation }: any) => {
         );
         console.log(authToken)
         console.log(response.data);
-        setUserName(response.data["name"])
-        console.log(response.data["name"])
+        setUserName(response.data.name)
+        setUserLogo(response.data.photo)
+        console.log(response.data.name)
         console.log("Api");
       } catch (error) {
         console.log(error)
@@ -110,8 +112,9 @@ const Profile = ({ navigation }: any) => {
         >
           <Image
             source={{
-              uri: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
+              uri: userLogo?userLogo:"https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ"
             }}
+
             style={{
               width: 100 * scale,
               height: 100 * scale,

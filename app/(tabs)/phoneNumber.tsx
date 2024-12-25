@@ -196,6 +196,7 @@ const PhoneNumber = ({ navigation }) => {
                           width: "80%",
                           fontSize: 16 * scale,
                           fontFamily: "Poppins_600SemiBold",
+                          alignItems:"center"
                         }}
                       />
                     </View>

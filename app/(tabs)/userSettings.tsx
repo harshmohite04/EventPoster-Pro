@@ -6,13 +6,15 @@ import {
   Linking,
   Alert,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 const { width } = Dimensions.get("window");
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const scale = width / 320;
 
-const UserSettings = () => {
+const UserSettings = ({ navigation }: any) => {
   const handleWhatsAppRedirect = () => {
     const phoneNumber = "+919356836581"; // Replace with the target phone number
     const message = "Hello!"; // Replace with your desired message
@@ -26,6 +28,27 @@ const UserSettings = () => {
         "WhatsApp is not installed on your device or the URL is invalid."
       );
     });
+  };
+
+  const handleLogout = async () => {
+    try {
+      const authToken = await AsyncStorage.getItem("authToken");
+      const response = await axios.delete(
+        "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/deleteaccount",
+        {
+          headers: {
+            "auth-token": authToken,
+          },
+        }
+      );
+
+      console.log(response);
+      console.log(authToken);
+      navigation.push("Splash");
+      await AsyncStorage.setItem("authToken", "");
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
@@ -44,7 +67,21 @@ const UserSettings = () => {
         }}
       >
         <Text style={{ fontSize: 16 * scale }}>Developer Options</Text>
-        <AntDesign name="arrowright" size={20 * scale} />
+        {/* <AntDesign name="arrowright" size={20 * scale} /> */}
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={handleLogout}
+        style={{
+          borderBottomWidth: 1,
+          paddingVertical: 12 * scale,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingHorizontal: 20 * scale,
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ fontSize: 16 * scale, color: "red" }}>Log Out</Text>
+        {/* <AntDesign name="arrowright" size={20 * scale} /> */}
       </TouchableOpacity>
     </View>
   );
