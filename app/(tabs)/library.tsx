@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -179,7 +179,6 @@ const DATA = [
 type ItemProps = { imageUrl: string };
 const Item = ({ imageUrl }: ItemProps) => {
   const [eye, setEye] = useState(true);
-
   return (
     <View
       style={{
@@ -215,9 +214,9 @@ const Item = ({ imageUrl }: ItemProps) => {
           }}
         >
           {eye ? (
-            <Ionicons name="eye-off-outline" size={20 * scale} color="white" />
-          ) : (
             <Ionicons name="eye-outline" size={20 * scale} color="white" />
+          ) : (
+            <Ionicons name="eye-off-outline" size={20 * scale} color="white" />
           )}
         </TouchableOpacity>
         <TouchableOpacity

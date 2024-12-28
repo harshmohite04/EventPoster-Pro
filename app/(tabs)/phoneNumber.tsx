@@ -30,7 +30,7 @@ import {
 } from "@expo-google-fonts/poppins";
 import axios from "axios";
 
-const PhoneNumber = ({ navigation }) => {
+const PhoneNumber = ({ navigation }:any) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),
@@ -73,7 +73,7 @@ const PhoneNumber = ({ navigation }) => {
   //   Gotham: require("../../assets/fonts/GothamMedium.ttf"),
   //   GothamBold: require("../../assets/fonts/GothamBold.ttf")
   // })
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values:any) => {
     const phoneNumber = `+91${values.phoneLength}`; // Add the country code to the phone number
     console.log(phoneNumber);
     try {
@@ -94,8 +94,8 @@ const PhoneNumber = ({ navigation }) => {
 
   const phoneNumeberSchema = Yup.object().shape({
     phoneLength: Yup.string()
-      .length(10, "Must be 10 numbers")
-      .required("Required Field"),
+    .required("Required Field")
+    .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits"),
   });
   return (
     <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
@@ -123,7 +123,7 @@ const PhoneNumber = ({ navigation }) => {
                 </View>
                 <View style={[styles.txt, { marginBottom: 20 * scale }]}>
                   <Text style={styles.txt1}> with </Text>
-                  <Text style={styles.txt2}> your photo </Text>
+                  <Text style={styles.txt2}>your photo </Text>
                   <Text style={styles.txt1}>and </Text>
                   <Text style={styles.txt2}>name</Text>
                 </View>
@@ -205,7 +205,7 @@ const PhoneNumber = ({ navigation }) => {
                         {errors.phoneLength}
                       </Text>
                     )}
-                    <TouchableOpacity onPress={handleSubmit} style={styles.btn}>
+                    <TouchableOpacity onPress={()=>handleSubmit()} style={styles.btn}>
                       <Text
                         style={{
                           fontSize: 15 * scale,

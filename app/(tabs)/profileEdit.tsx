@@ -5,6 +5,7 @@ import {
   Dimensions,
   TextInput,
   ScrollView,
+  TouchableOpacity,
   Image,
 } from "react-native";
 import React, { useState } from "react";
@@ -12,9 +13,23 @@ const { width } = Dimensions.get("window");
 const scale = width / 320;
 import Feather from "@expo/vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
-import { TouchableOpacity } from "react-native-gesture-handler";
+// import { TouchableOpacity } from "react-native-gesture-handler";
+import { Formik } from "formik";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Yup from "yup";
 
-const pickImage = async (setImageUri) => {
+const profileSchema = Yup.object().shape({
+  name: Yup.string().required("Required Field"),
+  phoneNumber: Yup.string()
+  .required("Required Field")
+  .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits"),
+  email: Yup.string().email().required("Required Field"),
+  businessName: Yup.string().required("Required Field"),
+  url: Yup.string().url().required("Required Field"),
+});
+
+const pickImage = async (setImageUri: any) => {
   let result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
     allowsEditing: true,
@@ -27,17 +42,29 @@ const pickImage = async (setImageUri) => {
   }
 };
 
-const Profile = ({ navigation }) => {
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [businessName, setBusinessName] = useState("");
-  const [website, setWebsite] = useState("");
+const Profile = ({ navigation }: any) => {
   const [logoUri, setLogoUri] = useState(null);
   const [photoUri, setPhotoUri] = useState(null);
 
-  const saveProfile = () => {
-    console.log("Save Pressed");
+  const saveProfile = async (values: any) => {
+    const authToken = await AsyncStorage.getItem("authToken");
+    const response = await axios.put(
+      "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile",
+      {
+        name: values.name,
+        email: values.email,
+        profilePic: photoUri,
+      },
+      {
+        headers: {
+          "auth-token": authToken,
+        },
+      }
+    );
+
+    console.log(values.name);
+    console.log(values.email);
+    console.log(photoUri);
   };
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -147,114 +174,174 @@ const Profile = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
+      {/* <TextInput
+           onChangeText={handleChange('name')}
+           onBlur={handleBlur('name')}
+           value={values.name}
+         />
+         <TouchableOpacity onPress={()=>handleSubmit}  >
+          <Text>Submit</Text>
+         </TouchableOpacity> */}
+
       {/* Personal Details Section */}
-      <View
-        style={{
-          backgroundColor: "#ffffff",
-          marginTop: 28 * scale,
-          paddingHorizontal: 10 * scale,
-          paddingVertical: 10 * scale,
+      <Formik
+        initialValues={{
+          name: "",
+          phoneNumber: "",
+          email: "",
+          businessName: "",
+          url: "https:\/\/",
         }}
+        onSubmit={(values) => saveProfile(values)}
+        validationSchema={profileSchema}
       >
-        <Text
-          style={{
-            fontSize: 15 * scale,
-            paddingBottom: 10 * scale,
-            fontWeight: "bold",
-          }}
-        >
-          Personal Details
-        </Text>
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+        }) => (
+          <View>
+            <View
+              style={{
+                backgroundColor: "#ffffff",
+                marginTop: 28 * scale,
+                paddingHorizontal: 10 * scale,
+                paddingVertical: 10 * scale,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15 * scale,
+                  paddingBottom: 10 * scale,
+                  fontWeight: "bold",
+                }}
+              >
+                Personal Details
+              </Text>
 
-        <Text style={[styles.labelText]}>Enter your name</Text>
-        <TextInput
-          style={styles.input}
-          value={userName}
-          onChangeText={setUserName}
-          placeholder="Aryan Sharma"
-          placeholderTextColor="#7c7c7c"
-        />
+              <Text style={[styles.labelText]}>Enter your name</Text>
 
-        <Text style={styles.labelText}>Phone Number</Text>
-        <TextInput
-          style={styles.input}
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          placeholder="9988776655"
-          placeholderTextColor="#7c7c7c"
-        />
+              <TextInput
+                style={styles.input}
+                placeholder="Aryan Sharma"
+                placeholderTextColor="#7c7c7c"
+                onChangeText={handleChange("name")}
+                onBlur={handleBlur("name")}
+                value={values.name}
+              />
+              {errors.name && touched.name ? (
+                <Text style={{ color: "red", fontWeight: "800" }}>
+                  *{errors.name}
+                </Text>
+              ) : null}
+              <Text style={styles.labelText}>Phone Number</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="9988776655"
+                placeholderTextColor="#7c7c7c"
+                onChangeText={handleChange("phoneNumber")}
+                onBlur={handleBlur("phoneNumber")}
+                value={values.phoneNumber}
+              />
+              {errors.phoneNumber && touched.phoneNumber ? (
+                <Text style={{ color: "red", fontWeight: "800" }}>
+                  *{errors.phoneNumber}
+                </Text>
+              ) : null}
+              <Text style={styles.labelText}>Email</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="abc@gmail.com"
+                placeholderTextColor="#7c7c7c"
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+              />
+              {errors.email && touched.email ? (
+                <Text style={{ color: "red", fontWeight: "800" }}>
+                  *{errors.email}
+                </Text>
+              ) : null}
+            </View>
 
-        <Text style={styles.labelText}>Email</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="abc@gmail.com"
-          placeholderTextColor="#7c7c7c"
-        />
-      </View>
+            {/* Business Details Section */}
+            <View
+              style={{
+                backgroundColor: "#ffffff",
+                marginTop: 20 * scale,
+                paddingBottom: 60 * scale,
+                paddingTop: 12 * scale,
+                paddingHorizontal: 10 * scale,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15 * scale,
+                  color: "#000000",
+                  fontWeight: "bold",
+                  paddingBottom: 5 * scale,
+                }}
+              >
+                Business Details
+              </Text>
 
-      {/* Business Details Section */}
-      <View
-        style={{
-          backgroundColor: "#ffffff",
-          marginTop: 20 * scale,
-          paddingBottom: 60 * scale,
-          paddingTop: 12 * scale,
-          paddingHorizontal: 10 * scale,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 15 * scale,
-            color: "#000000",
-            fontWeight: "bold",
-            paddingBottom: 5 * scale,
-          }}
-        >
-          Business Details
-        </Text>
-
-        <Text style={styles.labelText}>Business Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Event Poster Pro"
-          placeholderTextColor="#7c7c7c"
-          value={businessName}
-          onChangeText={setBusinessName}
-        />
-
-        <Text style={styles.labelText}>Website Link</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="https://abc.com"
-          placeholderTextColor="#7c7c7c"
-          value={website}
-          onChangeText={setWebsite}
-        />
-        <TouchableOpacity
-          onPress={saveProfile}
-          style={{
-            marginTop: 10 * scale,
-            borderRadius: 20 * scale,
-            backgroundColor: "#FF8017",
-            paddingVertical: 10 * scale,
-            width: "50%",
-            alignSelf: "center",
-          }}
-        >
-          <Text
-            style={{
-              color: "#000000",
-              textAlign: "center",
-              fontSize: 13 * scale,
-              fontWeight: "bold",
-            }}
-          >
-            SAVE
-          </Text>
-        </TouchableOpacity>
-      </View>
+              <Text style={styles.labelText}>Business Name</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Event Poster Pro"
+                placeholderTextColor="#7c7c7c"
+                onChangeText={handleChange("businessName")}
+                onBlur={handleBlur("businessName")}
+                value={values.businessName}
+              />
+              {errors.businessName && touched.businessName ? (
+                <Text style={{ color: "red", fontWeight: "800" }}>
+                  *{errors.businessName}
+                </Text>
+              ) : null}
+              <Text style={styles.labelText}>Website Link</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="https://abc.com"
+                placeholderTextColor="#7c7c7c"
+                onChangeText={handleChange("url")}
+                onBlur={handleBlur("url")}
+                value={values.url}
+              />
+              {errors.url && touched.url ? (
+                <Text style={{ color: "red", fontWeight: "800" }}>
+                  *{errors.url}
+                </Text>
+              ) : null}
+              <TouchableOpacity
+                onPress={() => handleSubmit()}
+                style={{
+                  marginTop: 10 * scale,
+                  borderRadius: 20 * scale,
+                  backgroundColor: "#FF8017",
+                  paddingVertical: 10 * scale,
+                  width: "50%",
+                  alignSelf: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#000000",
+                    textAlign: "center",
+                    fontSize: 13 * scale,
+                    fontWeight: "bold",
+                  }}
+                >
+                  SAVE
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </Formik>
     </ScrollView>
   );
 };
@@ -267,7 +354,7 @@ const styles = StyleSheet.create({
     fontSize: 12 * scale,
     paddingHorizontal: 10 * scale,
     paddingVertical: 3 * scale,
-    marginTop:8*scale
+    marginTop: 8 * scale,
   },
   input: {
     borderWidth: 1,

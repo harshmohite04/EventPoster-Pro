@@ -41,7 +41,7 @@ response:-
   "__v": 0
 }
 
-
+DONE
 [DEL] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/deleteaccount
 Headers:- 
 auth-token: (authToken)
