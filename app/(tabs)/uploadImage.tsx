@@ -55,8 +55,8 @@ const UploadImage = ({ navigation }) => {
         style={{
           alignItems: "center",
           backgroundColor: "#FFEFD4",
-          height: 200 * scale,
-          width: 200 * scale,
+          height: 140 * scale,
+          width: 140 * scale,
           borderRadius: 200 * scale,
           justifyContent: "center",
           alignSelf: "center",
@@ -81,7 +81,7 @@ const UploadImage = ({ navigation }) => {
       </TouchableOpacity>
       {/* {image && <Image source={{ uri: image }} style={styles.image} />} */}
       {/* {image && <Text style={styles.selectedImageText}>Selected Image</Text>} */}
-      {/* <TouchableOpacity
+      <TouchableOpacity
         style={{
           alignItems: "center",
           backgroundColor: "#FFEFD4",
@@ -106,7 +106,7 @@ const UploadImage = ({ navigation }) => {
           </Text>
           
         </View>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
       
       </View>
 
