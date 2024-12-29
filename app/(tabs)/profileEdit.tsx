@@ -136,7 +136,7 @@ const Profile = ({ navigation }: any) => {
     if (photoUri) {
       const photoUriParts = photoUri.split(".");
       const photoExtension = photoUriParts[photoUriParts.length - 1];
-      formData.append("Logo", {
+      formData.append("photo", {
         uri: photoUri,
         type: `image/${photoExtension}`,
         name: `photo.${photoExtension}`,
@@ -145,7 +145,7 @@ const Profile = ({ navigation }: any) => {
 
     try {
       // Make the API request to update the profile
-      const response = await axios.put(
+      const response = await axios.post(
         "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile",
         formData,
         {
