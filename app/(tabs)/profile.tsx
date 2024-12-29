@@ -64,7 +64,7 @@ const Profile = ({ navigation }: any) => {
       }
     };
     apiCall();
-  }, []);
+  }, [userName,userLogo]);
 
   return (
     <View style={{ flex: 1 }}>

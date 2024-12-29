@@ -77,32 +77,91 @@ const Profile = ({ navigation }: any) => {
     };
     fetchDetails();
   }, []);
+  // const saveProfile = async (values: any) => {
+  //   console.log("api trigger for SAVE");
+  //   const authToken = await AsyncStorage.getItem("authToken");
+  //   const response = await axios.put(
+  //     "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile",
+  //     {
+  //       name: values.name,
+  //       email: values.email,
+  //       businessName: values.businessName,
+  //       websiteLink: values.url,
+  //       Logo: logoUri,
+  //       photo: photoUri,
+  //     },
+  //     {
+  //       headers: {
+  //         "auth-token": authToken,
+  //       },
+  //     }
+  //   );
+
+  //   console.log(values.name);
+  //   console.log(values.email);
+  //   console.log(photoUri);
+  //   console.log(response.data.success);
+  //   setSuccess(response.data.success);
+  // };
+
   const saveProfile = async (values: any) => {
     console.log("api trigger for SAVE");
-    const authToken = await AsyncStorage.getItem("authToken");
-    const response = await axios.put(
-      "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile",
-      {
-        name: values.name,
-        email: values.email,
-        businessName: values.businessName,
-        websiteLink: values.url,
-        Logo: logoUri,
-        photo: photoUri,
-      },
-      {
-        headers: {
-          "auth-token": authToken,
-        },
-      }
-    );
-
-    console.log(values.name);
-    console.log(values.email);
+    console.log(logoUri);
     console.log(photoUri);
-    console.log(response.data.success);
-    setSuccess(response.data.success);
+    // Retrieve authToken
+    const authToken = await AsyncStorage.getItem("authToken");
+
+    // Create FormData object to hold profile data and images
+    const formData = new FormData();
+
+    // Append profile information
+    formData.append("name", values.name);
+    formData.append("email", values.email);
+    formData.append("businessName", values.businessName);
+    formData.append("websiteLink", values.url);
+
+    // Append Logo image if it exists
+    if (logoUri) {
+      const logoUriParts = logoUri.split(".");
+      const logoExtension = logoUriParts[logoUriParts.length - 1];
+      formData.append("Logo", {
+        uri: logoUri,
+        type: `image/${logoExtension}`,
+        name: `logo.${logoExtension}`,
+      });
+    }
+
+    // Append Photo image if it exists
+    if (photoUri) {
+      const photoUriParts = photoUri.split(".");
+      const photoExtension = photoUriParts[photoUriParts.length - 1];
+      formData.append("photo", {
+        uri: photoUri,
+        type: `image/${photoExtension}`,
+        name: `photo.${photoExtension}`,
+      });
+    }
+
+    try {
+      // Make the API request to update the profile
+      const response = await axios.put(
+        "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile",
+        formData,
+        {
+          headers: {
+            "auth-token": authToken,
+            "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
+          },
+        }
+      );
+
+      console.log(response.data.success);
+      setSuccess(response.data.success);
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   return (
     <ScrollView style={{ flex: 1 }}>
       <View
@@ -376,19 +435,18 @@ const Profile = ({ navigation }: any) => {
                   SAVE
                 </Text>
               </TouchableOpacity>
-                {success ? (
-                  <Text
-                    style={{
-                      color: "green",
-                      fontSize: 12 * scale,
-                      fontWeight: "800",
-                      alignSelf:"center"
-                    }}
-                  >
-                    Successfully Saved
-                  </Text>
-                ) : null}
-
+              {success ? (
+                <Text
+                  style={{
+                    color: "green",
+                    fontSize: 12 * scale,
+                    fontWeight: "800",
+                    alignSelf: "center",
+                  }}
+                >
+                  Successfully Saved
+                </Text>
+              ) : null}
             </View>
           </View>
         )}
