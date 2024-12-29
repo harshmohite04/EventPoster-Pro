@@ -129,13 +129,14 @@ const Profile = ({ navigation }: any) => {
         type: `image/${logoExtension}`,
         name: `logo.${logoExtension}`,
       });
+      console.log(logoExtension)
+      console.log(logoUri)
     }
-
     // Append Photo image if it exists
     if (photoUri) {
       const photoUriParts = photoUri.split(".");
       const photoExtension = photoUriParts[photoUriParts.length - 1];
-      formData.append("photo", {
+      formData.append("Logo", {
         uri: photoUri,
         type: `image/${photoExtension}`,
         name: `photo.${photoExtension}`,

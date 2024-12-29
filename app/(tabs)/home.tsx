@@ -99,7 +99,7 @@ const Home = ({ navigation }:any) => {
     ]);
   }, []);
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }:any) => (
     <View style={[styles.imageContainer, { height, width }]}>
       <Modal
         transparent={true}
