@@ -9,7 +9,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 
-const Promo = ({ navigation }) => {
+const Promo = ({ navigation }:any) => {
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
     "Poppins-Bold": require("../../assets/fonts/Poppins-Bold.ttf"),

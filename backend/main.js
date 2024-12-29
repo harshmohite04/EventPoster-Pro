@@ -54,20 +54,33 @@ response:-
 }
 
 
-[PUT] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile
-Headers:-
-auth-token: (authToken)
-request:-
-{
-  "name": "Raju Choudhary",
-  "email": "rajusirvi098@gmail.com",
-  "profilePic": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-}
-response:-
-{
-  "success": true,
-  "message": "profile updated successfully"
-}
+[PUT] https://event-poster-pro1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile 
+Headers:- 
+auth-token: (authToken) 
+request:- 
+{ 
+  "name": "Raju Choudhary", 
+  "email": "rajusirvi098@gmail.com", 
+  "businessName": "fffff", 
+  "websiteLink": "www.google.com", 
+  "Logo": ("upload image"),
+  "photo": ("upload image")
+} 
+response:- 
+{ 
+    "success": true, 
+    "message": "Profile updated successfully", 
+    "user": { 
+        "id": "675edd1bdeb9485b2baac981", 
+        "name": "jay", 
+        "email": "example@gmail.com", 
+        "businessName": "fffff", 
+        "websiteLink": "www.google.com", 
+        "photo": 
+"https://res.cloudinary.com/dpstjxsrh/image/upload/v1734270298/profile_photos/spciqeae9qrvvjy7jali.png", "logo": 
+"https://res.cloudinary.com/dpstjxsrh/image/upload/v1734270299/profile_logos/iupcecp1zatdvsw80rcr.png" 
+    } 
+} 
 
 
 [POST] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/logout

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 import Feather from "@expo/vector-icons/Feather";
@@ -21,9 +21,9 @@ import * as Yup from "yup";
 
 const profileSchema = Yup.object().shape({
   name: Yup.string().required("Required Field"),
-  phoneNumber: Yup.string()
-  .required("Required Field")
-  .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits"),
+  // phoneNumber: Yup.string()
+  //   .required("Required Field")
+  //   .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits"),
   email: Yup.string().email().required("Required Field"),
   businessName: Yup.string().required("Required Field"),
   url: Yup.string().url().required("Required Field"),
@@ -45,15 +45,50 @@ const pickImage = async (setImageUri: any) => {
 const Profile = ({ navigation }: any) => {
   const [logoUri, setLogoUri] = useState(null);
   const [photoUri, setPhotoUri] = useState(null);
+  const [success, setSuccess] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  useEffect(() => {
+    const fetchDetails = async () => {
+      console.log("Yo");
+      try {
+        const authToken = await AsyncStorage.getItem("authToken");
+        if (!authToken) {
+          console.error("Auth Token not found");
+          return;
+        }
+        const response = await axios.get(
+          "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/getuser",
+          {
+            headers: {
+              "auth-token": authToken,
+            },
+          }
+        );
+        console.log(authToken);
+        console.log(response.data.phone);
+        const number = response.data.phone;
+        const numberString = number.toString();
+        const number1 = numberString.slice(2, 12);
 
+        setPhoneNumber(number1);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchDetails();
+  }, []);
   const saveProfile = async (values: any) => {
+    console.log("api trigger for SAVE");
     const authToken = await AsyncStorage.getItem("authToken");
     const response = await axios.put(
       "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile",
       {
         name: values.name,
         email: values.email,
-        profilePic: photoUri,
+        businessName: values.businessName,
+        websiteLink: values.url,
+        Logo: logoUri,
+        photo: photoUri,
       },
       {
         headers: {
@@ -65,6 +100,8 @@ const Profile = ({ navigation }: any) => {
     console.log(values.name);
     console.log(values.email);
     console.log(photoUri);
+    console.log(response.data.success);
+    setSuccess(response.data.success);
   };
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -187,10 +224,10 @@ const Profile = ({ navigation }: any) => {
       <Formik
         initialValues={{
           name: "",
-          phoneNumber: "",
+          // phoneNumber: "",
           email: "",
           businessName: "",
-          url: "https:\/\/",
+          url: "https://",
         }}
         onSubmit={(values) => saveProfile(values)}
         validationSchema={profileSchema}
@@ -238,19 +275,20 @@ const Profile = ({ navigation }: any) => {
                 </Text>
               ) : null}
               <Text style={styles.labelText}>Phone Number</Text>
-              <TextInput
+              {/* <TextInput
                 style={styles.input}
                 placeholder="9988776655"
                 placeholderTextColor="#7c7c7c"
-                onChangeText={handleChange("phoneNumber")}
-                onBlur={handleBlur("phoneNumber")}
-                value={values.phoneNumber}
-              />
-              {errors.phoneNumber && touched.phoneNumber ? (
+                // onChangeText={handleChange("phoneNumber")}
+                // onBlur={handleBlur("phoneNumber")}
+                value={phoneNumber}
+              /> */}
+              {/* {errors.phoneNumber && touched.phoneNumber ? (
                 <Text style={{ color: "red", fontWeight: "800" }}>
                   *{errors.phoneNumber}
                 </Text>
-              ) : null}
+              ) : null} */}
+              <Text style={styles.input}>{phoneNumber}</Text>
               <Text style={styles.labelText}>Email</Text>
               <TextInput
                 style={styles.input}
@@ -338,6 +376,19 @@ const Profile = ({ navigation }: any) => {
                   SAVE
                 </Text>
               </TouchableOpacity>
+                {success ? (
+                  <Text
+                    style={{
+                      color: "green",
+                      fontSize: 12 * scale,
+                      fontWeight: "800",
+                      alignSelf:"center"
+                    }}
+                  >
+                    Successfully Saved
+                  </Text>
+                ) : null}
+
             </View>
           </View>
         )}

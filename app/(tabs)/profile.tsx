@@ -157,7 +157,7 @@ const Profile = ({ navigation }: any) => {
 
       <Tab.Navigator
         style={{
-          backgroundColor: "#fff",
+          backgroundColor: "#ffffff",
           flex: 1,
           marginTop: 20 * scale,
           borderTopRightRadius: 30 * scale,

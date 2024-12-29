@@ -25,7 +25,7 @@ import AppLoading from "expo-app-loading";
 import MiddleLogo from "@/assets/icons/middleLogo";
 import axios from "axios";
 
-const Otp = ({ navigation, route }) => {
+const Otp = ({ navigation, route }:any) => {
   const [inCorrect, setInCorrect] = useState(false);
   const listOfNumbers = ["+919356836581", "+910123456789", "+919876543210"];
   const [fontsLoaded] = useFonts({
@@ -57,7 +57,7 @@ const Otp = ({ navigation, route }) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   useEffect(() => {
-    let intervalId;
+    let intervalId:any;
     if (secondsRemaining > 0) {
       intervalId = setInterval(() => {
         setSecondsRemaining(secondsRemaining - 1);
@@ -252,7 +252,7 @@ const Otp = ({ navigation, route }) => {
                           console.log(response.data);
                           console.log(response.data.authToken);
                           if (response.data.success) {
-                            navigation.push("Promo");
+                            navigation.push("Promo",{ number:number });
                             if (listOfNumbers.includes(number)) {
                               navigation.replace("Library");
                               await AsyncStorage.setItem("authToken", response.data.authToken);

@@ -24,12 +24,12 @@ import axios from "axios";
 const { width, height } = Dimensions.get("window");
 const scale = width / 320;
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation }:any) => {
   const [search, setSearch] = useState("");
   const [images, setImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(true);
   const profileClicked = () => {
-    navigation.navigate("MainProfile");
+    navigation.push("MainProfile");
   };
 
   const [userLogo, setUserLogo] = useState("");
