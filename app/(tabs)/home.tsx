@@ -8,7 +8,7 @@ import {
   SafeAreaView,
   Image,
   FlatList,
-  Modal,
+  Modal,ScrollView,
   Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -20,14 +20,19 @@ import Download from "@/assets/icons/download";
 import Swipe from "@/assets/icons/swipe";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { array } from "yup";
 
 const { width, height } = Dimensions.get("window");
 const scale = width / 320;
 
-const Home = ({ navigation }:any) => {
+const Home = ({ navigation }: any) => {
   const [search, setSearch] = useState("");
   const [images, setImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(true);
+
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("");
+
   const profileClicked = () => {
     navigation.push("MainProfile");
   };
@@ -62,6 +67,35 @@ const Home = ({ navigation }:any) => {
     apiCall();
   }, []);
 
+  const handleCategoryPress = (name: string) => {
+    setSelectedCategory(name);
+  };
+
+
+
+  const categories = [
+    { name: "All" },
+    { name: "Jokefs" },
+    { name: "Birthday" },
+    { name: "sdsd" },
+    { name: "Jodkfes" },
+    { name: "Bdidsadrthday" },
+    { name: "Adll" },
+    { name: "Jodkes" },
+  ];
+
+
+  const languages = [
+    { name: "Engdlish" },
+    { name: "Hindi" },
+    { name: "Spandish" },
+    { name: "English" },
+    { name: "Hinsdi" },
+    { name: "Spandish" },
+    { name: "Englasish" },
+    { name: "Hinddsi" },
+    { name: "Spadsnish" },
+  ];
   useEffect(() => {
     setImages([
       {
@@ -99,7 +133,10 @@ const Home = ({ navigation }:any) => {
     ]);
   }, []);
 
-  const renderItem = ({ item }:any) => (
+  const handleLanguagePress = (name: string) => {
+    setSelectedLanguage(name);
+  };
+  const renderItem = ({ item }: any) => (
     <View style={[styles.imageContainer, { height, width }]}>
       <Modal
         transparent={true}
@@ -186,14 +223,48 @@ const Home = ({ navigation }:any) => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.categoryContainer}>
-        <View style={styles.categoryRow}>
-          <Text style={styles.category}>All</Text>
-          <Text style={styles.category}>Jokes</Text>
-          <Text style={styles.category}>Morning</Text>
-          <Text style={styles.category}>Birthday</Text>
-          <Text style={styles.category}>Night</Text>
-        </View>
+      <View style={{ paddingVertical: 15 * scale, width: "100%" }}>
+      <ScrollView
+      horizontal={true}
+      persistentScrollbar={false}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          paddingHorizontal: 5 * scale,
+        }}
+        >
+        {categories.map((category) => (
+          <RenderCategory
+          key={category.name}
+          name={category.name}
+          isSelected={selectedCategory === category.name}
+          onPress={handleCategoryPress}
+          />
+        ))}
+      </View>
+          </ScrollView>
+          <ScrollView
+      horizontal={true}
+      persistentScrollbar={false}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-start",
+          paddingHorizontal: 5 * scale,
+          marginTop: 10,
+        }}
+      >
+        {languages.map((language) => (
+          <RenderCategory
+            key={language.name}
+            name={language.name}
+            isSelected={selectedLanguage === language.name}
+            onPress={handleLanguagePress}
+          />
+        ))}
+      </View>
+      </ScrollView>
       </View>
 
       {/* <ImageReel /> */}
@@ -210,7 +281,34 @@ const Home = ({ navigation }:any) => {
     </SafeAreaView>
   );
 };
-
+const RenderCategory = ({
+  name,
+  isSelected,
+  onPress,
+}: {
+  name: string;
+  isSelected: boolean;
+  onPress: (name: string) => void;
+}) => {
+  return (
+    <TouchableOpacity style={{marginRight:5*scale}} onPress={() => onPress(name)}>
+      <Text
+        style={{
+          color: isSelected ? "#ffffff" : "#000000",
+          backgroundColor: isSelected ? "#FF9A37" : "transparent",
+          borderWidth: 1,
+          borderColor: "#FF9A37",
+          borderRadius: 25 * scale,
+          paddingHorizontal: 8 * scale,
+          paddingVertical: 2 * scale,
+          fontSize: 12 * scale,
+        }}
+      >
+        {name}
+      </Text>
+    </TouchableOpacity>
+  );
+};
 export default Home;
 
 const styles = StyleSheet.create({
@@ -259,24 +357,7 @@ const styles = StyleSheet.create({
     fontSize: 12 * scale,
     marginLeft: 5 * scale,
   },
-  categoryContainer: {
-    paddingVertical: 15 * scale,
-    width: "100%",
-  },
-  categoryRow: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingHorizontal: 5 * scale,
-  },
-  category: {
-    color: "#000000",
-    borderWidth: 1,
-    borderColor: "#FF9A37",
-    borderRadius: 25 * scale,
-    paddingHorizontal: 8 * scale,
-    paddingVertical: 2 * scale,
-    fontSize: 12 * scale,
-  },
+
   imageContainer: {
     alignItems: "center",
     paddingTop: 10 * scale,
