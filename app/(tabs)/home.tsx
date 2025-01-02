@@ -91,10 +91,10 @@ const Home = ({ navigation }: any) => {
     { name: "Spandish" },
     { name: "English" },
     { name: "Hinsdi" },
-    { name: "Spandish" },
+    { name: "Spanddish" },
     { name: "Englasish" },
     { name: "Hinddsi" },
-    { name: "Spadsnish" },
+    { name: "Spadsdnish" },
   ];
   useEffect(() => {
     setImages([

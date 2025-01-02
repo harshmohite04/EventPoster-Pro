@@ -19,6 +19,7 @@ import ViewShot, { captureRef } from "react-native-view-shot";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import Feather from "@expo/vector-icons/Feather";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import {
   useFonts,
@@ -118,6 +119,8 @@ const AdminEditImage = ({ navigation, route }: any) => {
   });
   const [emailSize, setEmailSize] = useState(20);
 
+  const [dropDownTag, setDropDownTag] = useState(false);
+  const [dropDownLTag, setDropDownLTag] = useState(false);
   useFonts({
     Kanit_400Regular,
     Kanit_500Medium,
@@ -224,7 +227,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
       console.log(image);
 
       const seeImage = handleDownload();
-      console.log(seeImage)
+      console.log(seeImage);
     } catch (error) {
       console.error("Error capturing and sharing image:", error);
     }
@@ -457,7 +460,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(0, 0, 0, 0)",
-                
+
                 marginRight: 5 * scale,
                 justifyContent: "center",
                 alignItems: "center",
@@ -473,7 +476,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(249, 255, 0, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -485,7 +488,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(246, 203, 0, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -497,7 +500,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(243, 140, 0, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -509,7 +512,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(241, 73, 0, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -521,7 +524,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(240, 0, 0, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -533,7 +536,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(240, 0, 64, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -545,7 +548,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(242, 0, 138, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -557,7 +560,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(244, 0, 201, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -569,7 +572,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(247, 0, 255, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -581,7 +584,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(196, 0, 255, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -593,7 +596,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(143, 0, 255, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -611,7 +614,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(199, 255, 0, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -623,7 +626,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(148, 255, 0, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -635,7 +638,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(100, 255, 0, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -647,7 +650,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(74, 255, 0, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -659,7 +662,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(81, 255, 131, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -671,7 +674,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(98, 255, 255, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -683,7 +686,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(85, 196, 255, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -695,7 +698,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(75, 131, 255, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -707,7 +710,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(68, 44, 255, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -719,7 +722,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(65, 0, 255, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -731,7 +734,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 width: 35 * scale,
                 height: 35 * scale,
                 backgroundColor: "rgba(68, 44, 255, 1)",
-                
+
                 marginRight: 5 * scale,
               }}
             ></TouchableOpacity>
@@ -775,7 +778,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                   height: 35 * scale,
                   backgroundColor: color,
                   marginRight: 5 * scale,
-                  borderWidth:1
+                  borderWidth: 1,
                 }}
               ></TouchableOpacity>
             ))}
@@ -806,7 +809,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                   height: 35 * scale,
                   backgroundColor: color,
                   marginRight: 5 * scale,
-                  borderWidth:1
+                  borderWidth: 1,
                 }}
               ></TouchableOpacity>
             ))}
@@ -1692,133 +1695,132 @@ const AdminEditImage = ({ navigation, route }: any) => {
               />
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  alignItems: "flex-start",
                   marginBottom: 16 * scale,
                   width: "80%",
                   alignSelf: "center",
                   marginTop: 10 * scale,
+                  borderWidth: 1 * scale,
+                  paddingHorizontal: 10 * scale,
+                  paddingVertical: 10 * scale,
                 }}
               >
-                <TextInput
-                  style={{
-                    flex: 1,
-                    borderWidth: 1 * scale,
-                    borderColor: "#ccc",
-                    borderRadius: 4 * scale,
-                    padding: 8 * scale,
-                  }}
-                  placeholder="Add a tag"
-                  value={tagsInputValue}
-                  onChangeText={setTagsInputValue}
-                  onSubmitEditing={addTag}
-                />
-                <TouchableOpacity
-                  onPress={addTag}
-                  style={{
-                    marginLeft: 8 * scale,
-                    backgroundColor: "#007bff",
-                    padding: 8 * scale,
-                    borderRadius: 4 * scale,
-                  }}
-                >
-                  <Text style={{ color: "#fff" }}>Add</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-                {tags.map((tag, index) => (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      backgroundColor: "#f0f0f0",
-                      padding: 8 * scale,
-                      margin: 4 * scale,
-                      borderRadius: 16 * scale,
+                <View style={{ flexDirection: "row" }}>
+                  {dropDownTag ? (
+                    <TextInput
+                      style={{
+                        flex: 1,
+
+                        paddingRight: 100 * scale,
+                        paddingVertical: 6 * scale,
+                      }}
+                      placeholder="Type Here"
+                      value={tagsInputValue}
+                      onChangeText={setTagsInputValue}
+                      onSubmitEditing={addTag}
+                    />
+                  ) : null}
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDropDownTag(!dropDownTag);
                     }}
                   >
-                    <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => removeTag(tag)}
+                    <AntDesign
+                      name={dropDownTag ? "caretup" : "caretdown"}
+                      size={14 * scale}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View style={{}}>
+                  {tags.map((tag, index) => (
+                    <View
+                      style={{
+                        alignItems: "flex-start",
+                      }}
                     >
-                      <Text
-                        style={{
-                          marginLeft: 4 * scale,
-                          fontSize: 16 * scale,
-                          color: "#ff0000",
-                        }}
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => removeTag(tag)}
                       >
-                        ×
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ))}
+                        <Text style={{ fontSize: 12 * scale }}>{tag}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+                <TouchableOpacity onPress={addTag} style={{}}>
+                  <Text style={{ color: "#FF8017", fontSize: 14 * scale }}>
+                    Add tag
+                  </Text>
+                </TouchableOpacity>
               </View>
+
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
                   marginBottom: 16 * scale,
                   width: "80%",
                   alignSelf: "center",
                   marginTop: 10 * scale,
+                  borderWidth: 1 * scale,
+                  paddingHorizontal: 10 * scale,
+                  paddingVertical:10*scale
                 }}
               >
-                <TextInput
-                  style={{
-                    flex: 1,
-                    borderWidth: 1 * scale,
-                    borderColor: "#ccc",
-                    borderRadius: 4 * scale,
-                    padding: 8 * scale,
-                  }}
-                  placeholder="Add a Language tag"
-                  value={languageTagsInputValue}
-                  onChangeText={setLanguageTagsInputValue}
-                  onSubmitEditing={languageAddTag}
-                />
+                <View style={{flexDirection:"row"}}>
+                  
+                  {dropDownLTag?<TextInput
+                    style={{
+                      flex: 1,
+                      padding: 8 * scale,
+                    }}
+                    placeholder="Add a Language tag"
+                    value={languageTagsInputValue}
+                    onChangeText={setLanguageTagsInputValue}
+                    onSubmitEditing={languageAddTag}
+                  />:null
+                  }
+                  <TouchableOpacity
+                    onPress={() => {
+                      setDropDownLTag(!dropDownLTag);
+                    }}
+                  >
+                    <AntDesign
+                      name={dropDownLTag ? "caretup" : "caretdown"}
+                      size={14 * scale}
+                      color="black"
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{}}>
+                  {languageTags.map((tag, index) => (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        paddingVertical: 1 * scale,
+                      }}
+                    >
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => languageRemoveTag(tag)}
+                      >
+                        <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
                 <TouchableOpacity
                   onPress={languageAddTag}
                   style={{
-                    marginLeft: 8 * scale,
-                    backgroundColor: "#007bff",
-                    padding: 8 * scale,
                     borderRadius: 4 * scale,
+                    width: "40%",
                   }}
                 >
-                  <Text style={{ color: "#fff" }}>Add</Text>
+                  <Text style={{ color: "#FF8017", fontSize: 14 * scale }}>
+                    Add tag
+                  </Text>
                 </TouchableOpacity>
-              </View>
-              <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-                {languageTags.map((tag, index) => (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      backgroundColor: "#f0f0f0",
-                      padding: 8 * scale,
-                      margin: 4 * scale,
-                      borderRadius: 16 * scale,
-                    }}
-                  >
-                    <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => languageRemoveTag(tag)}
-                    >
-                      <Text
-                        style={{
-                          marginLeft: 4 * scale,
-                          fontSize: 16 * scale,
-                          color: "#ff0000",
-                        }}
-                      >
-                        ×
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ))}
               </View>
             </ScrollView>
           ) : (

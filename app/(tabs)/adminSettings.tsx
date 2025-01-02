@@ -57,7 +57,7 @@ const AdminSettings = () => {
   const [search, setSearch] = useState();
   const [filteredData, setFilteredData] = useState(data);
 
-  const handleSearch = (txt) => {
+  const handleSearch = (txt:any) => {
     setSearch(txt);
     if (txt) {
       const filtered = data.filter((item) =>
@@ -69,8 +69,8 @@ const AdminSettings = () => {
     }
   };
 
-  const toggleSwitch = (id, field) => {
-    const updatedData = data.map((item) => {
+  const toggleSwitch = (id:any, field:any) => {
+    const updatedData = data.map((item:any) => {
       if (item.id === id) {
         return { ...item, [field]: !item[field] };
       }
