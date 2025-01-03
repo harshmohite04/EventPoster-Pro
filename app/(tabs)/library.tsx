@@ -15,6 +15,8 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width } = Dimensions.get("window");
 const scale = width / 320;
 
@@ -175,6 +177,19 @@ const DATA = [
       "https://ideogram.ai/assets/progressive-image/balanced/response/2T3vLk22TZiHRo2ROTUH6A",
   },
 ];
+
+
+  const deleteTemplete = async () => {
+    const authToken = await AsyncStorage.getItem("authToken");
+    const response = await axios.delete(
+      "https://event-poster-pro1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/deletetemplet/:imageid",{
+        headers:{
+          "auth-token":authToken
+        }
+      }
+    );
+    console.log(response.data)
+  };
 
 type ItemProps = { imageUrl: string };
 const Item = ({ imageUrl }: ItemProps) => {
