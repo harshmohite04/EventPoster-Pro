@@ -8,7 +8,8 @@ import {
   SafeAreaView,
   Image,
   FlatList,
-  Modal,ScrollView,
+  Modal,
+  ScrollView,
   Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -71,8 +72,6 @@ const Home = ({ navigation }: any) => {
     setSelectedCategory(name);
   };
 
-
-
   const categories = [
     { name: "All" },
     { name: "Jokefs" },
@@ -83,7 +82,6 @@ const Home = ({ navigation }: any) => {
     { name: "Adll" },
     { name: "Jodkes" },
   ];
-
 
   const languages = [
     { name: "Engdlish" },
@@ -97,40 +95,58 @@ const Home = ({ navigation }: any) => {
     { name: "Spadsdnish" },
   ];
   useEffect(() => {
-    setImages([
-      {
-        url: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
-        id: "1",
-      },
-      {
-        url: "https://ideogram.ai/assets/image/lossless/response/A7eOEfrLRdK8gZI88L3Yjw",
-        id: "2",
-      },
-      {
-        url: "https://ideogram.ai/assets/progressive-image/balanced/response/d6I5TyfcRYy8Pb_MSEjAQw",
-        id: "3",
-      },
-      {
-        url: "https://ideogram.ai/assets/progressive-image/balanced/response/mZKT1ae5SPWexGn5OTnOWQ",
-        id: "5",
-      },
-      {
-        url: "https://ideogram.ai/assets/progressive-image/balanced/response/2T3vLk22TZiHRo2ROTUH6A",
-        id: "6",
-      },
-      {
-        url: "https://ideogram.ai/assets/progressive-image/balanced/response/POhRvFN5QRmud-vx75SUYQ",
-        id: "7",
-      },
-      {
-        url: "https://ideogram.ai/assets/progressive-image/balanced/response/H9kSy8zhR3-J16Jy-OeSKQ",
-        id: "8",
-      },
-      {
-        url: "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
-        id: "9",
-      },
-    ]);
+    const callApi = async () => {
+      const authToken = await AsyncStorage.getItem("authToken");
+      try {
+        const response = await axios.get(
+          "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets",
+          {
+            headers: {
+              "auth-token": authToken,
+            },
+          }
+        );
+        setImages(response.data)
+        console.log(response.data)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    callApi();
+  //   setImages([
+  //     {
+  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
+  //       id: "1",
+  //     },
+  //     {
+  //       url: "https://ideogram.ai/assets/image/lossless/response/A7eOEfrLRdK8gZI88L3Yjw",
+  //       id: "2",
+  //     },
+  //     {
+  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/d6I5TyfcRYy8Pb_MSEjAQw",
+  //       id: "3",
+  //     },
+  //     {
+  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/mZKT1ae5SPWexGn5OTnOWQ",
+  //       id: "5",
+  //     },
+  //     {
+  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/2T3vLk22TZiHRo2ROTUH6A",
+  //       id: "6",
+  //     },
+  //     {
+  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/POhRvFN5QRmud-vx75SUYQ",
+  //       id: "7",
+  //     },
+  //     {
+  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/H9kSy8zhR3-J16Jy-OeSKQ",
+  //       id: "8",
+  //     },
+  //     {
+  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
+  //       id: "9",
+  //     },
+  //   ]);
   }, []);
 
   const handleLanguagePress = (name: string) => {
@@ -161,7 +177,7 @@ const Home = ({ navigation }: any) => {
         </View>
       </Modal>
 
-      <Image source={{ uri: item.url }} style={styles.image} />
+      <Image source={{ uri: item.image }} style={styles.image} />
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -224,47 +240,43 @@ const Home = ({ navigation }: any) => {
       </View>
 
       <View style={{ paddingVertical: 15 * scale, width: "100%" }}>
-      <ScrollView
-      horizontal={true}
-      persistentScrollbar={false}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "flex-start",
-          paddingHorizontal: 5 * scale,
-        }}
-        >
-        {categories.map((category) => (
-          <RenderCategory
-          key={category.name}
-          name={category.name}
-          isSelected={selectedCategory === category.name}
-          onPress={handleCategoryPress}
-          />
-        ))}
-      </View>
-          </ScrollView>
-          <ScrollView
-      horizontal={true}
-      persistentScrollbar={false}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "flex-start",
-          paddingHorizontal: 5 * scale,
-          marginTop: 10,
-        }}
-      >
-        {languages.map((language) => (
-          <RenderCategory
-            key={language.name}
-            name={language.name}
-            isSelected={selectedLanguage === language.name}
-            onPress={handleLanguagePress}
-          />
-        ))}
-      </View>
-      </ScrollView>
+        <ScrollView horizontal={true} persistentScrollbar={false}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              paddingHorizontal: 5 * scale,
+            }}
+          >
+            {categories.map((category) => (
+              <RenderCategory
+                key={category.name}
+                name={category.name}
+                isSelected={selectedCategory === category.name}
+                onPress={handleCategoryPress}
+              />
+            ))}
+          </View>
+        </ScrollView>
+        <ScrollView horizontal={true} persistentScrollbar={false}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              paddingHorizontal: 5 * scale,
+              marginTop: 10,
+            }}
+          >
+            {languages.map((language) => (
+              <RenderCategory
+                key={language.name}
+                name={language.name}
+                isSelected={selectedLanguage === language.name}
+                onPress={handleLanguagePress}
+              />
+            ))}
+          </View>
+        </ScrollView>
       </View>
 
       {/* <ImageReel /> */}
@@ -291,7 +303,10 @@ const RenderCategory = ({
   onPress: (name: string) => void;
 }) => {
   return (
-    <TouchableOpacity style={{marginRight:5*scale}} onPress={() => onPress(name)}>
+    <TouchableOpacity
+      style={{ marginRight: 5 * scale }}
+      onPress={() => onPress(name)}
+    >
       <Text
         style={{
           color: isSelected ? "#ffffff" : "#000000",

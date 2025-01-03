@@ -41,6 +41,8 @@ const Tab = createMaterialTopTabNavigator();
 import { throttle } from "lodash";
 import Slider from "@react-native-community/slider";
 import TagInput from "react-native-tag-input";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AdminEditImage = ({ navigation, route }: any) => {
   let { image } = route?.params || {};
@@ -119,8 +121,12 @@ const AdminEditImage = ({ navigation, route }: any) => {
   });
   const [emailSize, setEmailSize] = useState(20);
 
-  const [dropDownTag, setDropDownTag] = useState(false);
-  const [dropDownLTag, setDropDownLTag] = useState(false);
+  const [dropDownTag, setDropDownTag] = useState(true);
+  const [dropDownLTag, setDropDownLTag] = useState(true);
+
+  const[finalImg,setfinalImg]=useState("");
+
+
   useFonts({
     Kanit_400Regular,
     Kanit_500Medium,
@@ -187,6 +193,8 @@ const AdminEditImage = ({ navigation, route }: any) => {
       console.error("Error capturing and sharing image:", error);
     }
   };
+  const [tags, setTags] = useState([]);
+  const [tagsInputValue, setTagsInputValue] = useState("");
 
   const handleUpload = async () => {
     try {
@@ -226,8 +234,59 @@ const AdminEditImage = ({ navigation, route }: any) => {
       console.log("BackGround Image");
       console.log(image);
 
-      const seeImage = handleDownload();
-      console.log(seeImage);
+
+
+      try {
+        const uri = await captureRef(viewShotRef, {
+          format: "png",
+          quality: 1,
+        });
+        const newUri = `${FileSystem.documentDirectory}edited_image.png`;
+        console.log(newUri);
+        await FileSystem.moveAsync({
+          from: uri,
+          to: newUri,
+        });
+        // Store the new URI in a variable for further use
+        setfinalImg(newUri)
+        console.log("savedImageUri "+newUri)
+        // Return the image URI or perform further operations here
+        
+      } catch (error) {
+        console.error("Error capturing and sharing image:", error);
+      }
+
+      
+      
+      const authToken = AsyncStorage.getItem("authToken");
+      const formData = new FormData();
+
+
+      const logoUriParts = finalImg.split(".");
+      const logoExtension = logoUriParts[logoUriParts.length - 1].toLowerCase();
+      const logoType = logoExtension === "jpg" || logoExtension === "jpeg" 
+        ? "image/jpeg" 
+        : logoExtension === "png"
+        ? "image/png"
+        : `image/${logoExtension}`;
+      formData.append("templetImage", {
+        uri: finalImg,
+        type: logoType,
+        name: `logo.${logoExtension}`,
+      });
+      console.log("Logo MIME type:", logoType);
+
+      formData.append("title",title);
+      console.log(tags)
+      formData.append("category",tags);
+      const response = axios.post(
+        "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/addtemplet",
+        {},{
+          headers:{
+            "auth-token":authToken
+          }
+        }
+      );
     } catch (error) {
       console.error("Error capturing and sharing image:", error);
     }
@@ -1335,8 +1394,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
     })
   ).current;
 
-  const [tags, setTags] = useState([]);
-  const [tagsInputValue, setTagsInputValue] = useState("");
 
   const addTag = () => {
     if (tagsInputValue.trim() && !tags.includes(tagsInputValue.trim())) {
@@ -1682,12 +1739,13 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 style={{
                   borderWidth: 1 * scale,
                   width: "80%",
-                  borderRadius: 8 * scale,
+                  borderRadius: 4 * scale,
                   paddingHorizontal: 10 * scale,
                   paddingVertical: 5 * scale,
                   marginTop: 10 * scale,
                   alignSelf: "center",
-                  borderColor: "#ccc",
+                  borderColor: "#6B737A",
+                  marginBottom: 5 * scale,
                 }}
                 value={title}
                 onChangeText={setTitle}
@@ -1696,13 +1754,15 @@ const AdminEditImage = ({ navigation, route }: any) => {
               <View
                 style={{
                   alignItems: "flex-start",
-                  marginBottom: 16 * scale,
                   width: "80%",
                   alignSelf: "center",
                   marginTop: 10 * scale,
                   borderWidth: 1 * scale,
                   paddingHorizontal: 10 * scale,
                   paddingVertical: 10 * scale,
+                  borderRadius: 4 * scale,
+                  borderColor: "#6B737A",
+                  marginBottom: 5 * scale,
                 }}
               >
                 <View style={{ flexDirection: "row" }}>
@@ -1763,22 +1823,24 @@ const AdminEditImage = ({ navigation, route }: any) => {
                   marginTop: 10 * scale,
                   borderWidth: 1 * scale,
                   paddingHorizontal: 10 * scale,
-                  paddingVertical:10*scale
+                  paddingVertical: 10 * scale,
+                  borderRadius: 4 * scale,
+                  borderColor: "#6B737A",
                 }}
               >
-                <View style={{flexDirection:"row"}}>
-                  
-                  {dropDownLTag?<TextInput
-                    style={{
-                      flex: 1,
-                      padding: 8 * scale,
-                    }}
-                    placeholder="Add a Language tag"
-                    value={languageTagsInputValue}
-                    onChangeText={setLanguageTagsInputValue}
-                    onSubmitEditing={languageAddTag}
-                  />:null
-                  }
+                <View style={{ flexDirection: "row" }}>
+                  {dropDownLTag ? (
+                    <TextInput
+                      style={{
+                        flex: 1,
+                        padding: 8 * scale,
+                      }}
+                      placeholder="Add a Language tag"
+                      value={languageTagsInputValue}
+                      onChangeText={setLanguageTagsInputValue}
+                      onSubmitEditing={languageAddTag}
+                    />
+                  ) : null}
                   <TouchableOpacity
                     onPress={() => {
                       setDropDownLTag(!dropDownLTag);

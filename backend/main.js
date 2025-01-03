@@ -82,7 +82,7 @@ response:-
     } 
 } 
 
-
+Done
 [POST] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/logout
 Headers:-
 auth-token: (authToken)
@@ -94,7 +94,7 @@ response:-
   "success": true,
   "message": "Logout successful"
 }
-
+Done
 [GET] https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets
 Headers:-
 auth-token: (authToken)

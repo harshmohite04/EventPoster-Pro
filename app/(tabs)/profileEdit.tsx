@@ -123,25 +123,36 @@ const Profile = ({ navigation }: any) => {
     // Append Logo image if it exists
     if (logoUri) {
       const logoUriParts = logoUri.split(".");
-      const logoExtension = logoUriParts[logoUriParts.length - 1];
+      const logoExtension = logoUriParts[logoUriParts.length - 1].toLowerCase();
+      const logoType = logoExtension === "jpg" || logoExtension === "jpeg" 
+        ? "image/jpeg" 
+        : logoExtension === "png"
+        ? "image/png"
+        : `image/${logoExtension}`;
       formData.append("Logo", {
         uri: logoUri,
-        type: `image/${logoExtension}`,
+        type: logoType,
         name: `logo.${logoExtension}`,
       });
-      console.log(logoExtension)
-      console.log(logoUri)
+      console.log("Logo MIME type:", logoType);
     }
-    // Append Photo image if it exists
+    
     if (photoUri) {
       const photoUriParts = photoUri.split(".");
-      const photoExtension = photoUriParts[photoUriParts.length - 1];
+      const photoExtension = photoUriParts[photoUriParts.length - 1].toLowerCase();
+      const photoType = photoExtension === "jpg" || photoExtension === "jpeg" 
+        ? "image/jpeg" 
+        : photoExtension === "png"
+        ? "image/png"
+        : `image/${photoExtension}`;
       formData.append("photo", {
         uri: photoUri,
-        type: `image/${photoExtension}`,
+        type: photoType,
         name: `photo.${photoExtension}`,
       });
+      console.log("Photo MIME type:", photoType);
     }
+    
 
     try {
       // Make the API request to update the profile
@@ -153,10 +164,11 @@ const Profile = ({ navigation }: any) => {
             "auth-token": authToken,
             "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
           },
+          timeout: 10000
         }
       );
 
-      console.log(response.data.success);
+      console.log(response);
       setSuccess(response.data.success);
     } catch (error) {
       console.error(error);

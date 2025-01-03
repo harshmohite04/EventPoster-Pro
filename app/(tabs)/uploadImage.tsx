@@ -81,7 +81,7 @@ const UploadImage = ({ navigation }) => {
       </TouchableOpacity>
       {/* {image && <Image source={{ uri: image }} style={styles.image} />} */}
       {/* {image && <Text style={styles.selectedImageText}>Selected Image</Text>} */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           alignItems: "center",
           backgroundColor: "#FFEFD4",
@@ -106,7 +106,7 @@ const UploadImage = ({ navigation }) => {
           </Text>
           
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       
       </View>
 
