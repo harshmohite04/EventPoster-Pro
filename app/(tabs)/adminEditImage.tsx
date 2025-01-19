@@ -258,7 +258,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
       
       
-      const authToken = AsyncStorage.getItem("authToken");
+      const authToken = await AsyncStorage.getItem("authToken");
       const formData = new FormData();
 
 

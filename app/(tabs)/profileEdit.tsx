@@ -13,17 +13,12 @@ const { width } = Dimensions.get("window");
 const scale = width / 320;
 import Feather from "@expo/vector-icons/Feather";
 import * as ImagePicker from "expo-image-picker";
-// import { TouchableOpacity } from "react-native-gesture-handler";
 import { Formik } from "formik";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Yup from "yup";
 
 const profileSchema = Yup.object().shape({
   name: Yup.string().required("Required Field"),
-  // phoneNumber: Yup.string()
-  //   .required("Required Field")
-  //   .matches(/^[0-9]{10}$/, "Phone number must be exactly 10 digits"),
   email: Yup.string().email().required("Required Field"),
   businessName: Yup.string().required("Required Field"),
   url: Yup.string().url().required("Required Field"),
@@ -38,140 +33,118 @@ const pickImage = async (setImageUri: any) => {
   });
 
   if (!result.canceled) {
-    setImageUri(result.assets[0].uri);
+    setImageUri({
+      name: result.assets[0].fileName,
+      fileName: result.assets[0].fileName,
+      uri: result.assets[0].uri,
+      type: result.assets[0].mimeType,
+    });
   }
+  console.log("setImageUri",result);
 };
 
 const Profile = ({ navigation }: any) => {
-  const [logoUri, setLogoUri] = useState(null);
-  const [photoUri, setPhotoUri] = useState(null);
+  const [logoUri, setLogoUri] = useState({
+    name: "",
+    fileName: "",
+    uri: "",
+    type: "",
+  });
+  const [photoUri, setPhotoUri] = useState({
+    name: "",
+    fileName: "",
+    uri: "",
+    type: "",
+  });
   const [success, setSuccess] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
+
   useEffect(() => {
     const fetchDetails = async () => {
-      console.log("Yo");
       try {
         const authToken = await AsyncStorage.getItem("authToken");
         if (!authToken) {
           console.error("Auth Token not found");
           return;
         }
-        const response = await axios.get(
+
+        const response = await fetch(
           "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/getuser",
           {
+            method: "GET",
             headers: {
               "auth-token": authToken,
             },
           }
         );
-        console.log(authToken);
-        console.log(response.data.phone);
-        const number = response.data.phone;
-        const numberString = number.toString();
-        const number1 = numberString.slice(2, 12);
 
-        setPhoneNumber(number1);
+        if (!response.ok) throw new Error("Failed to fetch user details");
+
+        const data = await response.json();
+        const numberString = data.phone.toString();
+        const formattedNumber = numberString.slice(2, 12);
+        setPhoneNumber(formattedNumber);
       } catch (error) {
         console.error(error);
       }
     };
     fetchDetails();
   }, []);
-  // const saveProfile = async (values: any) => {
-  //   console.log("api trigger for SAVE");
-  //   const authToken = await AsyncStorage.getItem("authToken");
-  //   const response = await axios.put(
-  //     "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile",
-  //     {
-  //       name: values.name,
-  //       email: values.email,
-  //       businessName: values.businessName,
-  //       websiteLink: values.url,
-  //       Logo: logoUri,
-  //       photo: photoUri,
-  //     },
-  //     {
-  //       headers: {
-  //         "auth-token": authToken,
-  //       },
-  //     }
-  //   );
-
-  //   console.log(values.name);
-  //   console.log(values.email);
-  //   console.log(photoUri);
-  //   console.log(response.data.success);
-  //   setSuccess(response.data.success);
-  // };
 
   const saveProfile = async (values: any) => {
-    console.log("api trigger for SAVE");
-    console.log(logoUri);
-    console.log(photoUri);
-    // Retrieve authToken
-    const authToken = await AsyncStorage.getItem("authToken");
-
-    // Create FormData object to hold profile data and images
-    const formData = new FormData();
-
-    // Append profile information
-    formData.append("name", values.name);
-    formData.append("email", values.email);
-    formData.append("businessName", values.businessName);
-    formData.append("websiteLink", values.url);
-
-    // Append Logo image if it exists
-    if (logoUri) {
-      const logoUriParts = logoUri.split(".");
-      const logoExtension = logoUriParts[logoUriParts.length - 1].toLowerCase();
-      const logoType = logoExtension === "jpg" || logoExtension === "jpeg" 
-        ? "image/jpeg" 
-        : logoExtension === "png"
-        ? "image/png"
-        : `image/${logoExtension}`;
-      formData.append("Logo", {
-        uri: logoUri,
-        type: logoType,
-        name: `logo.${logoExtension}`,
-      });
-      console.log("Logo MIME type:", logoType);
-    }
-    
-    if (photoUri) {
-      const photoUriParts = photoUri.split(".");
-      const photoExtension = photoUriParts[photoUriParts.length - 1].toLowerCase();
-      const photoType = photoExtension === "jpg" || photoExtension === "jpeg" 
-        ? "image/jpeg" 
-        : photoExtension === "png"
-        ? "image/png"
-        : `image/${photoExtension}`;
-      formData.append("photo", {
-        uri: photoUri,
-        type: photoType,
-        name: `photo.${photoExtension}`,
-      });
-      console.log("Photo MIME type:", photoType);
-    }
-    
-
+    //console.log("---------------------------", photoUri);
     try {
-      // Make the API request to update the profile
-      const response = await axios.post(
+      const authToken = await AsyncStorage.getItem("authToken");
+      if (!authToken) {
+        console.error("Auth Token not found");
+        return;
+      }
+
+      let formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("businessName", values.businessName);
+      formData.append("websiteLink", values.url);
+
+      if (logoUri.uri) {
+        formData.append("logo", {
+          name: logoUri.name,
+          fileName: logoUri.fileName,
+          uri: logoUri.uri,
+          type: logoUri.type,
+        });
+      }
+
+      if (photoUri.uri) {
+        formData.append("photo", {
+          name: photoUri.name,
+          fileName: photoUri.fileName,
+          uri: photoUri.uri,
+          type: photoUri.type,
+        });
+      }
+      console.log("---------------------- form data -------------------", JSON.stringify(formData));
+
+      const response = await fetch(
         "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/updateProfile",
-        formData,
         {
+          method: "POST",
           headers: {
-            "auth-token": authToken,
-            "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
+            "auth-token": authToken, // Do NOT include "Content-Type"
           },
-          timeout: 10000
+          body: formData, // `fetch` will set the correct Content-Type with the boundary
         }
       );
 
-      console.log(response);
-      setSuccess(response.data.success);
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Failed to save profile: ${errorData}`);
+      }
+    
+      const data = await response.json();
+      console.log("Profile updated successfully:", data);
     } catch (error) {
-      console.error(error);
+      console.error("Error saving profile:", error);
     }
   };
 
@@ -187,11 +160,7 @@ const Profile = ({ navigation }: any) => {
           paddingHorizontal: 15 * scale,
         }}
       >
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}
-        >
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Feather name="arrow-left" size={20 * scale} color="black" />
         </TouchableOpacity>
         <Text style={{ fontSize: 18 * scale, marginLeft: 15 * scale }}>
@@ -206,16 +175,16 @@ const Profile = ({ navigation }: any) => {
           marginTop: 20 * scale,
         }}
       >
-        {/* Upload Logo Section */}
         <TouchableOpacity onPress={() => pickImage(setLogoUri)}>
           <View>
-            {logoUri ? (
+            {logoUri.uri ? (
               <Image
-                source={{ uri: logoUri }}
+                source={{ uri: logoUri.uri }}
                 style={{
                   height: 120 * scale,
                   width: 120 * scale,
                   borderRadius: 60 * scale,
+
                 }}
               />
             ) : (
@@ -244,12 +213,11 @@ const Profile = ({ navigation }: any) => {
           </Text>
         </TouchableOpacity>
 
-        {/* Upload Photo Section */}
         <TouchableOpacity onPress={() => pickImage(setPhotoUri)}>
           <View>
-            {photoUri ? (
+            {photoUri.uri ? (
               <Image
-                source={{ uri: photoUri }}
+                source={{ uri: photoUri.uri }}
                 style={{
                   height: 120 * scale,
                   width: 120 * scale,
@@ -258,14 +226,14 @@ const Profile = ({ navigation }: any) => {
               />
             ) : (
               <View
-                style={{
-                  backgroundColor: "#D9D9D9",
-                  height: 120 * scale,
-                  width: 120 * scale,
-                  borderRadius: 60 * scale,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+              style={{
+                backgroundColor: "#D9D9D9",
+                height: 120 * scale,
+                width: 120 * scale,
+                borderRadius: 60 * scale,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
               >
                 <Feather name="edit-3" size={24 * scale} color="#FF8017" />
               </View>
@@ -282,15 +250,6 @@ const Profile = ({ navigation }: any) => {
           </Text>
         </TouchableOpacity>
       </View>
-
-      {/* <TextInput
-           onChangeText={handleChange('name')}
-           onBlur={handleBlur('name')}
-           value={values.name}
-         />
-         <TouchableOpacity onPress={()=>handleSubmit}  >
-          <Text>Submit</Text>
-         </TouchableOpacity> */}
 
       {/* Personal Details Section */}
       <Formik

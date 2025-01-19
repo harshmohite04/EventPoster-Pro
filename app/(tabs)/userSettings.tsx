@@ -70,7 +70,7 @@ const UserSettings = ({ navigation }: any) => {
         },
       }
     );
-    await AsyncStorage.setItem("authToken", "");
+    await AsyncStorage.removeItem("authToken");
     navigation.dispatch(
       // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
       CommonActions.reset({
