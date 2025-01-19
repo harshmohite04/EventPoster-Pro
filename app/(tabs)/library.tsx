@@ -149,7 +149,7 @@ const Library = ({ navigation }) => {
         <Text style={styles.headerTitle}>Library</Text>
         <TouchableOpacity
           onPress={() => navigation.push("UserSettings")}
-          style={styles.headerTitle}
+          style={styles.settingsButton}
         >
           <Feather name="settings" size={30 * scale} color="red" />
         </TouchableOpacity>
