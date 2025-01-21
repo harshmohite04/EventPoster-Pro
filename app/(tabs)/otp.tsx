@@ -252,7 +252,7 @@ const Otp = ({ navigation, route }:any) => {
                           console.log(response.data);
                           console.log(response.data.authToken);
                           if (response.data.success) {
-                            navigation.push("Promo",{ number:number });
+                            //navigation.push("Promo",{ number:number });
                             if (response.data.user.isAdmin) {
                               console.log("admin = ",response.data.user.isAdmin);
                               await AsyncStorage.setItem("authToken", response.data.authToken);
