@@ -255,13 +255,13 @@ const Otp = ({ navigation, route }:any) => {
                             navigation.push("Promo",{ number:number });
                             if (response.data.user.isAdmin) {
                               console.log("admin = ",response.data.user.isAdmin);
-                              navigation.replace("Library");
                               await AsyncStorage.setItem("authToken", response.data.authToken);
                               await AsyncStorage.setItem("role", "admin");
+                              navigation.replace("Library");
                             } else {
-                              navigation.replace("Promo");
                               await AsyncStorage.setItem("authToken", response.data.authToken);
                               await AsyncStorage.setItem("role", "user");
+                              navigation.replace("Promo");
                             }
                           }
                         } catch (error) {
