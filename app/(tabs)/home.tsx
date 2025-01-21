@@ -11,6 +11,9 @@ import {
   Modal,
   ScrollView,
   Alert,
+  PermissionsAndroid,
+  Button,
+  Platform
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
@@ -22,6 +25,9 @@ import Swipe from "@/assets/icons/swipe";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { array } from "yup";
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
 
 const { width, height } = Dimensions.get("window");
 const scale = width / 320;
@@ -71,6 +77,113 @@ const Home = ({ navigation }: any) => {
   const handleCategoryPress = (name: string) => {
     setSelectedCategory(name);
   };
+
+  const requestStoragePermission = async (imageUrl: string) => {
+    try {
+      const granted = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      ]);
+      if (
+        granted[PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE] ===
+          PermissionsAndroid.RESULTS.GRANTED &&
+        granted[PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE] ===
+          PermissionsAndroid.RESULTS.GRANTED
+      ) {
+        console.log("Storage permission granted");
+        handleDownload(imageUrl);
+      } else {
+        console.log("Storage permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+   //console.log("Hello", imageUrl);
+  };
+  
+
+  // Add this function to handle download
+const handleDownload = async (imageUrl: string) => {
+  {/*
+  try {
+    // Get the download path in the device storage (can be adjusted for your needs)
+    const downloadPath = `${RNFS.DownloadDirectoryPath}/${imageUrl.split('/').pop()}`;
+    console.log("Download Path:", downloadPath);
+    
+    // Start the download process
+    const downloadOptions = {
+      fromUrl: imageUrl,
+      toFile: downloadPath,
+    };
+
+    const result = await RNFS.downloadFile(downloadOptions).promise;
+
+    if (result.statusCode === 200) {
+      Alert.alert('Download successful', 'Image has been downloaded to your device.');
+    } else {
+      Alert.alert('Download failed', 'There was an error downloading the image.');
+    }
+  } catch (error) {
+    console.error('Download failed:', error);
+    Alert.alert('Download failed', 'There was an error downloading the image.');
+  }
+    */}
+
+    try {
+      // Step 1: Request permission to access the media library (for iOS)
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Permission Denied', 'You need to grant media library permissions.');
+        return;
+      }
+  
+      // Step 2: Download the image from the URL
+      const fileUri = FileSystem.documentDirectory + 'downloaded-image.jpg';
+      const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
+  
+      // Step 3: Save the downloaded image to the gallery
+      const asset = await MediaLibrary.createAssetAsync(uri);
+      await MediaLibrary.createAlbumAsync('EventPoster Pro', asset, false);
+  
+      // Success alert
+      Alert.alert('Image Downloaded', 'The image has been saved to your gallery.');
+    } catch (error) {
+      console.error('Error downloading and saving image:', error);
+      Alert.alert('Error', 'An error occurred while downloading the image.');
+    }
+
+    console.log("Image URL:", imageUrl);
+};
+
+const shareImageOnWhatsApp = async (imageUrl) => {
+  try {
+    // Step 1: Download the image to the app's document directory
+    const fileUri = FileSystem.documentDirectory + 'shared-image.jpg';
+    const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
+
+    // Step 2: Check if sharing is available
+    if (!(await Sharing.isAvailableAsync())) {
+      Alert.alert('Sharing Not Available', 'Sharing is not available on this device.');
+      return;
+    }
+
+    // Step 3: Share the downloaded image using the Sharing API
+    await Sharing.shareAsync(uri, {
+      mimeType: 'image/jpeg', // Ensure proper MIME type
+      dialogTitle: 'Share this image on WhatsApp',
+    });
+
+    // Optional: Delete the file after sharing (clean up)
+    await FileSystem.deleteAsync(uri);
+  } catch (error) {
+    console.error('Error sharing image:', error);
+    Alert.alert('Error', 'An error occurred while sharing the image.');
+  }
+};
+
+const getExtention = filename =>{
+  return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
+}
 
   const categories = [
     { name: "All" },
@@ -181,7 +294,7 @@ const Home = ({ navigation }: any) => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => console.log("share to WhatsApp")}
+          onPress={() => shareImageOnWhatsApp(item.image)}
           style={styles.shareButton}
         >
           <Text style={styles.shareButtonText}>Share</Text>
@@ -189,7 +302,7 @@ const Home = ({ navigation }: any) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => console.log("Download pressed")}
+          onPress={() => handleDownload(item.image)}
           style={styles.downloadButton}
         >
           <Download size={20 * scale} />
