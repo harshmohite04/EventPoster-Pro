@@ -347,6 +347,8 @@ const getExtention = filename =>{
               width: 30 * scale,
               height: 30 * scale,
               borderRadius: 30 * scale,
+              borderWidth: 2,
+              borderColor: "black",
             }}
           />
         </TouchableOpacity>

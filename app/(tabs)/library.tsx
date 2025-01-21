@@ -27,6 +27,40 @@ const Library = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false); // Refresh state
   const [token, setToken] = useState("");
 
+  const profileClicked = () => {
+    navigation.push("MainProfile");
+  };
+
+  const [userLogo, setUserLogo] = useState("");
+  useEffect(() => {
+    console.log("Hello");
+    const apiCall = async () => {
+      try {
+        const authToken = await AsyncStorage.getItem("authToken");
+        if (!authToken) {
+          console.error("Auth Token not found");
+          return;
+        }
+        const response = await axios.get(
+          "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/getuser",
+          {
+            headers: {
+              "auth-token": authToken,
+            },
+          }
+        );
+        console.log(authToken);
+        console.log(response.data);
+        setUserLogo(response.data.photo);
+        console.log(response.data.name);
+        console.log("Api");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    apiCall();
+  }, []);
+
   const fetchTemplates = async () => {
     try {
       setIsLoading(true); // Start loading
@@ -110,6 +144,8 @@ const Library = ({ navigation }) => {
     }
   };
 
+  
+
   const renderTemplate = ({ item }) => (
     <View style={styles.templateCard}>
       <Image source={{ uri: item.image }} style={styles.templateImage} />
@@ -144,15 +180,25 @@ const Library = ({ navigation }) => {
           onPress={() => navigation.push("AdminSettings")}
           style={styles.settingsButton}
         >
-          <Feather name="settings" size={30 * scale} color="#000000" />
+          <Feather name="users" size={30 * scale} color="#000000" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Library</Text>
-        <TouchableOpacity
-          onPress={() => navigation.push("UserSettings")}
-          style={styles.settingsButton}
-        >
-          <Feather name="settings" size={30 * scale} color="red" />
-        </TouchableOpacity>
+        <TouchableOpacity onPress={profileClicked}>
+                  <Image
+                    source={{
+                      uri: userLogo
+                        ? userLogo
+                        : "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
+                    }}
+                    style={{
+                      width: 30 * scale,
+                      height: 30 * scale,
+                      borderRadius: 30 * scale,
+                      borderWidth: 2,
+                      borderColor: "black",
+                    }}
+                  />
+                </TouchableOpacity>
       </View>
       <FlatList
         data={templates}
@@ -201,7 +247,8 @@ const styles = StyleSheet.create({
     fontSize: 20 * scale,
     textAlign: "center",
     fontWeight: "bold",
-    marginLeft: 95 * scale,
+    marginLeft: 90 * scale,
+    marginRight: 90 * scale,
   },
   gridContainer: {
     padding: 2 * scale,
