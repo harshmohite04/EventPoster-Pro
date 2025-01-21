@@ -75,7 +75,7 @@ const UserSettings = ({ navigation }: any) => {
       // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
       CommonActions.reset({
         index: 0, // The first screen in the stack
-        routes: [{ name: "Splash" }], // Replace 'Login' with your start screen
+        routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
       })
     );
     console.log(authToken);
