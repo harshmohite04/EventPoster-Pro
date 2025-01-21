@@ -17,6 +17,7 @@ import Feather from "@expo/vector-icons/Feather";
 import Entypo from "@expo/vector-icons/Entypo";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
 
 const { width } = Dimensions.get("window");
 const scale = width / 320;
@@ -27,6 +28,22 @@ const Library = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false); // Refresh state
   const [token, setToken] = useState("");
 
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+
+      quality: 1,
+    });
+
+    console.log("result", result);
+    if (!result.canceled) {
+      console.log("This image was sent", result.assets[0].uri);
+      let image = result.assets[0].uri;
+      navigation.push("AdminEditImage", { image: image });
+    }
+  };
+  
   const profileClicked = () => {
     navigation.push("MainProfile");
   };
@@ -210,12 +227,25 @@ const Library = ({ navigation }) => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.push("AdminEditImage")}
-      >
-        <Entypo name="plus" size={25 * scale} color="white" />
-      </TouchableOpacity>
+      
+         <TouchableOpacity
+          style={{
+            position: "absolute",
+            bottom: 50 * scale,
+            right: 20 * scale,
+            backgroundColor: "#FF8017",
+            borderRadius: 50,
+            width: 50 * scale,
+            height: 50 * scale,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          onPress={pickImage}
+        >
+          <Entypo name="plus" size={25 * scale} color="white" />
+        </TouchableOpacity>
+
+      
     </SafeAreaView>
   );
 };
