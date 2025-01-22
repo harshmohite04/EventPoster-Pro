@@ -196,7 +196,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
   const [tags, setTags] = useState([]);
   const [tagsInputValue, setTagsInputValue] = useState("");
 
-  const handleUpload = async () => {
+  /* const handleUpload = async () => {
     try {
       console.log("Logo");
       console.log(logoPosition);
@@ -290,7 +290,73 @@ const AdminEditImage = ({ navigation, route }: any) => {
     } catch (error) {
       console.error("Error capturing and sharing image:", error);
     }
+  }; */
+
+  const handleUpload = async () => {
+    try {
+      // Capture image and save it locally
+      const uri = await captureRef(viewShotRef, {
+        format: "png",
+        quality: 1,
+      });
+      const newUri = `${FileSystem.documentDirectory}edited_image.png`;
+      await FileSystem.moveAsync({ from: uri, to: newUri });
+  
+      // Update the final image state
+      setfinalImg(newUri);
+  
+      const authToken = await AsyncStorage.getItem("authToken");
+      if (!authToken) {
+        throw new Error("Authentication token not found.");
+      }
+  
+      // Create FormData for upload
+      const formData = new FormData();
+      const logoUriParts = newUri.split(".");
+      const logoExtension = logoUriParts[logoUriParts.length - 1].toLowerCase();
+      const logoType =
+        logoExtension === "jpg" || logoExtension === "jpeg"
+          ? "image/jpeg"
+          : logoExtension === "png"
+          ? "image/png"
+          : `image/${logoExtension}`;
+  
+      formData.append("templetImage", {
+        uri: newUri,
+        type: logoType,
+        name: `templet.${logoExtension}`,
+      });
+  
+      formData.append("title", title);
+      formData.append("category", JSON.stringify(tags));
+  
+      // API call to upload
+      const response = await axios.post(
+        "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/addtemplet",
+        formData,
+        {
+          headers: {
+            "auth-token": authToken,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("upload response",response)
+  
+      // Handle server response
+      if (response.status === 201) {
+        Alert.alert("Success", "Image uploaded successfully!");
+        navigation.replace("Library");
+      } else {
+        throw new Error("Failed to upload the image.");
+      }
+    } catch (error) {
+      console.error("Error during upload:", error.message);
+      Alert.alert("Error", "An error occurred while uploading the image.");
+    }
   };
+  
 
   const FontTab = React.memo(() => {
     return (

@@ -181,14 +181,14 @@ const Library = ({ navigation }) => {
     </View>
   );
 
-  if (isLoading) {
+  /* if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" color="#FF8017" />
         <Text>Loading templates...</Text>
       </View>
     );
-  }
+  } */
 
   return (
     <SafeAreaView style={styles.container}>
@@ -217,7 +217,7 @@ const Library = ({ navigation }) => {
                   />
                 </TouchableOpacity>
       </View>
-      <FlatList
+      {!isLoading ? <FlatList
         data={templates}
         numColumns={3}
         keyExtractor={(item) => item._id}
@@ -226,7 +226,10 @@ const Library = ({ navigation }) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-      />
+      /> : <View style={styles.loaderContainer}>
+      <ActivityIndicator size="large" color="#FF8017" />
+      <Text>Loading templates...</Text>
+    </View>}
       
          <TouchableOpacity
           style={{
