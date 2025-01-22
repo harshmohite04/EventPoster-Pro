@@ -50,7 +50,7 @@ const Library = ({ navigation }) => {
 
   const [userLogo, setUserLogo] = useState("");
   useEffect(() => {
-    console.log("Hello");
+    //console.log("Hello");
     const apiCall = async () => {
       try {
         const authToken = await AsyncStorage.getItem("authToken");
@@ -67,10 +67,10 @@ const Library = ({ navigation }) => {
           }
         );
         console.log(authToken);
-        console.log(response.data);
+        //console.log(response.data);
         setUserLogo(response.data.photo);
-        console.log(response.data.name);
-        console.log("Api");
+        //console.log(response.data.name);
+        //console.log("Api");
       } catch (error) {
         console.log(error);
       }
@@ -100,7 +100,7 @@ const Library = ({ navigation }) => {
 
         if (response.status === 200) {
           setTemplates(response.data);
-          console.log(response.data);
+          //console.log(response.data);
           setIsLoading(false); // Stop loading once we get a valid response
           success = true; // Exit the loop
         } else {

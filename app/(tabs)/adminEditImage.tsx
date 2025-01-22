@@ -294,6 +294,42 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
   const handleUpload = async () => {
     try {
+      /* console.log("Logo");
+      console.log(logoPosition);
+      console.log(logoImage);
+      console.log(logoSize);
+      console.log("Photo");
+      console.log(photoPosition);
+      console.log(photoImage);
+      console.log(photoSize);
+      console.log("Name");
+      console.log(nameText);
+      console.log(namePosition);
+      console.log(nameDimensions);
+      console.log(nameSize);
+      console.log("Business");
+      console.log(businessText);
+      console.log(businessPosition);
+      console.log(businessDimensions);
+      console.log(businessSize);
+      console.log("Website");
+      console.log(websiteNameText);
+      console.log(websiteNamePosition);
+      console.log(websiteNameDimensions);
+      console.log(websiteNameSize);
+      console.log("Phone Number");
+      console.log(phoneNumberText);
+      console.log(phoneNumberPosition);
+      console.log(phoneNumberDimensions);
+      console.log(phoneNumberSize);
+      console.log("Email");
+      console.log(emailText);
+      console.log(emailPosition);
+      console.log(emailDimensions);
+      console.log(emailSize);
+      console.log("BackGround Image");
+      console.log(image);
+ */
       // Capture image and save it locally
       const uri = await captureRef(viewShotRef, {
         format: "png",
@@ -326,10 +362,21 @@ const AdminEditImage = ({ navigation, route }: any) => {
         type: logoType,
         name: `templet.${logoExtension}`,
       });
-  
-      formData.append("title", title);
+
+      formData.append("title", "teat1");
       formData.append("category", JSON.stringify(tags));
-  
+      formData.append("language",JSON.stringify(languageTags));
+      formData.append("logo",`{"present":${logoImage},"x":${logoPosition.x},"y":${logoPosition.y},"size":${logoSize.width}}`)
+      formData.append("photo",`{"present":${photoImage},"x":${photoPosition.x},"y":${photoPosition.y},"size":${photoSize.width}}`)
+      formData.append("name",`{"present":${nameText},"x":${namePosition.x},"y":${namePosition.y},"size":${nameSize},"height":${nameDimensions.height},"width":${nameDimensions.width}}`)
+      formData.append("businessName",`{"present":${businessText},"x":${businessPosition.x},"y":${businessPosition.y},"size":${businessSize},"height":${businessDimensions.height},"width":${businessDimensions.width}}`)
+      formData.append("websiteLink",`{"present":${websiteNameText},"x":${websiteNamePosition.x},"y":${websiteNamePosition.y},"size":${websiteNameSize},"height":${websiteNameDimensions.height},"width":${websiteNameDimensions.width}}`)
+      formData.append("phoneNo",`{"present":${phoneNumberText},"x":${phoneNumberPosition.x},"y":${phoneNumberPosition.y},"size":${phoneNumberSize},"height":${phoneNumberDimensions.height},"width":${phoneNumberDimensions.width}}`)
+      formData.append("email",`{"present":${emailText},"x":${emailPosition.x},"y":${emailPosition.y},"size":${emailSize},"height":${emailDimensions.height},"width":${emailDimensions.width}}`)
+ 
+
+
+      console.log("formData",formData);
       // API call to upload
       const response = await axios.post(
         "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/addtemplet",
@@ -342,7 +389,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
         }
       );
 
-      console.log("upload response",response)
+      console.log("upload response-------------------------------------------------",response.data);
   
       // Handle server response
       if (response.status === 201) {
