@@ -256,11 +256,11 @@ const Otp = ({ navigation, route }:any) => {
                             if (response.data.user.isAdmin) {
                               console.log("admin = ",response.data.user.isAdmin);
                               await AsyncStorage.setItem("authToken", response.data.authToken);
-                              await AsyncStorage.setItem("role", "admin");
+                              //await AsyncStorage.setItem("role", "admin");
                               navigation.replace("Library");
                             } else {
                               await AsyncStorage.setItem("authToken", response.data.authToken);
-                              await AsyncStorage.setItem("role", "user");
+                              //await AsyncStorage.setItem("role", "user");
                               navigation.replace("Promo");
                             }
                           }

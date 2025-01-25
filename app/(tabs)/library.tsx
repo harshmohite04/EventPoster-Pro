@@ -9,6 +9,7 @@ import {
   Dimensions,
   ActivityIndicator,
   RefreshControl,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -18,6 +19,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { CommonActions } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 const scale = width / 320;
@@ -111,6 +113,21 @@ const Library = ({ navigation }) => {
     } catch (error) {
       console.error("Error fetching templates:", error);
       setIsLoading(false); // Stop loading on error
+      if (error.message === "Request failed with status code 401") {
+        console.log("Token expired, logging out...");
+        Alert.alert(
+          "Token Expired",
+          "logging out...",)
+        await AsyncStorage.removeItem("authToken"); // Remove the token
+        navigation.dispatch(
+          // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
+          CommonActions.reset({
+            index: 0, // The first screen in the stack
+            routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
+          })
+        );
+        return;
+      }
     }
   };
 

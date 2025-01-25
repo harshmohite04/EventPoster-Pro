@@ -60,7 +60,13 @@ const UserSettings = ({ navigation }: any) => {
   };
 
   const handleLogout = async () => {
+    try {
     const authToken = await AsyncStorage.getItem("authToken");
+
+    if (authToken == null || authToken == "") {
+      throw new Error("Auth Token not found");
+    }
+
     const response = await axios.post(
       "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/logout",
       {},
@@ -70,6 +76,7 @@ const UserSettings = ({ navigation }: any) => {
         },
       }
     );
+    
     await AsyncStorage.removeItem("authToken");
     navigation.dispatch(
       // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
@@ -78,7 +85,17 @@ const UserSettings = ({ navigation }: any) => {
         routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
       })
     );
-    console.log(authToken);
+    } catch (error) {
+      console.error(error);
+      await AsyncStorage.removeItem("authToken");
+      navigation.dispatch(
+        // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
+        CommonActions.reset({
+          index: 0, // The first screen in the stack
+          routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
+        })
+      );
+    }
   };
 
   return (

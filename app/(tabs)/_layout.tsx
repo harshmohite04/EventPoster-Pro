@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 // import { Slot,Stack } from 'expo-router'
 import { createStackNavigator } from "@react-navigation/stack";
@@ -20,25 +20,63 @@ import EditFlyer from "./EditFlyer";
 import AdminSettings from "./adminSettings";
 import Profile from "./profile";
 import UserSettings from "./userSettings";
+import {CommonActions } from "@react-navigation/native";
 
 const SplashScreen = ({ navigation }: any) => {
   
   useEffect(() => {
     const checkVerificationStatus = async () => {
+      try {
       const authToken = await AsyncStorage.getItem("authToken");
-      const role = await AsyncStorage.getItem("role");
-      console.log("authToken")
-      if (authToken!=null) {
-        console.log(authToken)
-        if (role === "admin") {
-          navigation.replace("Library"); // change when before going to production
-        } else if (role === "user") {
-          navigation.replace("Promo"); // change when before going to production
-        }
-        // navigation.replace('Home');
-      } else {
-        navigation.replace("PhoneNumberAuth");
+
+      if (authToken == null) {
+        navigation.dispatch(
+          // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
+          CommonActions.reset({
+            index: 0, // The first screen in the stack
+            routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
+          })
+        );
+        return;
       }
+
+      if (authToken == "") {
+        throw new Error("Auth Token not found");
+      }
+
+      const response = await fetch(
+        "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/getuser",
+        {
+          method: "GET",
+          headers: {
+            "auth-token": authToken,
+          },
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user details");
+      }
+
+      const data = await response.json();
+      console.log("authToken")
+      if (data.isAdmin == true) {
+        navigation.replace("Library"); // change when before going to production
+      } else if (data.isAdmin == false) {
+        navigation.replace("Promo"); // change when before going to production
+      }
+    } catch (error) {
+      console.error(error);
+      await AsyncStorage.removeItem("authToken");
+      Alert.alert("Invalid Auth Token", "Please login again!!");
+      navigation.dispatch(
+        // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
+        CommonActions.reset({
+          index: 0, // The first screen in the stack
+          routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
+        })
+      );
+    }
     };
 
     checkVerificationStatus();
