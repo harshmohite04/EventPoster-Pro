@@ -11,7 +11,9 @@ import {
   Modal,
   ScrollView,
   Alert,
+  RefreshControl,
   PermissionsAndroid,
+  ActivityIndicator,
   Button,
   Platform
 } from "react-native";
@@ -28,6 +30,7 @@ import { array } from "yup";
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
+import { CommonActions } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 const scale = width / 320;
@@ -39,6 +42,11 @@ const Home = ({ navigation }: any) => {
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
+
+  const [isListEnd, setIsListEnd] = useState(false);  
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [refreshing, setRefreshing] = useState(false);
 
   const profileClicked = () => {
     navigation.push("MainProfile");
@@ -185,7 +193,7 @@ const getExtention = filename =>{
   return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
 }
 
-  const categories = [
+const categories = [
     { name: "All" },
     { name: "Jokes" },
     { name: "Birthday" },
@@ -196,60 +204,92 @@ const getExtention = filename =>{
     { name: "Hindi" },
     { name: "Marathi" },
   ];
-  useEffect(() => {
-    const callApi = async () => {
+
+  const callApi = async () => {
+    try {
+      console.log("Fetching templates...page", currentPage);
+
+      setIsLoading(true);
       const authToken = await AsyncStorage.getItem("authToken");
-      try {
-        const response = await axios.get(
-          "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets",
-          {
-            headers: {
-              "auth-token": authToken,
-            },
-          }
-        );
-        setImages(response.data.templets)
-        console.log(response.data)
-      } catch (error) {
-        console.error(error);
+      if (!authToken) {
+        console.error("Auth token not found!");
+        setIsLoading(false);
+        return;
       }
-    };
+
+      if (!isListEnd) {
+      const response = await axios.get(
+        `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?page=${currentPage}&limit=10`,
+        {
+          headers: {
+            "auth-token": authToken,
+          },
+        }
+      );
+      console.log(response.data);
+
+      if (response.status === 200 && response.data.results > 0) {
+        setImages((prevImages) => [...prevImages, ...response.data.templets]);
+      }
+      else {
+        setIsListEnd(true);
+      }
+    }
+    } catch (error) {
+      console.error("Error fetching templates:", error);
+      if (error.response?.status === 401) {
+        Alert.alert("Token Expired", "Logging out...");
+        await AsyncStorage.removeItem("authToken");
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "PhoneNumberAuth" }],
+          })
+        );
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     callApi();
-  //   setImages([
-  //     {
-  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/jcV_Ea1sQga0NYL0jPyUYQ",
-  //       id: "1",
-  //     },
-  //     {
-  //       url: "https://ideogram.ai/assets/image/lossless/response/A7eOEfrLRdK8gZI88L3Yjw",
-  //       id: "2",
-  //     },
-  //     {
-  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/d6I5TyfcRYy8Pb_MSEjAQw",
-  //       id: "3",
-  //     },
-  //     {
-  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/mZKT1ae5SPWexGn5OTnOWQ",
-  //       id: "5",
-  //     },
-  //     {
-  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/2T3vLk22TZiHRo2ROTUH6A",
-  //       id: "6",
-  //     },
-  //     {
-  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/POhRvFN5QRmud-vx75SUYQ",
-  //       id: "7",
-  //     },
-  //     {
-  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/H9kSy8zhR3-J16Jy-OeSKQ",
-  //       id: "8",
-  //     },
-  //     {
-  //       url: "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
-  //       id: "9",
-  //     },
-  //   ]);
-  }, []);
+  }, [currentPage]);
+
+  const onRefresh = () => {
+    setCurrentPage(1);
+    setIsListEnd(false);
+    setImages([]);
+    setRefreshing(true);
+    callApi().then(() => setRefreshing(false));
+  };
+
+  const loadMoreTemplates = () => {
+    if (!isListEnd && !isLoading) {
+      console.log("loadMoreTemplates",currentPage);
+      console.log("loader state = ",isLoading);
+      
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
+/*   if (isLoading && currentPage === 1) {
+      return (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#FF8017" />
+          <Text>Loading templates...</Text>
+        </View>
+      );
+    } */
+
+  const bottomLoader = () => {
+      console.log("loader");
+      return (
+        isLoading ? <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#FF8017" />
+        </View> : null
+      );
+    }
 
   const handleLanguagePress = (name: string) => {
     setSelectedLanguage(name);
@@ -393,6 +433,10 @@ const getExtention = filename =>{
         showsVerticalScrollIndicator={false}
         snapToAlignment="start"
         decelerationRate="fast"
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        onEndReached={loadMoreTemplates}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={bottomLoader}
       />
     </SafeAreaView>
   );
@@ -544,5 +588,10 @@ const styles = StyleSheet.create({
   closeButtonText: {
     fontSize: 16 * scale,
     color: "#FF9A37",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
