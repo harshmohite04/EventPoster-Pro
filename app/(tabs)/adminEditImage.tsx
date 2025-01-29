@@ -124,8 +124,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
   const [dropDownTag, setDropDownTag] = useState(true);
   const [dropDownLTag, setDropDownLTag] = useState(true);
 
-  const[finalImg,setfinalImg]=useState("");
-
+  const [finalImg, setfinalImg] = useState("");
 
   useFonts({
     Kanit_400Regular,
@@ -292,6 +291,9 @@ const AdminEditImage = ({ navigation, route }: any) => {
     }
   }; */
 
+  const predefinedTags = ["Birthday", "Jokes"];
+  const predefinedLanguageTags = ["English", "Marathi", "Hindi", "Gujrati"];
+
   const handleUpload = async () => {
     try {
       /* console.log("Logo");
@@ -337,15 +339,15 @@ const AdminEditImage = ({ navigation, route }: any) => {
       });
       const newUri = `${FileSystem.documentDirectory}edited_image.png`;
       await FileSystem.moveAsync({ from: uri, to: newUri });
-  
+
       // Update the final image state
       setfinalImg(newUri);
-  
+
       const authToken = await AsyncStorage.getItem("authToken");
       if (!authToken) {
         throw new Error("Authentication token not found.");
       }
-  
+
       // Create FormData for upload
       const formData = new FormData();
       const logoUriParts = newUri.split(".");
@@ -356,7 +358,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
           : logoExtension === "png"
           ? "image/png"
           : `image/${logoExtension}`;
-  
+
       formData.append("templetImage", {
         uri: newUri,
         type: logoType,
@@ -365,18 +367,37 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
       formData.append("title", "teat1");
       formData.append("category", JSON.stringify(tags));
-      formData.append("language",JSON.stringify(languageTags));
-      formData.append("logo",`{"present":${logoImage},"x":${logoPosition.x},"y":${logoPosition.y},"size":${logoSize.width}}`)
-      formData.append("photo",`{"present":${photoImage},"x":${photoPosition.x},"y":${photoPosition.y},"size":${photoSize.width}}`)
-      formData.append("name",`{"present":${nameText},"x":${namePosition.x},"y":${namePosition.y},"size":${nameSize},"height":${nameDimensions.height},"width":${nameDimensions.width}}`)
-      formData.append("businessName",`{"present":${businessText},"x":${businessPosition.x},"y":${businessPosition.y},"size":${businessSize},"height":${businessDimensions.height},"width":${businessDimensions.width}}`)
-      formData.append("websiteLink",`{"present":${websiteNameText},"x":${websiteNamePosition.x},"y":${websiteNamePosition.y},"size":${websiteNameSize},"height":${websiteNameDimensions.height},"width":${websiteNameDimensions.width}}`)
-      formData.append("phoneNo",`{"present":${phoneNumberText},"x":${phoneNumberPosition.x},"y":${phoneNumberPosition.y},"size":${phoneNumberSize},"height":${phoneNumberDimensions.height},"width":${phoneNumberDimensions.width}}`)
-      formData.append("email",`{"present":${emailText},"x":${emailPosition.x},"y":${emailPosition.y},"size":${emailSize},"height":${emailDimensions.height},"width":${emailDimensions.width}}`)
- 
+      formData.append("language", JSON.stringify(languageTags));
+      formData.append(
+        "logo",
+        `{"present":${logoImage},"x":${logoPosition.x},"y":${logoPosition.y},"size":${logoSize.width}}`
+      );
+      formData.append(
+        "photo",
+        `{"present":${photoImage},"x":${photoPosition.x},"y":${photoPosition.y},"size":${photoSize.width}}`
+      );
+      formData.append(
+        "name",
+        `{"present":${nameText},"x":${namePosition.x},"y":${namePosition.y},"size":${nameSize},"height":${nameDimensions.height},"width":${nameDimensions.width}}`
+      );
+      formData.append(
+        "businessName",
+        `{"present":${businessText},"x":${businessPosition.x},"y":${businessPosition.y},"size":${businessSize},"height":${businessDimensions.height},"width":${businessDimensions.width}}`
+      );
+      formData.append(
+        "websiteLink",
+        `{"present":${websiteNameText},"x":${websiteNamePosition.x},"y":${websiteNamePosition.y},"size":${websiteNameSize},"height":${websiteNameDimensions.height},"width":${websiteNameDimensions.width}}`
+      );
+      formData.append(
+        "phoneNo",
+        `{"present":${phoneNumberText},"x":${phoneNumberPosition.x},"y":${phoneNumberPosition.y},"size":${phoneNumberSize},"height":${phoneNumberDimensions.height},"width":${phoneNumberDimensions.width}}`
+      );
+      formData.append(
+        "email",
+        `{"present":${emailText},"x":${emailPosition.x},"y":${emailPosition.y},"size":${emailSize},"height":${emailDimensions.height},"width":${emailDimensions.width}}`
+      );
 
-
-      console.log("formData",formData);
+      console.log("formData", formData);
       // API call to upload
       const response = await axios.post(
         "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/addtemplet",
@@ -389,8 +410,11 @@ const AdminEditImage = ({ navigation, route }: any) => {
         }
       );
 
-      console.log("upload response-------------------------------------------------",response.data);
-  
+      console.log(
+        "upload response-------------------------------------------------",
+        response.data
+      );
+
       // Handle server response
       if (response.status === 201) {
         Alert.alert("Success", "Image uploaded successfully!");
@@ -403,7 +427,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
       Alert.alert("Error", "An error occurred while uploading the image.");
     }
   };
-  
 
   const FontTab = React.memo(() => {
     return (
@@ -1507,7 +1530,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
     })
   ).current;
 
-
   const addTag = () => {
     if (tagsInputValue.trim() && !tags.includes(tagsInputValue.trim())) {
       setTags([...tags, tagsInputValue.trim()]);
@@ -1848,6 +1870,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
         {choosing ? (
           uploadFlag ? (
             <ScrollView>
+              {/* Template Name Input */}
               <TextInput
                 style={{
                   borderWidth: 1 * scale,
@@ -1862,8 +1885,10 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 }}
                 value={title}
                 onChangeText={setTitle}
-                placeholder="Name of templete"
+                placeholder="Name of template"
               />
+
+              {/* Tag Section */}
               <View
                 style={{
                   alignItems: "flex-start",
@@ -1883,7 +1908,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
                     <TextInput
                       style={{
                         flex: 1,
-
                         paddingRight: 100 * scale,
                         paddingVertical: 6 * scale,
                       }}
@@ -1894,9 +1918,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                     />
                   ) : null}
                   <TouchableOpacity
-                    onPress={() => {
-                      setDropDownTag(!dropDownTag);
-                    }}
+                    onPress={() => setDropDownTag(!dropDownTag)}
                   >
                     <AntDesign
                       name={dropDownTag ? "caretup" : "caretdown"}
@@ -1905,29 +1927,65 @@ const AdminEditImage = ({ navigation, route }: any) => {
                     />
                   </TouchableOpacity>
                 </View>
-                <View style={{}}>
+
+                {/* Display Selected Tags */}
+                <View>
                   {tags.map((tag, index) => (
-                    <View
-                      style={{
-                        alignItems: "flex-start",
-                      }}
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => removeTag(tag)}
                     >
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => removeTag(tag)}
-                      >
-                        <Text style={{ fontSize: 12 * scale }}>{tag}</Text>
-                      </TouchableOpacity>
-                    </View>
+                      <Text style={{ fontSize: 12 * scale }}>{tag}</Text>
+                    </TouchableOpacity>
                   ))}
                 </View>
-                <TouchableOpacity onPress={addTag} style={{}}>
+
+                <Text
+                  style={{
+                    fontSize: 12 * scale,
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  Suggestions Tags
+                </Text>
+                {/* Suggested Predefined Tags */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    marginTop: 10,
+                  }}
+                >
+                  {predefinedTags.map((tag, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        if (!tags.includes(tag)) {
+                          setTags([...tags, tag]);
+                        }
+                      }}
+                      style={{
+                        backgroundColor: "#FF8017",
+                        padding: 5 * scale,
+                        borderRadius: 4 * scale,
+                        margin: 3 * scale,
+                      }}
+                    >
+                      <Text style={{ color: "white", fontSize: 12 * scale }}>
+                        {tag}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+
+                <TouchableOpacity onPress={addTag}>
                   <Text style={{ color: "#FF8017", fontSize: 14 * scale }}>
                     Add tag
                   </Text>
                 </TouchableOpacity>
               </View>
 
+              {/* Language Tag Section */}
               <View
                 style={{
                   marginBottom: 16 * scale,
@@ -1955,9 +2013,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                     />
                   ) : null}
                   <TouchableOpacity
-                    onPress={() => {
-                      setDropDownLTag(!dropDownLTag);
-                    }}
+                    onPress={() => setDropDownLTag(!dropDownLTag)}
                   >
                     <AntDesign
                       name={dropDownLTag ? "caretup" : "caretdown"}
@@ -1966,32 +2022,57 @@ const AdminEditImage = ({ navigation, route }: any) => {
                     />
                   </TouchableOpacity>
                 </View>
-
-                <View style={{}}>
+                {/* Display Selected Language Tags */}
+                <View>
                   {languageTags.map((tag, index) => (
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        paddingVertical: 1 * scale,
-                      }}
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => languageRemoveTag(tag)}
                     >
-                      <TouchableOpacity
-                        key={index}
-                        onPress={() => languageRemoveTag(tag)}
-                      >
-                        <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
-                      </TouchableOpacity>
-                    </View>
+                      <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
+                    </TouchableOpacity>
                   ))}
                 </View>
-                <TouchableOpacity
-                  onPress={languageAddTag}
+
+                <Text
                   style={{
-                    borderRadius: 4 * scale,
-                    width: "40%",
+                    fontSize: 12 * scale,
+                    textDecorationLine: "underline",
                   }}
                 >
+                  Suggestions Tags
+                </Text>
+                {/* Suggested Predefined Language Tags */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    marginTop: 10,
+                  }}
+                >
+                  {predefinedLanguageTags.map((tag, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        if (!languageTags.includes(tag)) {
+                          setLanguageTags([...languageTags, tag]);
+                        }
+                      }}
+                      style={{
+                        backgroundColor: "#FF8017",
+                        padding: 5 * scale,
+                        borderRadius: 4 * scale,
+                        margin: 3 * scale,
+                      }}
+                    >
+                      <Text style={{ color: "white", fontSize: 12 * scale }}>
+                        {tag}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+
+                <TouchableOpacity onPress={languageAddTag}>
                   <Text style={{ color: "#FF8017", fontSize: 14 * scale }}>
                     Add tag
                   </Text>

@@ -187,25 +187,14 @@ const getExtention = filename =>{
 
   const categories = [
     { name: "All" },
-    { name: "Jokefs" },
+    { name: "Jokes" },
     { name: "Birthday" },
-    { name: "sdsd" },
-    { name: "Jodkfes" },
-    { name: "Bdidsadrthday" },
-    { name: "Adll" },
-    { name: "Jodkes" },
   ];
 
   const languages = [
-    { name: "Engdlish" },
-    { name: "Hindi" },
-    { name: "Spandish" },
     { name: "English" },
-    { name: "Hinsdi" },
-    { name: "Spanddish" },
-    { name: "Englasish" },
-    { name: "Hinddsi" },
-    { name: "Spadsdnish" },
+    { name: "Hindi" },
+    { name: "Marathi" },
   ];
   useEffect(() => {
     const callApi = async () => {
@@ -219,7 +208,7 @@ const getExtention = filename =>{
             },
           }
         );
-        setImages(response.data.templets);
+        setImages(response.data.templets)
         console.log(response.data)
       } catch (error) {
         console.error(error);
