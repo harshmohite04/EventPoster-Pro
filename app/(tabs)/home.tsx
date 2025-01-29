@@ -219,7 +219,7 @@ const getExtention = filename =>{
             },
           }
         );
-        setImages(response.data)
+        setImages(response.data.templets);
         console.log(response.data)
       } catch (error) {
         console.error(error);
