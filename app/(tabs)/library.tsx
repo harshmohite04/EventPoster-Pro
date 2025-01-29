@@ -26,14 +26,20 @@ const scale = width / 320;
 
 const Library = ({ navigation }) => {
   const [templates, setTemplates] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [refreshing, setRefreshing] = useState(false); // Refresh state
+  const [refreshing, setRefreshing] = useState(false);
   const [token, setToken] = useState("");
   const [isListEnd, setIsListEnd] = useState(false);
+  const [userLogo, setUserLogo] = useState("");
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission denied", "Sorry, we need camera roll permissions to make this work!");
+      return;
+    }
+
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -41,22 +47,17 @@ const Library = ({ navigation }) => {
       quality: 1,
     });
 
-    console.log("result", result);
     if (!result.canceled) {
-      console.log("This image was sent", result.assets[0].uri);
-      let image = result.assets[0].uri;
-      navigation.push("AdminEditImage", { image: image });
+      navigation.push("AdminEditImage", { image: result.assets[0].uri });
     }
   };
-  
+
   const profileClicked = () => {
     navigation.push("MainProfile");
   };
 
-  const [userLogo, setUserLogo] = useState("");
   useEffect(() => {
-    //console.log("Hello");
-    const apiCall = async () => {
+    const fetchUserData = async () => {
       try {
         const authToken = await AsyncStorage.getItem("authToken");
         if (!authToken) {
@@ -71,69 +72,56 @@ const Library = ({ navigation }) => {
             },
           }
         );
-        console.log(authToken);
-        //console.log(response.data);
         setUserLogo(response.data.photo);
-        //console.log(response.data.name);
-        //console.log("Api");
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching user data:", error);
       }
     };
-    apiCall();
+    fetchUserData();
   }, []);
 
   const fetchTemplates = async () => {
     try {
-      setIsLoading(true); // Start loading
+      console.log("Fetching templates...");
+      
+      setIsLoading(true);
       const authToken = await AsyncStorage.getItem("authToken");
       if (!authToken) {
         console.error("Auth token not found!");
-        setIsLoading(false); // Stop loading in case of no authToken
+        setIsLoading(false);
         return;
       }
       setToken(authToken);
-      console.log("Auth Token:", authToken); // Debugging the token
 
-      // Retry fetching templates until successful response
-      let success = false;
-      if (!isListEnd){
+      if (!isListEnd) {
         const response = await axios.get(
-          `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?page=${currentPage}&limit=15`,
+          `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?page=${currentPage}&limit=21`,
           { headers: { "auth-token": authToken } }
         );
 
+        console.log(response.data);
+        
+
         if (response.status === 200 && response.data.results > 0) {
-          //setTemplates(response.data);
-          setTemplates([...templates, ...response.data.templets]);
-          //console.log(response.data);
-          setIsLoading(false); // Stop loading once we get a valid response
-          success = true; // Exit the loop
+          setTemplates((prevTemplates) => [...prevTemplates, ...response.data.templets]);
         } else {
           setIsListEnd(true);
-          setIsLoading(false); // Stop loading once we get a valid response
-          success = true; // Exit the loop
-          console.log("Retrying fetching templates...");
         }
       }
     } catch (error) {
       console.error("Error fetching templates:", error);
-      setIsLoading(false); // Stop loading on error
-      if (error.message === "Request failed with status code 401") {
-        console.log("Token expired, logging out...");
-        Alert.alert(
-          "Token Expired",
-          "logging out...",)
-        await AsyncStorage.removeItem("authToken"); // Remove the token
+      if (error.response?.status === 401) {
+        Alert.alert("Token Expired", "Logging out...");
+        await AsyncStorage.removeItem("authToken");
         navigation.dispatch(
-          // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
           CommonActions.reset({
-            index: 0, // The first screen in the stack
-            routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
+            index: 0,
+            routes: [{ name: "PhoneNumberAuth" }],
           })
         );
-        return;
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -146,7 +134,7 @@ const Library = ({ navigation }) => {
     setIsListEnd(false);
     setTemplates([]);
     setRefreshing(true);
-    fetchTemplates().then(() => setRefreshing(false)); // Refresh templates
+    fetchTemplates().then(() => setRefreshing(false));
   };
 
   const deleteTemplate = async (id) => {
@@ -156,10 +144,7 @@ const Library = ({ navigation }) => {
         { headers: { "auth-token": token } }
       );
       if (response.status === 200) {
-        console.log("Template deleted successfully");
-        setTemplates((prevTemplates) =>
-          prevTemplates.filter((template) => template._id !== id)
-        );
+        setTemplates((prevTemplates) => prevTemplates.filter((template) => template._id !== id));
       }
     } catch (error) {
       console.error("Error deleting template:", error);
@@ -176,19 +161,14 @@ const Library = ({ navigation }) => {
       if (response.status === 200) {
         setTemplates((prevTemplates) =>
           prevTemplates.map((template) =>
-            template._id === id
-              ? { ...template, visibility: !template.visibility }
-              : template
+            template._id === id ? { ...template, visibility: !template.visibility } : template
           )
         );
       }
-      console.log(response.data);
     } catch (error) {
       console.error("Error changing template visibility:", error);
     }
   };
-
-  
 
   const renderTemplate = ({ item }) => (
     <View style={styles.templateCard}>
@@ -209,23 +189,28 @@ const Library = ({ navigation }) => {
   );
 
   const loadMoreTemplates = () => {
-    if (!isListEnd){
-    console.log("Loading more templates...");
-    setCurrentPage((prevPage) => prevPage + 1);
+    if (!isListEnd) {
+      setCurrentPage((prevPage) => prevPage + 1);
     }
-    else{
-    console.log("no more templates to load");
-    }
-  }
+  };
 
-  /* if (isLoading) {
+  if (isLoading && currentPage === 1) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" color="#FF8017" />
         <Text>Loading templates...</Text>
       </View>
     );
-  } */
+  }
+
+  const bottomLoader = () => {
+    console.log("loader");
+    return (
+      isLoading ? <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#FF8017" />
+      </View> : null
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -238,55 +223,28 @@ const Library = ({ navigation }) => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Library</Text>
         <TouchableOpacity onPress={profileClicked}>
-                  <Image
-                    source={{
-                      uri: userLogo
-                        ? userLogo
-                        : "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
-                    }}
-                    style={{
-                      width: 30 * scale,
-                      height: 30 * scale,
-                      borderRadius: 30 * scale,
-                      borderWidth: 2,
-                      borderColor: "black",
-                    }}
-                  />
-                </TouchableOpacity>
+          <Image
+            source={{
+              uri: userLogo || "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
+            }}
+            style={styles.profileImage}
+          />
+        </TouchableOpacity>
       </View>
-      {!isLoading ? <FlatList
+      <FlatList
         data={templates}
         numColumns={3}
-        keyExtractor={(item) => item._id}
+        keyExtractor={(item) => item._id.toString()}
         renderItem={renderTemplate}
         contentContainerStyle={styles.gridContainer}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         onEndReached={loadMoreTemplates}
-      /> : <View style={styles.loaderContainer}>
-      <ActivityIndicator size="large" color="#FF8017" />
-      {/* <Text>Loading templates...</Text> */}
-    </View>}
-      
-         <TouchableOpacity
-          style={{
-            position: "absolute",
-            bottom: 50 * scale,
-            right: 20 * scale,
-            backgroundColor: "#FF8017",
-            borderRadius: 50,
-            width: 50 * scale,
-            height: 50 * scale,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onPress={pickImage}
-        >
-          <Entypo name="plus" size={25 * scale} color="white" />
-        </TouchableOpacity>
-
-      
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={bottomLoader}
+      />
+      <TouchableOpacity style={styles.fab} onPress={pickImage}>
+        <Entypo name="plus" size={25 * scale} color="white" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -299,7 +257,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   loaderContainer: {
-    marginVertical: 16,
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
   header: {
@@ -360,5 +319,12 @@ const styles = StyleSheet.create({
     height: 50 * scale,
     alignItems: "center",
     justifyContent: "center",
+  },
+  profileImage: {
+    width: 30 * scale,
+    height: 30 * scale,
+    borderRadius: 30 * scale,
+    borderWidth: 2,
+    borderColor: "black",
   },
 });
