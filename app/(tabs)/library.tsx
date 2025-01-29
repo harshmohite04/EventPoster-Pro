@@ -27,8 +27,10 @@ const scale = width / 320;
 const Library = ({ navigation }) => {
   const [templates, setTemplates] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [currentPage, setCurrentPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false); // Refresh state
   const [token, setToken] = useState("");
+  const [isListEnd, setIsListEnd] = useState(false);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -95,18 +97,22 @@ const Library = ({ navigation }) => {
 
       // Retry fetching templates until successful response
       let success = false;
-      while (!success) {
+      if (!isListEnd){
         const response = await axios.get(
-          "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets",
+          `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?page=${currentPage}&limit=15`,
           { headers: { "auth-token": authToken } }
         );
 
-        if (response.status === 200) {
-          setTemplates(response.data);
+        if (response.status === 200 && response.data.results > 0) {
+          //setTemplates(response.data);
+          setTemplates([...templates, ...response.data.templets]);
           //console.log(response.data);
           setIsLoading(false); // Stop loading once we get a valid response
           success = true; // Exit the loop
         } else {
+          setIsListEnd(true);
+          setIsLoading(false); // Stop loading once we get a valid response
+          success = true; // Exit the loop
           console.log("Retrying fetching templates...");
         }
       }
@@ -133,9 +139,12 @@ const Library = ({ navigation }) => {
 
   useEffect(() => {
     fetchTemplates();
-  }, []);
+  }, [currentPage]);
 
   const onRefresh = () => {
+    setCurrentPage(1);
+    setIsListEnd(false);
+    setTemplates([]);
     setRefreshing(true);
     fetchTemplates().then(() => setRefreshing(false)); // Refresh templates
   };
@@ -199,6 +208,16 @@ const Library = ({ navigation }) => {
     </View>
   );
 
+  const loadMoreTemplates = () => {
+    if (!isListEnd){
+    console.log("Loading more templates...");
+    setCurrentPage((prevPage) => prevPage + 1);
+    }
+    else{
+    console.log("no more templates to load");
+    }
+  }
+
   /* if (isLoading) {
     return (
       <View style={styles.loaderContainer}>
@@ -244,9 +263,10 @@ const Library = ({ navigation }) => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        onEndReached={loadMoreTemplates}
       /> : <View style={styles.loaderContainer}>
       <ActivityIndicator size="large" color="#FF8017" />
-      <Text>Loading templates...</Text>
+      {/* <Text>Loading templates...</Text> */}
     </View>}
       
          <TouchableOpacity
@@ -279,10 +299,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   loaderContainer: {
-    flex: 1,
-    justifyContent: "center",
+    marginVertical: 16,
     alignItems: "center",
-    backgroundColor: "#ffffff",
   },
   header: {
     flexDirection: "row",
