@@ -429,6 +429,8 @@ const categories = [
         data={images}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        windowSize={10}
+        maxToRenderPerBatch={5}
         pagingEnabled
         showsVerticalScrollIndicator={false}
         snapToAlignment="start"
