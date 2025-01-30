@@ -11,6 +11,7 @@ import {
   ScrollView,
   Alert,
   Modal,
+  Animated,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
@@ -72,20 +73,24 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
   // Position Of Logo and Photo
   const [logoImage, setLogoImage] = useState(false);
-  const [logoPosition, setLogoPosition] = useState({ x: 0, y: 0 });
+  const [logoPositionX,setLogoPositionX] = useState(0);
+  const [logoPositionY,setLogoPositionY] = useState(0);
   const [logoSize, setLogoSize] = useState({ width: 200, height: 200 });
 
   const [photoImage, setPhotoImage] = useState(false);
-  const [photoPosition, setPhotoPosition] = useState({ x: 0, y: 0 });
+  const [photoPositionX,setPhotoPositionX] = useState(0);
+  const [photoPositionY,setPhotoPositionY] = useState(0);
   const [photoSize, setPhotoSize] = useState({ width: 200, height: 200 });
 
   const [nameText, setNameText] = useState(false);
-  const [namePosition, setNamePosition] = useState({ x: 0, y: 0 });
+  const [namePositionX,setNamePositionX] = useState(0);
+  const [namePositionY,setNamePositionY] = useState(0);
   const [nameDimensions, setNameDimensions] = useState({ width: 0, height: 0 });
   const [nameSize, setNameSize] = useState(20);
 
   const [businessText, setBusinessText] = useState(false);
-  const [businessPosition, setBusinessPosition] = useState({ x: 0, y: 0 });
+  const [businessPositionX,setBusinessPositionX] = useState(0);
+  const [businessPositionY,setBusinessPositionY] = useState(0);  
   const [businessDimensions, setBusinessDimensions] = useState({
     width: 0,
     height: 0,
@@ -93,10 +98,8 @@ const AdminEditImage = ({ navigation, route }: any) => {
   const [businessSize, setBusinessSize] = useState(20);
 
   const [websiteNameText, setWebsiteNameText] = useState(false);
-  const [websiteNamePosition, setWebsiteNamePosition] = useState({
-    x: 0,
-    y: 0,
-  });
+  const [websiteNamePositionX, setWebsiteNamePositionX] = useState(0);
+  const [websiteNamePositionY, setWebsiteNamePositionY] = useState(0);
   const [websiteNameDimensions, setWebsiteNameDimensions] = useState({
     width: 0,
     height: 0,
@@ -104,10 +107,8 @@ const AdminEditImage = ({ navigation, route }: any) => {
   const [websiteNameSize, setWebsiteNameSize] = useState(20);
 
   const [phoneNumberText, setPhoneNumberText] = useState(false);
-  const [phoneNumberPosition, setPhoneNumberPosition] = useState({
-    x: 0,
-    y: 0,
-  });
+  const [phoneNumberPositionX, setPhoneNumberPositionX] = useState(0);
+  const [phoneNumberPositionY, setPhoneNumberPositionY] = useState(0);
   const [phoneNumberDimensions, setPhoneNumberDimensions] = useState({
     width: 0,
     height: 0,
@@ -115,7 +116,8 @@ const AdminEditImage = ({ navigation, route }: any) => {
   const [phoneNumberSize, setPhoneNumberSize] = useState(20);
 
   const [emailText, setEmailText] = useState(false);
-  const [emailPosition, setEmailPosition] = useState({ x: 0, y: 0 });
+  const [emailPositionX, setEmailPositionX] = useState(0);
+  const [emailPositionY, setEmailPositionY] = useState(0);
   const [emailDimensions, setEmailDimensions] = useState({
     width: 0,
     height: 0,
@@ -140,29 +142,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
     height: 0,
   });
 
-  const throttledSetTextPosition = throttle((newX: any, newY: any) => {
-    setTextPosition({ x: newX, y: newY });
-  }, 30);
-
-  const throttledSetNamePosition = throttle((newX: any, newY: any) => {
-    setNamePosition({ x: newX, y: newY });
-  }, 30);
-
-  const throttledSetBusinessPosition = throttle((newX: any, newY: any) => {
-    setBusinessPosition({ x: newX, y: newY });
-  }, 30);
-
-  const throttledSetWebsiteNamePosition = throttle((newX: any, newY: any) => {
-    setWebsiteNamePosition({ x: newX, y: newY });
-  }, 30);
-
-  const throttledSetPhoneNumberPosition = throttle((newX: any, newY: any) => {
-    setPhoneNumberPosition({ x: newX, y: newY });
-  }, 30);
-
-  const throttledSetEmailPosition = throttle((newX: any, newY: any) => {
-    setEmailPosition({ x: newX, y: newY });
-  }, 30);
 
   useEffect(() => {
     if (image) {
@@ -331,42 +310,6 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
   const handleUpload = async () => {
     try {
-      /* console.log("Logo");
-      console.log(logoPosition);
-      console.log(logoImage);
-      console.log(logoSize);
-      console.log("Photo");
-      console.log(photoPosition);
-      console.log(photoImage);
-      console.log(photoSize);
-      console.log("Name");
-      console.log(nameText);
-      console.log(namePosition);
-      console.log(nameDimensions);
-      console.log(nameSize);
-      console.log("Business");
-      console.log(businessText);
-      console.log(businessPosition);
-      console.log(businessDimensions);
-      console.log(businessSize);
-      console.log("Website");
-      console.log(websiteNameText);
-      console.log(websiteNamePosition);
-      console.log(websiteNameDimensions);
-      console.log(websiteNameSize);
-      console.log("Phone Number");
-      console.log(phoneNumberText);
-      console.log(phoneNumberPosition);
-      console.log(phoneNumberDimensions);
-      console.log(phoneNumberSize);
-      console.log("Email");
-      console.log(emailText);
-      console.log(emailPosition);
-      console.log(emailDimensions);
-      console.log(emailSize);
-      console.log("BackGround Image");
-      console.log(image);
- */
       // Capture image and save it locally
       const uri = await captureRef(viewShotRef, {
         format: "png",
@@ -400,39 +343,43 @@ const AdminEditImage = ({ navigation, route }: any) => {
         name: `templet.${logoExtension}`,
       });
 
-      formData.append("title", title);
+      formData.append("title", "ddd");
       formData.append("category", JSON.stringify(tags));
       formData.append("language", JSON.stringify(languageTags));
       formData.append(
         "logo",
-        `{"present":${logoImage},"x":${logoPosition.x},"y":${logoPosition.y},"size":${logoSize.width}}`
+        `{"present":${logoImage},"x":${logoPositionX},"y":${logoPositionY},"size":${logoSize.width}}`
       );
       formData.append(
         "photo",
-        `{"present":${photoImage},"x":${photoPosition.x},"y":${photoPosition.y},"size":${photoSize.width}}`
+        `{"present":${photoImage},"x":${photoPositionX},"y":${photoPositionY},"size":${photoSize.width}}`
       );
       formData.append(
         "name",
-        `{"present":${nameText},"x":${namePosition.x},"y":${namePosition.y},"size":${nameSize},"height":${nameDimensions.height},"width":${nameDimensions.width}}`
+        `{"present":${nameText},"x":${namePositionX},"y":${namePositionY},"size":${nameSize},"height":${nameDimensions.height},"width":${nameDimensions.width}}`
       );
       formData.append(
         "businessName",
-        `{"present":${businessText},"x":${businessPosition.x},"y":${businessPosition.y},"size":${businessSize},"height":${businessDimensions.height},"width":${businessDimensions.width}}`
+        `{"present":${businessText},"x":${businessPositionX},"y":${businessPositionY},"size":${businessSize},"height":${businessDimensions.height},"width":${businessDimensions.width}}`
       );
       formData.append(
         "websiteLink",
-        `{"present":${websiteNameText},"x":${websiteNamePosition.x},"y":${websiteNamePosition.y},"size":${websiteNameSize},"height":${websiteNameDimensions.height},"width":${websiteNameDimensions.width}}`
+        `{"present":${websiteNameText},"x":${websiteNamePositionX},"y":${websiteNamePositionY},"size":${websiteNameSize},"height":${websiteNameDimensions.height},"width":${websiteNameDimensions.width}}`
       );
       formData.append(
         "phoneNo",
-        `{"present":${phoneNumberText},"x":${phoneNumberPosition.x},"y":${phoneNumberPosition.y},"size":${phoneNumberSize},"height":${phoneNumberDimensions.height},"width":${phoneNumberDimensions.width}}`
+        `{"present":${phoneNumberText},"x":${phoneNumberPositionX},"y":${phoneNumberPositionY},"size":${phoneNumberSize},"height":${phoneNumberDimensions.height},"width":${phoneNumberDimensions.width}}`
       );
       formData.append(
         "email",
-        `{"present":${emailText},"x":${emailPosition.x},"y":${emailPosition.y},"size":${emailSize},"height":${emailDimensions.height},"width":${emailDimensions.width}}`
+        `{"present":${emailText},"x":${emailPositionX},"y":${emailPositionY},"size":${emailSize},"height":${emailDimensions.height},"width":${emailDimensions.width}}`
       );
 
       console.log("formData", formData);
+      console.log("logo: x",logoPositionX,"y: ",logoPositionY);
+      console.log("x  1",typeof(logoPositionX));
+      console.log("x  2",Number(logoPositionX)); 
+
       // API call to upload
       const response = await axios.post(
         "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/addtemplet",
@@ -458,7 +405,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
         throw new Error("Failed to upload the image.");
       }
     } catch (error) {
-      console.error("Error during upload:", error.message);
+      console.error("Error during upload:", error);
       Alert.alert("Error", "An error occurred while uploading the image.");
     }
   };
@@ -1445,124 +1392,201 @@ const AdminEditImage = ({ navigation, route }: any) => {
     );
   };
 
-  const panResponder = useRef(
+  const panText = useRef(new Animated.ValueXY()).current;
+
+  const TextPanResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        const newX = textPosition.x + gestureState.dx;
-        const newY = textPosition.y + gestureState.dy;
-        throttledSetTextPosition(newX, newY);
+      onPanResponderMove: Animated.event([null, {dx: panText.x, dy: panText.y}], {
+        useNativeDriver: false,  // Pass the options here
+      }),
+      onPanResponderRelease: () => {
+        panText.extractOffset();
       },
-      onPanResponderRelease: () => {},
-    })
+    }),
   ).current;
+
+  const panLogo = useRef(new Animated.ValueXY()).current;
+
+  useEffect(() => {
+    // Listen to changes in pan.x and pan.y
+    const xListener  = panLogo.x.addListener(({value}) => setLogoPositionX(value));
+    const yListener  = panLogo.y.addListener(({value}) => setLogoPositionY(value));
+
+    // Clean up listeners when component is unmounted
+    return () => {
+      panLogo.x.removeListener(xListener);
+      panLogo.y.removeListener(yListener);
+    };
+  }, [panLogo]);
 
   const LogoPanResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: (evt, gestureState) => {
-        // Record the current position when the gesture starts
-        setLogoPosition({
-          x: logoPosition.x + gestureState.dx,
-          y: logoPosition.y + gestureState.dy,
-        });
-      },
-      onPanResponderMove: (evt, gestureState) => {
-        const newX = logoPosition.x + gestureState.dx;
-        const newY = logoPosition.y + gestureState.dy;
-
-        // Optional: Check for bounds here to prevent dragging outside
-        setLogoPosition({
-          x: newX,
-          y: newY,
-        });
-      },
+      onPanResponderMove: Animated.event([null, {dx: panLogo.x, dy: panLogo.y}], {
+        useNativeDriver: false,  // Pass the options here
+      }),
       onPanResponderRelease: () => {
-        // Can include logic for smooth stop or reset if necessary
+        panLogo.extractOffset();
       },
-    })
+    }),
   ).current;
+
+  const panPhoto = useRef(new Animated.ValueXY()).current;
+
+  useEffect(() => {
+    // Listen to changes in pan.x and pan.y
+    const xListener  = panPhoto.x.addListener(({value}) => setPhotoPositionX(value));
+    const yListener  = panPhoto.y.addListener(({value}) => setPhotoPositionY(value));
+
+    // Clean up listeners when component is unmounted
+    return () => {
+      panPhoto.x.removeListener(xListener);
+      panPhoto.y.removeListener(yListener);
+    };
+  }, [panPhoto]);
 
   const PhotoPanResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: (evt, gestureState) => {
-        // Record the current position when the gesture starts
-        setPhotoPosition({
-          x: photoPosition.x + gestureState.dx,
-          y: photoPosition.y + gestureState.dy,
-        });
-      },
-      onPanResponderMove: (evt, gestureState) => {
-        const newX = photoPosition.x + gestureState.dx;
-        const newY = photoPosition.y + gestureState.dy;
-
-        // Optional: Check for bounds here to prevent dragging outside
-        setPhotoPosition({
-          x: newX,
-          y: newY,
-        });
-      },
+      onPanResponderMove: Animated.event([null, {dx: panPhoto.x, dy: panPhoto.y}], {
+        useNativeDriver: false,  // Pass the options here
+      }),
       onPanResponderRelease: () => {
-        // Can include logic for smooth stop or reset if necessary
+        panPhoto.extractOffset();
       },
-    })
+    }),
   ).current;
 
-  const namePanResponder = useRef(
+  const panName = useRef(new Animated.ValueXY()).current;
+
+  useEffect(() => {
+    // Listen to changes in pan.x and pan.y
+    const xListener  = panName.x.addListener(({value}) => setNamePositionX(value));
+    const yListener  = panName.y.addListener(({value}) => setNamePositionY(value));
+
+    // Clean up listeners when component is unmounted
+    return () => {
+      panName.x.removeListener(xListener);
+      panName.y.removeListener(yListener);
+    };
+  }, [panName]);
+
+  const NamePanResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        const newX = namePosition.x + gestureState.dx;
-        const newY = namePosition.y + gestureState.dy;
-        throttledSetNamePosition(newX, newY);
+      onPanResponderMove: Animated.event([null, {dx: panName.x, dy: panName.y}], {
+        useNativeDriver: false,  // Pass the options here
+      }),
+      onPanResponderRelease: () => {
+        panName.extractOffset();
       },
-      onPanResponderRelease: () => {},
-    })
+    }),
   ).current;
-  const businessPanResponder = useRef(
+
+
+  const panBusinessName = useRef(new Animated.ValueXY()).current;
+
+  useEffect(() => {
+    // Listen to changes in pan.x and pan.y
+    const xListener  = panBusinessName.x.addListener(({value}) => setBusinessPositionX(value));
+    const yListener  = panBusinessName.y.addListener(({value}) => setBusinessPositionY(value));
+
+    // Clean up listeners when component is unmounted
+    return () => {
+      panBusinessName.x.removeListener(xListener);
+      panBusinessName.y.removeListener(yListener);
+    };
+  }, [panBusinessName]);
+
+  const BusinessNamePanResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        const newX = businessPosition.x + gestureState.dx;
-        const newY = businessPosition.y + gestureState.dy;
-        throttledSetBusinessPosition(newX, newY);
+      onPanResponderMove: Animated.event([null, {dx: panBusinessName.x, dy: panBusinessName.y}], {
+        useNativeDriver: false,  // Pass the options here
+      }),
+      onPanResponderRelease: () => {
+        panBusinessName.extractOffset();
       },
-      onPanResponderRelease: () => {},
-    })
+    }),
   ).current;
-  const websiteNamePanResponder = useRef(
+
+  const panWebsiteName = useRef(new Animated.ValueXY()).current;
+
+  useEffect(() => {
+    // Listen to changes in pan.x and pan.y
+    const xListener  = panWebsiteName.x.addListener(({value}) => setWebsiteNamePositionX(value));
+    const yListener  = panWebsiteName.y.addListener(({value}) => setWebsiteNamePositionY(value));
+
+    // Clean up listeners when component is unmounted
+    return () => {
+      panWebsiteName.x.removeListener(xListener);
+      panWebsiteName.y.removeListener(yListener);
+    };
+  }, [panWebsiteName]);
+
+  const WebsiteNamePanResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        const newX = websiteNamePosition.x + gestureState.dx;
-        const newY = websiteNamePosition.y + gestureState.dy;
-        throttledSetWebsiteNamePosition(newX, newY);
+      onPanResponderMove: Animated.event([null, {dx: panWebsiteName.x, dy: panWebsiteName.y}], {
+        useNativeDriver: false,  // Pass the options here
+      }),
+      onPanResponderRelease: () => {
+        panWebsiteName.extractOffset();
       },
-      onPanResponderRelease: () => {},
-    })
+    }),
   ).current;
-  const phoneNumberPanResponder = useRef(
+
+  const panPhone = useRef(new Animated.ValueXY()).current;
+
+  useEffect(() => {
+    // Listen to changes in pan.x and pan.y
+    const xListener  = panPhone.x.addListener(({value}) => setPhoneNumberPositionX(value));
+    const yListener  = panPhone.y.addListener(({value}) => setPhoneNumberPositionY(value));
+
+    // Clean up listeners when component is unmounted
+    return () => {
+      panPhone.x.removeListener(xListener);
+      panPhone.y.removeListener(yListener);
+    };
+  }, [panPhone]);
+
+  const PhoneNumberPanResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        const newX = phoneNumberPosition.x + gestureState.dx;
-        const newY = phoneNumberPosition.y + gestureState.dy;
-        throttledSetPhoneNumberPosition(newX, newY);
+      onPanResponderMove: Animated.event([null, {dx: panPhone.x, dy: panPhone.y}], {
+        useNativeDriver: false,  // Pass the options here
+      }),
+      onPanResponderRelease: () => {
+        panPhone.extractOffset();
       },
-      onPanResponderRelease: () => {},
-    })
+    }),
   ).current;
-  const emailPanResponder = useRef(
+
+  const panEmail = useRef(new Animated.ValueXY()).current;
+
+  useEffect(() => {
+    // Listen to changes in pan.x and pan.y
+    const xListener  = panEmail.x.addListener(({value}) => setEmailPositionX(value));
+    const yListener  = panEmail.y.addListener(({value}) => setEmailPositionY(value));
+
+    // Clean up listeners when component is unmounted
+    return () => {
+      panEmail.x.removeListener(xListener);
+      panEmail.y.removeListener(yListener);
+    };
+  }, [panEmail]);
+
+  const EmailPanResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        const newX = emailPosition.x + gestureState.dx;
-        const newY = emailPosition.y + gestureState.dy;
-        throttledSetEmailPosition(newX, newY);
+      onPanResponderMove: Animated.event([null, {dx: panEmail.x, dy: panEmail.y}], {
+        useNativeDriver: false,  // Pass the options here
+      }),
+      onPanResponderRelease: () => {
+        panEmail.extractOffset();
       },
-      onPanResponderRelease: () => {},
-    })
+    }),
   ).current;
 
   const addTag = () => {
@@ -1701,13 +1725,12 @@ const AdminEditImage = ({ navigation, route }: any) => {
               }}
             />
             {logoImage ? (
-              <PinchGestureHandler>
-                <View
+              <Animated.View
                   {...LogoPanResponder.panHandlers}
                   style={{
                     position: "absolute",
-                    left: logoPosition.x,
-                    top: logoPosition.y,
+                    left: panLogo.x,
+                    top: panLogo.y,
                     width: logoSize.width,
                     height: logoSize.height,
                   }}
@@ -1721,18 +1744,16 @@ const AdminEditImage = ({ navigation, route }: any) => {
                       position: "relative",
                     }}
                   />
-                </View>
-              </PinchGestureHandler>
+              </Animated.View>
             ) : null}
 
             {photoImage ? (
-              <PinchGestureHandler>
-                <View
+              <Animated.View
                   {...PhotoPanResponder.panHandlers}
                   style={{
                     position: "absolute",
-                    left: photoPosition.x,
-                    top: photoPosition.y,
+                    left: panPhoto.x,
+                    top: panPhoto.y,
                     width: photoSize.width,
                     height: photoSize.height,
                   }}
@@ -1747,144 +1768,165 @@ const AdminEditImage = ({ navigation, route }: any) => {
                       position: "relative",
                     }}
                   />
-                </View>
-              </PinchGestureHandler>
+                </Animated.View>
             ) : null}
 
             {nameText ? (
+              <Animated.View
+              {...NamePanResponder.panHandlers}
+              style={[
+                styles.textOverlay,
+                {
+                  left: panName.x,
+                  top: panName.y,
+                },
+              ]}
+              >
               <Text
-                {...namePanResponder.panHandlers}
                 onLayout={(event) => {
                   const { width, height } = event.nativeEvent.layout;
                   setNameDimensions({ width, height });
                 }}
-                style={[
-                  styles.textOverlay,
-                  {
-                    fontSize: nameSize,
-                    color: "#000000",
-                    left: namePosition.x,
-                    top: namePosition.y,
-                  },
-                ]}
+                style={{
+                  fontSize: nameSize, color: "#000000",}}
               >
                 Your Name
               </Text>
+              </Animated.View>
             ) : null}
 
             {businessText ? (
+              <Animated.View
+              {...BusinessNamePanResponder.panHandlers}
+              style={[
+                styles.textOverlay,
+                {
+                  left: panBusinessName.x,
+                  top: panBusinessName.y,
+                },
+              ]}
+              >
               <Text
-                {...businessPanResponder.panHandlers}
                 onLayout={(event) => {
                   const { width, height } = event.nativeEvent.layout;
                   setBusinessDimensions({ width, height });
                 }}
-                style={[
-                  styles.textOverlay,
-                  {
-                    fontSize: businessSize,
-                    color: "#000000",
-                    left: businessPosition.x,
-                    top: businessPosition.y,
-                  },
-                ]}
+                style={{
+                  fontSize: businessSize, color: "#000000",}}
               >
                 Business Name
               </Text>
+              </Animated.View>
             ) : null}
 
             {websiteNameText ? (
+              <Animated.View
+              {...WebsiteNamePanResponder.panHandlers}
+              style={[
+                styles.textOverlay,
+                {
+                  left: panWebsiteName.x,
+                  top: panWebsiteName.y,
+                },
+              ]}
+              >
               <Text
-                {...websiteNamePanResponder.panHandlers}
                 onLayout={(event) => {
                   const { width, height } = event.nativeEvent.layout;
                   setWebsiteNameDimensions({ width, height });
                 }}
-                style={[
-                  styles.textOverlay,
-                  {
-                    fontSize: websiteNameSize,
-                    color: "#000000",
-                    left: websiteNamePosition.x,
-                    top: websiteNamePosition.y,
-                  },
-                ]}
+                style={{
+                  fontSize: websiteNameSize, color: "#000000",}}
               >
                 Website URL
               </Text>
+              </Animated.View>
             ) : null}
 
             {phoneNumberText ? (
+              <Animated.View
+              {...PhoneNumberPanResponder.panHandlers}
+              style={[
+                styles.textOverlay,
+                {
+                  left: panPhone.x,
+                  top: panPhone.y,
+                },
+              ]}
+              >
               <Text
-                {...phoneNumberPanResponder.panHandlers}
                 onLayout={(event) => {
                   const { width, height } = event.nativeEvent.layout;
                   setPhoneNumberDimensions({ width, height });
                 }}
-                style={[
-                  styles.textOverlay,
-                  {
-                    fontSize: phoneNumberSize,
-                    color: "#000000",
-                    left: phoneNumberPosition.x,
-                    top: phoneNumberPosition.y,
-                  },
-                ]}
+                style={{
+                  fontSize: phoneNumberSize, color: "#000000",}}
               >
-                93568365412
+                93xxxxxxxx
               </Text>
+              </Animated.View>
             ) : null}
 
             {emailText ? (
+              <Animated.View
+              {...EmailPanResponder.panHandlers}
+              style={[
+                styles.textOverlay,
+                {
+                  left: panEmail.x,
+                  top: panEmail.y,
+                },
+              ]}
+              >
               <Text
-                {...emailPanResponder.panHandlers}
                 onLayout={(event) => {
                   const { width, height } = event.nativeEvent.layout;
                   setEmailDimensions({ width, height });
                 }}
-                style={[
-                  styles.textOverlay,
-                  {
-                    fontSize: emailSize,
-                    color: "#000000",
-                    left: emailPosition.x,
-                    top: emailPosition.y,
-                  },
-                ]}
+                style={{
+                  fontSize: emailSize, color: "#000000",}}
               >
                 abc@gmail.com
               </Text>
+              </Animated.View>
             ) : null}
 
             {choosing ? (
+              <Animated.View
+              {...TextPanResponder.panHandlers}
+              style={[
+                styles.textOverlay,
+                {
+                  left: panText.x,
+                  top: panText.y,
+                },
+              ]}
+              >
               <Text
-                {...panResponder.panHandlers}
                 onLayout={(event) => {
                   const { width, height } = event.nativeEvent.layout;
                   setTextDimensions({ width, height });
                 }}
-                style={[
-                  styles.textOverlay,
-                  {
-                    fontSize,
-                    color: fontColor,
-                    backgroundColor: BgColor,
-                    left: textPosition.x,
-                    top: textPosition.y,
-                    fontFamily: fontFamily,
-                    opacity: opacity,
-                    textAlign: align,
-                    lineHeight: lineSpacing,
-                    textShadowColor: shadowColor,
-                    textShadowOffset: { width: -1, height: 1 },
-                    textShadowRadius: shadow,
-                    fontWeight: fontW ? "100" : "bold",
-                    fontStyle: fontI ? "normal" : "italic",
-                  },
-                ]}
+                style={{
+                  fontSize,
+                  color: fontColor,
+                  backgroundColor: BgColor,
+                  left: textPosition.x,
+                  top: textPosition.y,
+                  fontFamily: fontFamily,
+                  opacity: opacity,
+                  textAlign: align,
+                  lineHeight: lineSpacing,
+                  textShadowColor: shadowColor,
+                  textShadowOffset: { width: -1, height: 1 },
+                  textShadowRadius: shadow,
+                  fontWeight: fontW ? "100" : "bold",
+                  fontStyle: fontI ? "normal" : "italic",
+                }}
               >
                 {text}
               </Text>
+              </Animated.View>
             ) : null}
           </ViewShot>
         ) : (
