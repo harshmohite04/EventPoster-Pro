@@ -10,6 +10,7 @@ import {
   TextInput,
   ScrollView,
   Alert,
+  Modal,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
@@ -121,8 +122,8 @@ const AdminEditImage = ({ navigation, route }: any) => {
   });
   const [emailSize, setEmailSize] = useState(20);
 
-  const [dropDownTag, setDropDownTag] = useState(true);
-  const [dropDownLTag, setDropDownLTag] = useState(true);
+  const [dropDownTag, setDropDownTag] = useState(false);
+  const [dropDownLTag, setDropDownLTag] = useState(false);
 
   const [finalImg, setfinalImg] = useState("");
 
@@ -291,8 +292,42 @@ const AdminEditImage = ({ navigation, route }: any) => {
     }
   }; */
 
-  const predefinedTags = ["Birthday", "Jokes"];
-  const predefinedLanguageTags = ["English", "Marathi", "Hindi", "Gujrati"];
+  const predefinedTags = [
+    "Birthday",
+    "Jokes",
+    "Anniversary",
+    "Motivation",
+    "Friendship",
+    "Love",
+    "Funny",
+    "Congratulations",
+    "Inspiration",
+    "Get Well Soon",
+    "Thank You",
+    "Good Morning",
+    "Good Night",
+    "New Year",
+    "Christmas",
+    "Valentine's Day",
+    "Quotes",
+    "Wisdom",
+    "Memes",
+    "Success",
+    "Encouragement",
+    "Family",
+    "Work",
+    "Weekend",
+  ];
+  
+  const predefinedLanguageTags = [
+    "English", "Marathi", "Hindi", "Gujarati",
+    "Spanish", "French", "German", "Italian",
+    "Russian", "Chinese", "Japanese", "Korean",
+    "Arabic", "Portuguese", "Bengali", "Punjabi",
+    "Tamil", "Telugu", "Urdu", "Malayalam",
+    "Kannada", "Odia", "Assamese", "Nepali"
+  ];
+  
 
   const handleUpload = async () => {
     try {
@@ -365,7 +400,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
         name: `templet.${logoExtension}`,
       });
 
-      formData.append("title", "teat1");
+      formData.append("title", title);
       formData.append("category", JSON.stringify(tags));
       formData.append("language", JSON.stringify(languageTags));
       formData.append(
@@ -1541,6 +1576,22 @@ const AdminEditImage = ({ navigation, route }: any) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
+  const handleTagSelect = (tag) => {
+    if (!tags.includes(tag)) {
+      setTags([...tags, tag]);
+    }
+    setDropDownTag(false); // Close dropdown after selection
+  };
+
+  const handleLTagSelect = (tag) => {
+    if (!languageTags.includes(tag)) {
+      setLanguageTags([...languageTags, tag]);
+    }
+    setDropDownLTag(false); // Close dropdown after selection
+  };
+
+
+
   const [languageTags, setLanguageTags] = useState([]);
   const [languageTagsInputValue, setLanguageTagsInputValue] = useState("");
 
@@ -1889,195 +1940,150 @@ const AdminEditImage = ({ navigation, route }: any) => {
               />
 
               {/* Tag Section */}
-              <View
-                style={{
-                  alignItems: "flex-start",
-                  width: "80%",
-                  alignSelf: "center",
-                  marginTop: 10 * scale,
-                  borderWidth: 1 * scale,
-                  paddingHorizontal: 10 * scale,
-                  paddingVertical: 10 * scale,
-                  borderRadius: 4 * scale,
-                  borderColor: "#6B737A",
-                  marginBottom: 5 * scale,
-                }}
-              >
-                <View style={{ flexDirection: "row" }}>
-                  {dropDownTag ? (
-                    <TextInput
-                      style={{
-                        flex: 1,
-                        paddingRight: 100 * scale,
-                        paddingVertical: 6 * scale,
-                      }}
-                      placeholder="Type Here"
-                      value={tagsInputValue}
-                      onChangeText={setTagsInputValue}
-                      onSubmitEditing={addTag}
-                    />
-                  ) : null}
+              <View style={styles.containerTag}>
+      {/* Tag Input Textbox */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Type a tag"
+          placeholderTextColor="#999"
+          value={tagsInputValue}
+          onChangeText={setTagsInputValue}
+          onSubmitEditing={addTag}
+        />
+        <TouchableOpacity
+          onPress={() => setDropDownTag(!dropDownTag)}
+          style={styles.dropdownButton}
+        >
+          <AntDesign
+            name={dropDownTag ? "caretup" : "caretdown"}
+            size={14 * scale}
+            color="#6B737A"
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* Display Selected Tags */}
+      <View style={styles.tagsContainer}>
+        {tags.map((tag, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => removeTag(tag)}
+            style={styles.tag}
+          >
+            <Text style={styles.tagText}>{tag} ✕</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Dropdown Modal */}
+      <Modal
+        visible={dropDownTag}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setDropDownTag(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setDropDownTag(false)}
+        >
+          <View style={styles.dropdownContainer}>
+            <ScrollView
+              style={styles.dropdownScrollView}
+              showsVerticalScrollIndicator={true}
+            >
+              {predefinedTags
+                .filter((tag) => !tags.includes(tag)) // Hide already selected tags
+                .map((tag, index) => (
                   <TouchableOpacity
-                    onPress={() => setDropDownTag(!dropDownTag)}
+                    key={index}
+                    onPress={() => handleTagSelect(tag)}
+                    style={styles.dropdownItem}
                   >
-                    <AntDesign
-                      name={dropDownTag ? "caretup" : "caretdown"}
-                      size={14 * scale}
-                      color="black"
-                    />
+                    <Text style={styles.dropdownItemText}>{tag}</Text>
                   </TouchableOpacity>
-                </View>
+                ))}
+            </ScrollView>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    </View>
 
-                {/* Display Selected Tags */}
-                <View>
-                  {tags.map((tag, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => removeTag(tag)}
-                    >
-                      <Text style={{ fontSize: 12 * scale }}>{tag}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
 
-                <Text
-                  style={{
-                    fontSize: 12 * scale,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Suggestions Tags
-                </Text>
-                {/* Suggested Predefined Tags */}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                    marginTop: 10,
-                  }}
-                >
-                  {predefinedTags.map((tag, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => {
-                        if (!tags.includes(tag)) {
-                          setTags([...tags, tag]);
-                        }
-                      }}
-                      style={{
-                        backgroundColor: "#FF8017",
-                        padding: 5 * scale,
-                        borderRadius: 4 * scale,
-                        margin: 3 * scale,
-                      }}
-                    >
-                      <Text style={{ color: "white", fontSize: 12 * scale }}>
-                        {tag}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
 
-                <TouchableOpacity onPress={addTag}>
-                  <Text style={{ color: "#FF8017", fontSize: 14 * scale }}>
-                    Add tag
-                  </Text>
-                </TouchableOpacity>
-              </View>
+
 
               {/* Language Tag Section */}
-              <View
-                style={{
-                  marginBottom: 16 * scale,
-                  width: "80%",
-                  alignSelf: "center",
-                  marginTop: 10 * scale,
-                  borderWidth: 1 * scale,
-                  paddingHorizontal: 10 * scale,
-                  paddingVertical: 10 * scale,
-                  borderRadius: 4 * scale,
-                  borderColor: "#6B737A",
-                }}
-              >
-                <View style={{ flexDirection: "row" }}>
-                  {dropDownLTag ? (
-                    <TextInput
-                      style={{
-                        flex: 1,
-                        padding: 8 * scale,
-                      }}
-                      placeholder="Add a Language tag"
-                      value={languageTagsInputValue}
-                      onChangeText={setLanguageTagsInputValue}
-                      onSubmitEditing={languageAddTag}
-                    />
-                  ) : null}
+              <View style={styles.containerTag}>
+      {/* Tag Input Textbox */}
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Add a Language tag"
+          placeholderTextColor="#999"
+          value={languageTagsInputValue}
+          onChangeText={setLanguageTagsInputValue}
+          onSubmitEditing={languageAddTag}
+        />
+        <TouchableOpacity
+          onPress={() => setDropDownLTag(!dropDownLTag)}
+          style={styles.dropdownButton}
+        >
+          <AntDesign
+            name={dropDownLTag ? "caretup" : "caretdown"}
+            size={14 * scale}
+            color="#6B737A"
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* Display Selected Tags */}
+      <View style={styles.tagsContainer}>
+        {languageTags.map((tag, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => languageRemoveTag(tag)}
+            style={styles.tag}
+          >
+            <Text style={styles.tagText}>{tag} ✕</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Dropdown Modal */}
+      <Modal
+        visible={dropDownLTag}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setDropDownLTag(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
+          onPress={() => setDropDownLTag(false)}
+        >
+          <View style={styles.dropdownContainer}>
+            <ScrollView
+              style={styles.dropdownScrollView}
+              showsVerticalScrollIndicator={true}
+            >
+              {predefinedLanguageTags
+                .filter((tag) => !tags.includes(tag)) // Hide already selected tags
+                .map((tag, index) => (
                   <TouchableOpacity
-                    onPress={() => setDropDownLTag(!dropDownLTag)}
+                    key={index}
+                    onPress={() => handleLTagSelect(tag)}
+                    style={styles.dropdownItem}
                   >
-                    <AntDesign
-                      name={dropDownLTag ? "caretup" : "caretdown"}
-                      size={14 * scale}
-                      color="black"
-                    />
+                    <Text style={styles.dropdownItemText}>{tag}</Text>
                   </TouchableOpacity>
-                </View>
-                {/* Display Selected Language Tags */}
-                <View>
-                  {languageTags.map((tag, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => languageRemoveTag(tag)}
-                    >
-                      <Text style={{ fontSize: 14 * scale }}>{tag}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-
-                <Text
-                  style={{
-                    fontSize: 12 * scale,
-                    textDecorationLine: "underline",
-                  }}
-                >
-                  Suggestions Tags
-                </Text>
-                {/* Suggested Predefined Language Tags */}
-                <View
-                  style={{
-                    flexDirection: "row",
-                    flexWrap: "wrap",
-                    marginTop: 10,
-                  }}
-                >
-                  {predefinedLanguageTags.map((tag, index) => (
-                    <TouchableOpacity
-                      key={index}
-                      onPress={() => {
-                        if (!languageTags.includes(tag)) {
-                          setLanguageTags([...languageTags, tag]);
-                        }
-                      }}
-                      style={{
-                        backgroundColor: "#FF8017",
-                        padding: 5 * scale,
-                        borderRadius: 4 * scale,
-                        margin: 3 * scale,
-                      }}
-                    >
-                      <Text style={{ color: "white", fontSize: 12 * scale }}>
-                        {tag}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-
-                <TouchableOpacity onPress={languageAddTag}>
-                  <Text style={{ color: "#FF8017", fontSize: 14 * scale }}>
-                    Add tag
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                ))}
+            </ScrollView>
+          </View>
+        </TouchableOpacity>
+      </Modal>
+    </View>
             </ScrollView>
           ) : (
             <Tab.Navigator
@@ -2763,6 +2769,18 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20 * scale,
   },
+  containerTag: {
+    width: "80%",
+    alignSelf: "center",
+    marginTop: 10 * scale,
+    borderWidth: 1 * scale,
+    paddingHorizontal: 10 * scale,
+    paddingVertical: 10 * scale,
+    borderRadius: 4 * scale,
+    borderColor: "#6B737A",
+    marginBottom: 5 * scale,
+    position: "relative",
+  },
   imageContainer: {
     position: "relative",
     marginVertical: 20 * scale,
@@ -2794,5 +2812,69 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: 10 * scale,
     paddingVertical: 15 * scale,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+  },
+  textInput: {
+    flex: 1,
+    paddingRight: 30 * scale,
+    paddingVertical: 6 * scale,
+    fontSize: 14 * scale,
+    color: "#333",
+  },
+  dropdownButton: {
+    marginLeft: 10 * scale,
+    padding: 4 * scale,
+  },
+  tagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginTop: 10,
+  },
+  tag: {
+    backgroundColor: "#FF8017",
+    paddingHorizontal: 8 * scale,
+    paddingVertical: 5 * scale,
+    borderRadius: 4 * scale,
+    margin: 3 * scale,
+  },
+  tagText: {
+    color: "white",
+    fontSize: 12 * scale,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  dropdownContainer: {
+    width: "80%",
+    maxHeight: 200 * scale,
+    backgroundColor: "white",
+    borderRadius: 4 * scale,
+    borderWidth: 1 * scale,
+    borderColor: "#6B737A",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  dropdownScrollView: {
+    paddingVertical: 5 * scale,
+  },
+  dropdownItem: {
+    paddingVertical: 8 * scale,
+    paddingHorizontal: 10 * scale,
+    borderBottomWidth: 1 * scale,
+    borderBottomColor: "#E0E0E0",
+  },
+  dropdownItemText: {
+    fontSize: 14 * scale,
+    color: "#333",
   },
 });
