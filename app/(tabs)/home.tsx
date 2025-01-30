@@ -220,7 +220,7 @@ const categories = [
 
       if (!isListEnd) {
       const response = await axios.get(
-        `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?page=${currentPage}&limit=${limit}`,
+        `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?page=${currentPage}&limit=10`,
         {
           headers: {
             "auth-token": authToken,
@@ -271,8 +271,6 @@ const categories = [
     if (!isListEnd && !isLoading) {
       console.log("loadMoreTemplates",currentPage);
       console.log("loader state = ",isLoading);
-      setLimit(10);
-      
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
@@ -432,7 +430,7 @@ const categories = [
       <FlatList
         data={images}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id.toString()}
         windowSize={10}
         maxToRenderPerBatch={5}
         pagingEnabled
