@@ -46,6 +46,7 @@ const Home = ({ navigation }: any) => {
   const [isListEnd, setIsListEnd] = useState(false);  
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(2);
   const [refreshing, setRefreshing] = useState(false);
 
   const profileClicked = () => {
@@ -219,7 +220,7 @@ const categories = [
 
       if (!isListEnd) {
       const response = await axios.get(
-        `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?page=${currentPage}&limit=10`,
+        `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?page=${currentPage}&limit=${limit}`,
         {
           headers: {
             "auth-token": authToken,
@@ -230,6 +231,8 @@ const categories = [
 
       if (response.status === 200 && response.data.results > 0) {
         setImages((prevImages) => [...prevImages, ...response.data.templets]);
+        console.log(images);
+        
       }
       else {
         setIsListEnd(true);
@@ -268,6 +271,7 @@ const categories = [
     if (!isListEnd && !isLoading) {
       console.log("loadMoreTemplates",currentPage);
       console.log("loader state = ",isLoading);
+      setLimit(10);
       
       setCurrentPage((prevPage) => prevPage + 1);
     }
