@@ -14,22 +14,19 @@ import {
   RefreshControl,
   PermissionsAndroid,
   ActivityIndicator,
-  Button,
-  Platform
+  Keyboard,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import WhatsAppLogo from "@/assets/icons/WhatsLogo";
-import ProfilePhoto from "@/assets/icons/profilePhoto";
 import Download from "@/assets/icons/download";
 import Swipe from "@/assets/icons/swipe";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { array } from "yup";
-import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
-import * as Sharing from 'expo-sharing';
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
+import * as Sharing from "expo-sharing";
 import { CommonActions } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
@@ -37,26 +34,32 @@ const scale = width / 320;
 
 const Home = ({ navigation }: any) => {
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [images, setImages] = useState([]);
   const [modalVisible, setModalVisible] = useState(true);
-
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("");
-
-  const [isListEnd, setIsListEnd] = useState(false);  
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedLanguage, setSelectedLanguage] = useState("all");
+  const [isListEnd, setIsListEnd] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(2);
   const [refreshing, setRefreshing] = useState(false);
-
-  const profileClicked = () => {
-    navigation.push("MainProfile");
-  };
-
   const [userLogo, setUserLogo] = useState("");
+  const [noData, setNoData] = useState(false);
+
+  // Debounce search input
   useEffect(() => {
-    console.log("Hello");
-    const apiCall = async () => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500); // 500ms delay
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [search]);
+
+  // Fetch user profile
+  useEffect(() => {
+    const fetchUserProfile = async () => {
       try {
         const authToken = await AsyncStorage.getItem("authToken");
         if (!authToken) {
@@ -71,145 +74,18 @@ const Home = ({ navigation }: any) => {
             },
           }
         );
-        console.log(authToken);
-        console.log(response.data);
         setUserLogo(response.data.photo);
-        console.log(response.data.name);
-        console.log("Api");
       } catch (error) {
         console.log(error);
       }
     };
-    apiCall();
+    fetchUserProfile();
   }, []);
 
-  const handleCategoryPress = (name: string) => {
-    setSelectedCategory(name);
-  };
-
-  const requestStoragePermission = async (imageUrl: string) => {
+  // Fetch templates
+  const callApi = useCallback(async () => {
     try {
-      const granted = await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-      ]);
-      if (
-        granted[PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE] ===
-          PermissionsAndroid.RESULTS.GRANTED &&
-        granted[PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE] ===
-          PermissionsAndroid.RESULTS.GRANTED
-      ) {
-        console.log("Storage permission granted");
-        handleDownload(imageUrl);
-      } else {
-        console.log("Storage permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-   //console.log("Hello", imageUrl);
-  };
-  
-
-  // Add this function to handle download
-const handleDownload = async (imageUrl: string) => {
-  {/*
-  try {
-    // Get the download path in the device storage (can be adjusted for your needs)
-    const downloadPath = `${RNFS.DownloadDirectoryPath}/${imageUrl.split('/').pop()}`;
-    console.log("Download Path:", downloadPath);
-    
-    // Start the download process
-    const downloadOptions = {
-      fromUrl: imageUrl,
-      toFile: downloadPath,
-    };
-
-    const result = await RNFS.downloadFile(downloadOptions).promise;
-
-    if (result.statusCode === 200) {
-      Alert.alert('Download successful', 'Image has been downloaded to your device.');
-    } else {
-      Alert.alert('Download failed', 'There was an error downloading the image.');
-    }
-  } catch (error) {
-    console.error('Download failed:', error);
-    Alert.alert('Download failed', 'There was an error downloading the image.');
-  }
-    */}
-
-    try {
-      // Step 1: Request permission to access the media library (for iOS)
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permission Denied', 'You need to grant media library permissions.');
-        return;
-      }
-  
-      // Step 2: Download the image from the URL
-      const fileUri = FileSystem.documentDirectory + 'downloaded-image.jpg';
-      const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
-  
-      // Step 3: Save the downloaded image to the gallery
-      const asset = await MediaLibrary.createAssetAsync(uri);
-      await MediaLibrary.createAlbumAsync('EventPoster Pro', asset, false);
-  
-      // Success alert
-      Alert.alert('Image Downloaded', 'The image has been saved to your gallery.');
-    } catch (error) {
-      console.error('Error downloading and saving image:', error);
-      Alert.alert('Error', 'An error occurred while downloading the image.');
-    }
-
-    console.log("Image URL:", imageUrl);
-};
-
-const shareImageOnWhatsApp = async (imageUrl) => {
-  try {
-    // Step 1: Download the image to the app's document directory
-    const fileUri = FileSystem.documentDirectory + 'shared-image.jpg';
-    const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
-
-    // Step 2: Check if sharing is available
-    if (!(await Sharing.isAvailableAsync())) {
-      Alert.alert('Sharing Not Available', 'Sharing is not available on this device.');
-      return;
-    }
-
-    // Step 3: Share the downloaded image using the Sharing API
-    await Sharing.shareAsync(uri, {
-      mimeType: 'image/jpeg', // Ensure proper MIME type
-      dialogTitle: 'Share this image on WhatsApp',
-    });
-
-    // Optional: Delete the file after sharing (clean up)
-    await FileSystem.deleteAsync(uri);
-  } catch (error) {
-    console.error('Error sharing image:', error);
-    Alert.alert('Error', 'An error occurred while sharing the image.');
-  }
-};
-
-const getExtention = filename =>{
-  return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
-}
-
-const categories = [
-    { name: "All" },
-    { name: "Jokes" },
-    { name: "Birthday" },
-  ];
-
-  const languages = [
-    { name: "English" },
-    { name: "Hindi" },
-    { name: "Marathi" },
-  ];
-
-  const callApi = async () => {
-    try {
-      console.log("Fetching templates...page", currentPage);
-
+      setNoData(false);
       setIsLoading(true);
       const authToken = await AsyncStorage.getItem("authToken");
       if (!authToken) {
@@ -218,26 +94,28 @@ const categories = [
         return;
       }
 
-      if (!isListEnd) {
       const response = await axios.get(
-        `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?page=${currentPage}&limit=10`,
+        `https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/templets/fetchtemplets?limit=5&page=${currentPage}&language=${selectedLanguage}&category=${selectedCategory}&title=${debouncedSearch}`,
         {
           headers: {
             "auth-token": authToken,
           },
         }
       );
-      console.log(response.data);
+      if (response.status === 200 && response.data.totalTemplets === 0) {
+        console.log(response);
+        setNoData(true);
+      }
 
       if (response.status === 200 && response.data.results > 0) {
-        setImages((prevImages) => [...prevImages, ...response.data.templets]);
-        console.log(images);
-        
+        if (currentPage === 1) {
+          setImages(response.data.templets); // Replace data for first page
+        } else {
+          setImages((prevImages) => [...prevImages, ...response.data.templets]); // Append data for subsequent pages
+        }
+      } else {
+        setIsListEnd(true); // No more data to load
       }
-      else {
-        setIsListEnd(true);
-      }
-    }
     } catch (error) {
       console.error("Error fetching templates:", error);
       if (error.response?.status === 401) {
@@ -253,12 +131,31 @@ const categories = [
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [currentPage, selectedCategory, selectedLanguage, debouncedSearch]);
 
+  // Fetch data when filters or search change
   useEffect(() => {
-    callApi();
+    setCurrentPage(1); // Reset to first page
+    setIsListEnd(false); // Reset end of list flag
+    setImages([]); // Clear existing data
+    callApi(); // Fetch new data
+  }, [selectedCategory, selectedLanguage, debouncedSearch]);
+
+  // Fetch more data when scrolling
+  useEffect(() => {
+    if (currentPage > 1) {
+      callApi(); // Fetch more data for subsequent pages
+    }
   }, [currentPage]);
 
+  // Load more templates
+  const loadMoreTemplates = () => {
+    if (!isListEnd && !isLoading) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  // Refresh data
   const onRefresh = () => {
     setCurrentPage(1);
     setIsListEnd(false);
@@ -267,62 +164,63 @@ const categories = [
     callApi().then(() => setRefreshing(false));
   };
 
-  const loadMoreTemplates = () => {
-    if (!isListEnd && !isLoading) {
-      console.log("loadMoreTemplates",currentPage);
-      console.log("loader state = ",isLoading);
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
+  // Handle category selection
+  const handleCategoryPress = (name: string) => {
+    setSelectedCategory(name.toLowerCase());
   };
 
-/*   if (isLoading && currentPage === 1) {
-      return (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#FF8017" />
-          <Text>Loading templates...</Text>
-        </View>
-      );
-    } */
-
-  const bottomLoader = () => {
-      console.log("loader");
-      return (
-        isLoading ? <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#FF8017" />
-        </View> : null
-      );
-    }
-
+  // Handle language selection
   const handleLanguagePress = (name: string) => {
-    setSelectedLanguage(name);
+    setSelectedLanguage(name.toLowerCase());
   };
+
+  // Download image
+  const handleDownload = async (imageUrl: string) => {
+    try {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission Denied", "You need to grant media library permissions.");
+        return;
+      }
+
+      const fileUri = FileSystem.documentDirectory + "downloaded-image.jpg";
+      const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
+      const asset = await MediaLibrary.createAssetAsync(uri);
+      await MediaLibrary.createAlbumAsync("EventPoster Pro", asset, false);
+      Alert.alert("Image Downloaded", "The image has been saved to your gallery.");
+    } catch (error) {
+      console.error("Error downloading and saving image:", error);
+      Alert.alert("Error", "An error occurred while downloading the image.");
+    }
+  };
+
+  // Share image on WhatsApp
+  const shareImageOnWhatsApp = async (imageUrl: string) => {
+    try {
+      const fileUri = FileSystem.documentDirectory + "shared-image.jpg";
+      const { uri } = await FileSystem.downloadAsync(imageUrl, fileUri);
+
+      if (!(await Sharing.isAvailableAsync())) {
+        Alert.alert("Sharing Not Available", "Sharing is not available on this device.");
+        return;
+      }
+
+      await Sharing.shareAsync(uri, {
+        mimeType: "image/jpeg",
+        dialogTitle: "Share this image on WhatsApp",
+      });
+
+      await FileSystem.deleteAsync(uri);
+    } catch (error) {
+      console.error("Error sharing image:", error);
+      Alert.alert("Error", "An error occurred while sharing the image.");
+    }
+  };
+
+  // Render a single template
   const renderItem = ({ item }: any) => (
     <View style={[styles.imageContainer, { height, width }]}>
-      <Modal
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Swipe Up for more</Text>
-            <Swipe size={80 * scale} />
-            <Text style={styles.modalText}>Just like Instagram</Text>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-
       <Image source={{ uri: item.image }} style={styles.image} />
-
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() => shareImageOnWhatsApp(item.image)}
@@ -331,7 +229,6 @@ const categories = [
           <Text style={styles.shareButtonText}>Share</Text>
           <WhatsAppLogo size={20 * scale} />
         </TouchableOpacity>
-
         <TouchableOpacity
           onPress={() => handleDownload(item.image)}
           style={styles.downloadButton}
@@ -342,6 +239,21 @@ const categories = [
       </View>
     </View>
   );
+
+  // Categories and languages
+  const categories = [
+    { name: "All" },
+    { name: "Jokes" },
+    { name: "Birthday" },
+  ];
+
+  const languages = [
+    { name: "All" },
+    { name: "English" },
+    { name: "Hindi" },
+    { name: "Marathi" },
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.flex1}>
@@ -352,12 +264,12 @@ const categories = [
               value={search}
               onChangeText={setSearch}
               placeholder="Search"
-              placeholderTextColor={"#49454F"}
-              clearButtonMode="always"
+              placeholderTextColor="#49454F"
               style={styles.searchInput}
+              returnKeyType="search"
+              onSubmitEditing={() => Keyboard.dismiss()}
             />
           </View>
-
           <TouchableOpacity
             onPress={() => navigation.push("UploadImage")}
             style={styles.createButton}
@@ -366,58 +278,36 @@ const categories = [
             <Text style={styles.createButtonText}>Create</Text>
           </TouchableOpacity>
         </View>
-
-        <TouchableOpacity onPress={profileClicked}>
+        <TouchableOpacity onPress={() => navigation.push("MainProfile")}>
           <Image
             source={{
-              uri: userLogo
-                ? userLogo
-                : "https://ideogram.ai/assets/progressive-image/balanced/response/dxJM-M2cSvaceVnuURCJCA",
+              uri: userLogo || "https://via.placeholder.com/150",
             }}
-            style={{
-              width: 30 * scale,
-              height: 30 * scale,
-              borderRadius: 30 * scale,
-              borderWidth: 2,
-              borderColor: "black",
-            }}
+            style={styles.profileImage}
           />
         </TouchableOpacity>
       </View>
 
       <View style={{ paddingVertical: 15 * scale, width: "100%" }}>
         <ScrollView horizontal={true} persistentScrollbar={false}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              paddingHorizontal: 5 * scale,
-            }}
-          >
+          <View style={styles.categoryContainer}>
             {categories.map((category) => (
               <RenderCategory
                 key={category.name}
                 name={category.name}
-                isSelected={selectedCategory === category.name}
+                isSelected={selectedCategory === category.name.toLowerCase()}
                 onPress={handleCategoryPress}
               />
             ))}
           </View>
         </ScrollView>
         <ScrollView horizontal={true} persistentScrollbar={false}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              paddingHorizontal: 5 * scale,
-              marginTop: 10,
-            }}
-          >
+          <View style={styles.categoryContainer}>
             {languages.map((language) => (
               <RenderCategory
                 key={language.name}
                 name={language.name}
-                isSelected={selectedLanguage === language.name}
+                isSelected={selectedLanguage === language.name.toLowerCase()}
                 onPress={handleLanguagePress}
               />
             ))}
@@ -425,9 +315,7 @@ const categories = [
         </ScrollView>
       </View>
 
-      {/* <ImageReel /> */}
-
-      <FlatList
+      {!noData ? <FlatList
         data={images}
         renderItem={renderItem}
         keyExtractor={(item) => item._id.toString()}
@@ -440,11 +328,23 @@ const categories = [
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         onEndReached={loadMoreTemplates}
         onEndReachedThreshold={0.5}
-        ListFooterComponent={bottomLoader}
-      />
+        ListFooterComponent={
+          isLoading && !refreshing ? (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size="large" color="#FF8017" />
+            </View>
+          ) : null
+        }
+      /> : (
+        <View style={styles.noDataContainer}>
+          <Text style={styles.noDataText}>No Templates found</Text>
+          <Text style={styles.message}>Try changing the filters</Text>
+        </View>)}
     </SafeAreaView>
   );
 };
+
+// RenderCategory component
 const RenderCategory = ({
   name,
   isSelected,
@@ -455,29 +355,15 @@ const RenderCategory = ({
   onPress: (name: string) => void;
 }) => {
   return (
-    <TouchableOpacity
-      style={{ marginRight: 5 * scale }}
-      onPress={() => onPress(name)}
-    >
-      <Text
-        style={{
-          color: isSelected ? "#ffffff" : "#000000",
-          backgroundColor: isSelected ? "#FF9A37" : "transparent",
-          borderWidth: 1,
-          borderColor: "#FF9A37",
-          borderRadius: 25 * scale,
-          paddingHorizontal: 8 * scale,
-          paddingVertical: 2 * scale,
-          fontSize: 12 * scale,
-        }}
-      >
+    <TouchableOpacity style={styles.categoryButton} onPress={() => onPress(name)}>
+      <Text style={[styles.categoryText, isSelected && styles.selectedCategoryText]}>
         {name}
       </Text>
     </TouchableOpacity>
   );
 };
-export default Home;
 
+// Styles (same as before)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -524,7 +410,13 @@ const styles = StyleSheet.create({
     fontSize: 12 * scale,
     marginLeft: 5 * scale,
   },
-
+  profileImage: {
+    width: 30 * scale,
+    height: 30 * scale,
+    borderRadius: 30 * scale,
+    borderWidth: 2,
+    borderColor: "black",
+  },
   imageContainer: {
     alignItems: "center",
     paddingTop: 10 * scale,
@@ -570,32 +462,46 @@ const styles = StyleSheet.create({
     fontSize: 15 * scale,
     paddingLeft: 10 * scale,
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.155)",
-    justifyContent: "center",
-    alignItems: "center",
+  categoryContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    paddingHorizontal: 5 * scale,
   },
-  modalContent: {
-    backgroundColor: "#ffffff",
-    padding: 30 * scale,
-    borderRadius: 10 * scale,
-    alignItems: "center",
+  categoryButton: {
+    marginRight: 5 * scale,
   },
-  modalText: {
-    fontSize: 18 * scale,
-    marginBottom: 10 * scale,
+  categoryText: {
+    color: "#000000",
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: "#FF9A37",
+    borderRadius: 25 * scale,
+    paddingHorizontal: 8 * scale,
+    paddingVertical: 2 * scale,
+    fontSize: 12 * scale,
   },
-  closeButton: {
-    marginTop: 20 * scale,
-  },
-  closeButtonText: {
-    fontSize: 16 * scale,
-    color: "#FF9A37",
+  selectedCategoryText: {
+    color: "#ffffff",
+    backgroundColor: "#FF9A37",
   },
   loaderContainer: {
+    padding: 20 * scale,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noDataContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
+  noDataText: {
+    fontSize: 16 * scale,
+    color: "#000000",
+  },
+  message: {
+    fontSize: 10 * scale,
+    color: "#000000",
+  },
 });
+
+export default Home;
