@@ -103,7 +103,7 @@ const Home = ({ navigation }: any) => {
         }
       );
       if (response.status === 200 && response.data.totalTemplets === 0) {
-        console.log(response);
+        console.log(response.data);
         setNoData(true);
       }
 
