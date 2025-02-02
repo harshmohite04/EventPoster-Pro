@@ -302,6 +302,7 @@ const styles = StyleSheet.create({
     height: 100 * scale,
     borderBottomRightRadius: 20 * scale,
     borderBottomLeftRadius: 20 * scale,
+    resizeMode: "contain",
   },
   actionsContainer: {
     flexDirection: "row",

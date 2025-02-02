@@ -107,6 +107,10 @@ const Home = ({ navigation }: any) => {
         setNoData(true);
       }
 
+      if (response.data.results === 0){
+        console.warn("no more templets");
+      }
+
       if (response.status === 200 && response.data.results > 0) {
         if (currentPage === 1) {
           setImages(response.data.templets); // Replace data for first page
@@ -423,7 +427,7 @@ const styles = StyleSheet.create({
     paddingBottom: 60 * scale,
   },
   image: {
-    width: "80%",
+    width: "84%",
     height: "65%",
     resizeMode: "cover",
   },

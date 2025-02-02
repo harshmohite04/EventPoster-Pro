@@ -70,6 +70,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
   const [title, setTitle] = useState("");
   const imageRef = useRef(null); // Reference to the image for getting its dimensions
   const viewShotRef = useRef(null); // Reference to ViewShot for capturing the screen
+  const [editing, setEditing] = useState(true);
 
   // Position Of Logo and Photo
   const [logoImage, setLogoImage] = useState(false);
@@ -1695,6 +1696,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
           <TouchableOpacity
             onPress={() => {
               setChoosing(true);
+              setEditing(false);
             }}
             style={{
               backgroundColor: "#FF9A37",
@@ -1712,9 +1714,9 @@ const AdminEditImage = ({ navigation, route }: any) => {
           </TouchableOpacity>
         )}
       </View>
-      <View style={{ paddingVertical: 20 * scale }}>
+      <View style={{alignItems: "center" }}>
         {image ? (
-          <ViewShot ref={viewShotRef} style={{ alignItems: "center" }}>
+          <ViewShot ref={viewShotRef} style={{ alignItems: "center", width: "53.6%",overflow: "hidden"}}>
             <Image
               ref={imageRef}
               source={{ uri: image }}
@@ -1726,7 +1728,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
             />
             {logoImage ? (
               <Animated.View
-                  {...LogoPanResponder.panHandlers}
+              {...(editing && LogoPanResponder.panHandlers)}
                   style={{
                     position: "absolute",
                     left: panLogo.x,
@@ -1749,7 +1751,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
             {photoImage ? (
               <Animated.View
-                  {...PhotoPanResponder.panHandlers}
+              {...(editing && PhotoPanResponder.panHandlers)}
                   style={{
                     position: "absolute",
                     left: panPhoto.x,
@@ -1773,7 +1775,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
             {nameText ? (
               <Animated.View
-              {...NamePanResponder.panHandlers}
+              {...(editing && NamePanResponder.panHandlers)}
               style={[
                 styles.textOverlay,
                 {
@@ -1797,7 +1799,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
             {businessText ? (
               <Animated.View
-              {...BusinessNamePanResponder.panHandlers}
+              {...(editing && BusinessNamePanResponder.panHandlers)}
               style={[
                 styles.textOverlay,
                 {
@@ -1821,7 +1823,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
             {websiteNameText ? (
               <Animated.View
-              {...WebsiteNamePanResponder.panHandlers}
+              {...(editing && WebsiteNamePanResponder.panHandlers)}
               style={[
                 styles.textOverlay,
                 {
@@ -1845,7 +1847,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
             {phoneNumberText ? (
               <Animated.View
-              {...PhoneNumberPanResponder.panHandlers}
+              {...(editing && PhoneNumberPanResponder.panHandlers)}
               style={[
                 styles.textOverlay,
                 {
@@ -1869,7 +1871,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
 
             {emailText ? (
               <Animated.View
-              {...EmailPanResponder.panHandlers}
+              {...(editing && EmailPanResponder.panHandlers)}
               style={[
                 styles.textOverlay,
                 {
@@ -1944,6 +1946,7 @@ const AdminEditImage = ({ navigation, route }: any) => {
                 paddingVertical: 3 * scale,
                 marginTop: 10 * scale,
                 alignSelf: "center",
+
               }}
               value={text}
               onChangeText={setText}
