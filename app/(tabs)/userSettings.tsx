@@ -1,59 +1,39 @@
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
   Dimensions,
-  Linking,
-  Alert,
 } from "react-native";
-import React, { useEffect } from "react";
-const { width } = Dimensions.get("window");
+import { useNavigation,CommonActions  } from "@react-navigation/native";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StackActions, CommonActions } from "@react-navigation/native";
+
+const { width } = Dimensions.get("window");
 const scale = width / 320;
 
-const UserSettings = ({ navigation }: any) => {
-  // const handleWhatsAppRedirect = () => {
-  //   const phoneNumber = "+919356836581"; // Replace with the target phone number
-  //   const message = "Hello!"; // Replace with your desired message
-  //   const url = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
-  //     message
-  //   )}`;
-
-  //   Linking.openURL(url).catch(() => {
-  //     Alert.alert(
-  //       "Error",
-  //       "WhatsApp is not installed on your device or the URL is invalid."
-  //     );
-  //   });
-  // };
+const UserSettings = () => {
+  const navigation = useNavigation();
 
   const handleAccountDelete = async () => {
     try {
       const authToken = await AsyncStorage.getItem("authToken");
-      const response = await axios.delete(
+      await axios.delete(
         "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/deleteaccount",
         {
-          headers: {
-            "auth-token": authToken,
-          },
+          headers: { "auth-token": authToken },
         }
       );
-
-      console.log(response);
-      console.log(authToken);
-      await AsyncStorage.setItem("authToken", "");
+      await AsyncStorage.removeItem("authToken");
       navigation.dispatch(
         // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
         CommonActions.reset({
           index: 0, // The first screen in the stack
-          routes: [{ name: "Splash" }], // Replace 'Login' with your start screen
+          routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
         })
       );
-      console.log(authToken);
     } catch (error) {
       console.error(error);
     }
@@ -61,30 +41,23 @@ const UserSettings = ({ navigation }: any) => {
 
   const handleLogout = async () => {
     try {
-    const authToken = await AsyncStorage.getItem("authToken");
+      const authToken = await AsyncStorage.getItem("authToken");
+      if (!authToken) throw new Error("Auth Token not found");
 
-    if (authToken == null || authToken == "") {
-      throw new Error("Auth Token not found");
-    }
-
-    const response = await axios.post(
-      "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/logout",
-      {},
-      {
-        headers: {
-          "auth-token": authToken,
-        },
-      }
-    );
-    
-    await AsyncStorage.removeItem("authToken");
-    navigation.dispatch(
-      // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
-      CommonActions.reset({
-        index: 0, // The first screen in the stack
-        routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
-      })
-    );
+      await axios.post(
+        "https://event-poster-pro-1mllvw3hfppqkrkjmxue8whf.onrender.com/api/auth/logout",
+        {},
+        { headers: { "auth-token": authToken } }
+      );
+      
+      await AsyncStorage.removeItem("authToken");
+      navigation.dispatch(
+        // StackActions.replace('Splash') // Replace 'Login' with the name of your start screen
+        CommonActions.reset({
+          index: 0, // The first screen in the stack
+          routes: [{ name: "PhoneNumberAuth" }], // Replace 'Login' with your start screen
+        })
+      );
     } catch (error) {
       console.error(error);
       await AsyncStorage.removeItem("authToken");
@@ -99,36 +72,23 @@ const UserSettings = ({ navigation }: any) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
-      <TouchableOpacity
-        onPress={handleAccountDelete}
-        style={{
-          borderBottomWidth: 1,
-          paddingVertical: 12 * scale,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 20 * scale,
-          alignItems: "center",
-        }}
-      >
-        <Text style={{ fontSize: 16 * scale, color: "red" }}>
-          Permenently delete account{" "}
-        </Text>
-        {/* <AntDesign name="arrowright" size={20 * scale} /> */}
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name="arrowleft" size={24} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Settings</Text>
+      </View>
+
+      {/* Logout Button */}
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={handleLogout}
-        style={{
-          borderBottomWidth: 1,
-          paddingVertical: 12 * scale,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 20 * scale,
-          alignItems: "center",
-        }}
-      >
-        <Text style={{ fontSize: 16 * scale, color: "red" }}>Log Out</Text>
-        {/* <AntDesign name="arrowright" size={20 * scale} /> */}
+
+      {/* Delete Account Button */}
+      <TouchableOpacity onPress={handleAccountDelete} style={styles.deleteButton}>
+        <Text style={styles.deleteText}>Delete Account Permanently</Text>
       </TouchableOpacity>
     </View>
   );
@@ -136,4 +96,48 @@ const UserSettings = ({ navigation }: any) => {
 
 export default UserSettings;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    padding: 20,
+    alignItems: "center",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    marginBottom: 40,
+  },
+  headerTitle: {
+    fontSize: 18 * scale,
+    fontWeight: "bold",
+    marginLeft: 10,
+  },
+  logoutButton: {
+    width: "90%",
+    paddingVertical: 14 * scale,
+    borderWidth: 2,
+    borderColor: "#E07A5F",
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  logoutText: {
+    fontSize: 16 * scale,
+    color: "#000",
+    fontWeight: "bold",
+  },
+  deleteButton: {
+    width: "90%",
+    paddingVertical: 14 * scale,
+    backgroundColor: "#D90429",
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  deleteText: {
+    fontSize: 16 * scale,
+    color: "#ffffff",
+    fontWeight: "bold",
+  },
+});
